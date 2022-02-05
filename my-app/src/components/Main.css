@@ -109,3 +109,9 @@
   background-size: cover;
   background-repeat: no-repeat;
 }
+
+.team-info-item__photo-semyon {
+  background-image: url('../assets/semyon-photo.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}

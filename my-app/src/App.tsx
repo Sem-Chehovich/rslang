@@ -4,11 +4,6 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Main from './components/Main';
 
-interface SidebarLinks {
-  value: string,
-  href: string
-}
-
 function App() {
   return (
     <div className="app">

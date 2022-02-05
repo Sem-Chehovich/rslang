@@ -12,7 +12,6 @@ function App() {
       </header>
       <main>
         <div>
-          <WordsPage />
         </div>
       </main>
     </div>

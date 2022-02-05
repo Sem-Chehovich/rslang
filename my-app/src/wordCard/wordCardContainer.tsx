@@ -1,8 +1,8 @@
 import React from "react";
 import './wordCard.scss';
 import SoundButton from './soundButton';
-import { getCorrectUrl, getCorrectMeaning } from '../utilities/utilities'
-import { card } from '../interface/interface'
+import { getCorrectUrl, getCorrectMeaning } from '../utilities/utilities';
+import { card } from '../interface/interface';
 
 type MyProps = { card: card };
 type MyState = {};
@@ -12,7 +12,7 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
     constructor(props: any) {
         super(props)
     }
-    
+
     render() {
         const { image, word, transcription, textMeaning, textExample, wordTranslate, textMeaningTranslate, textExampleTranslate, audio, audioMeaning, audioExample } = this.props.card
         return (

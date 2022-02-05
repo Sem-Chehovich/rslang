@@ -1,16 +1,14 @@
 import React from 'react';
 import './App.css';
-import Footer from './components/Footer';
-import Header from './components/Header';
-import Main from './components/Main';
+import Footer from './main-page/footer/footer';
+import Header from './main-page/header/header';
+import Main from './main-page/main/main';
 
 function App() {
   return (
     <div className="app">
       <Header />
-      <div className='app__main-page'>
-        <Main />
-      </div>
+      <Main />
       <Footer />
     </div>
   );

@@ -23,7 +23,7 @@
 }
 
 .main-content__png {
-  background-image: url('../main-page.png');
+  background-image: url('../assets/main-page.png');
   background-repeat: no-repeat;
   background-size: cover;
   width: 513px;

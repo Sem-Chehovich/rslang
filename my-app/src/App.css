@@ -1,4 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap');
 
+.app {
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: bold;
+}
+
+.app p {
+  font-size: 20px;
+}
+
+.app a {
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+h1 {
+  text-transform: uppercase;
+  font-size: 80px;
+  margin: 0;
+}
+
+h2 {
+  font-size: 44px;
+}
 
 
 

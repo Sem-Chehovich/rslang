@@ -3,6 +3,7 @@
   background-color: #537895;
   position: fixed;
   width: 100vw;
+  top: 0;
 }
 
 .header__content-list {

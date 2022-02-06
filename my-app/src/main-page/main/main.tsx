@@ -1,5 +1,6 @@
 import './main.css';
 import { members, possibilities } from '../main-page-constants';
+import { Outlet, Link } from "react-router-dom";
 
 export interface ProjectMember {
   [key: string]: string
@@ -21,11 +22,13 @@ function Main() {
         <h3 className='main-content__headers'>Possibilities and advantages</h3>
         <div className='main-content__app-advantages'>
           {possibilities.map((possibility: AppPossibility) =>
-          <a key={possibility.name} href='#' className='main-content__app-advantages-item'>
-            <i className={'fa fa-'+ possibility.icon + ' fa-5x'}></i>
-            <h3>{possibility.name}</h3>
-            <p>{possibility.info}</p>
-          </a>
+          <div key={possibility.name} className='main-content__app-advantages-item'>
+            <Link to={possibility.href}>
+              <i className={'fa fa-'+ possibility.icon + ' fa-5x'}></i>
+              <h3>{possibility.name}</h3>
+              <p>{possibility.info}</p>
+            </Link>
+          </div>
           )}
         </div>
       </div>
@@ -39,6 +42,7 @@ function Main() {
         </div>
         )}
       </div>
+      <Outlet />
     </section>
   );
 }

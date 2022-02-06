@@ -1,9 +1,14 @@
+import React from 'react';
 import { useState } from 'react';
 import './AuthForm.css';
+import NameInput from './inputName';
 
 const AuthForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isSignUp, setSignUp] = React.useState<React.ReactNode>();
+  const [formType, setFormType] = useState('Sign in');
+  const [name, setName] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -11,6 +16,13 @@ const AuthForm = () => {
 
   const handleClick = (e: React.FormEvent) => {
     e.preventDefault();
+    if (formType === 'Sign in')  {
+      setFormType('Sign up');
+      setSignUp(<NameInput name={name} setName={setName} />);
+    } else { 
+      setFormType('Sign in');
+      setSignUp('');
+    }
   }
 
   return (
@@ -19,6 +31,7 @@ const AuthForm = () => {
         <div className='form-container__box'>
           <h2 className='form-container__title'>Sign in</h2>
           <form className='auth-form' onSubmit={handleSubmit}>
+            { isSignUp }
             <div>
               <label className='auth-form__label' htmlFor='email'>Email:</label>
               <input 

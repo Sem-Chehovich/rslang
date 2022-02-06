@@ -5,7 +5,7 @@ import AuthForm from './authorization/AuthForm';
 
 function App() {
   return (
-    <div className="App">
+    <div className="app">
       <AuthForm />
     </div>
   );

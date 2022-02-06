@@ -1,6 +1,6 @@
 class WordPageApiService {
 
-    getWords = (page: number, groupe: number) => fetch(`https://rs-lang-rs-school.herokuapp.com/words?page=${page}&group=${groupe}`, {
+    getWords = (page: string, groupe: string) => fetch(`https://rs-lang-rs-school.herokuapp.com/words?page=${page}&group=${groupe}`, {
         method: 'GET',
         headers: {
           'X-Total-Count': '4',

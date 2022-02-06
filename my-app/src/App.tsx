@@ -1,9 +1,5 @@
-// import React from 'react';
-// import logo from './logo.svg';
-import './App.css';
-// import WordCardContainer from './wordCard/wordCardContainer';
-import WordsPage from './wordsPage/wordsPage';
 
+import './App.css';
 
 function App() {
   return (

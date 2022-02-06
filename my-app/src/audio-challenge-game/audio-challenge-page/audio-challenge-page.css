@@ -1,0 +1,119 @@
+.audio-challenge-page {
+  width: 100vw;
+  height: calc(100vh - 300px);
+  /* background-image: url('../assets/bg.jpg'); */
+  background-color: rgba(210, 108, 106, .4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 150px 0;
+}
+
+.audio-challenge-page h3 {
+  text-transform: uppercase;
+}
+
+.audio-challenge-page__close-btn {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  position: absolute;
+  top: 100px;
+  right: 40px;
+}
+
+.audio-challenge-page__close-btn i {
+  color: white;
+  transition: .4s;
+}
+
+.audio-challenge-page__close-btn i:hover {
+  transform: scale(1.1);
+}
+
+.audio-challenge-page__audio-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.audio-challenge-page__answer-img {
+  width: 110px;
+  height: 110px;
+  display: none;
+}
+
+.audio-challenge-page__right-answer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  gap: 20px;
+}
+
+.audio-challenge-page__right-answer h2 {
+  display: none;
+}
+
+.audio-challenge-page__audio-btn {
+  background-color: rgba(250, 252, 254, .4);
+  border-radius: 50%;
+  color: white;
+  border: none;
+  width: 110px;
+  height: 110px;
+  cursor: pointer;
+  transition: .4s;
+}
+
+.audio-challenge-page__audio-btn:active {
+  width: 70px;
+  height: 70px;
+}
+
+.audio-challenge-page__audio-btn:hover {
+  background-color: rgba(250, 252, 254, .2);
+}
+
+.audio-challenge-page__audio-btn i {
+  color: white;
+}
+
+.audio-challenge-page__words {
+  width: 800px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.audio-challenge-page__words-btn {
+  width: 170px;
+  border: 3px solid white;
+  border-radius: 25px;
+  cursor: pointer;
+  background-color: rgba(210, 108, 106, .1);
+  transition: .4s;
+  margin: 40px 0;
+  box-shadow: 5px 5px 2px 1px rgba(0, 0, 0, .3);
+}
+
+.audio-challenge-page__words-btn:hover {
+  transform: scale(1.1);
+}
+
+.audio-challenge-page__next-btn {
+  width: 190px;
+  border: 3px solid black;
+  border-radius: 25px;
+  cursor: pointer;
+  background-color: #537895;
+  color: white;
+  transition: .4s;
+  text-transform: uppercase;
+  box-shadow: 5px 5px 2px 1px rgba(0, 0, 0, .3);
+}
+
+.audio-challenge-page__next-btn:hover {
+  transform: scale(1.1);
+}

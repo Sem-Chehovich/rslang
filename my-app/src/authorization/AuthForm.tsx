@@ -1,27 +1,48 @@
 import React from 'react';
 import { useState } from 'react';
 import './AuthForm.css';
-import NameInput from './inputName';
+import { signUpUser, signInUser } from './api';
+import { getErrorMessage } from './errorMessages';
 
 const AuthForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isSignUp, setSignUp] = React.useState<React.ReactNode>();
   const [formType, setFormType] = useState('Sign in');
   const [name, setName] = useState('');
+  const [message, setMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (formType === 'Sign up') {
+      const newUser = { name: name, email: email, password: password };
+      const creationResult = await signUpUser(newUser);
+      if (typeof creationResult === 'number') { 
+        setMessage(getErrorMessage(creationResult));
+      } else { 
+        const user = { email: email, password: password };
+        const result = await signInUser(user);
+        if (typeof result === 'number') setMessage(getErrorMessage(result));
+        else setMessage('');
+      }
+    }
+
+    if (formType === 'Sign in') {
+      const user = { email: email, password: password };
+      const result = await signInUser(user);
+      
+      if (typeof result === 'number') setMessage(getErrorMessage(result));
+      else setMessage('');
+    }
   };
 
   const handleClick = (e: React.FormEvent) => {
     e.preventDefault();
     if (formType === 'Sign in')  {
       setFormType('Sign up');
-      setSignUp(<NameInput name={name} setName={setName} />);
+      setMessage('');
     } else { 
       setFormType('Sign in');
-      setSignUp('');
+      setMessage('');
     }
   }
 
@@ -29,9 +50,23 @@ const AuthForm = () => {
     <div className='form-page'>
       <div className='form-container'>
         <div className='form-container__box'>
-          <h2 className='form-container__title'>Sign in</h2>
+          <h2 className='form-container__title'>{ formType }</h2>
+          { message && <p className='error-message'>{ message }</p> }
           <form className='auth-form' onSubmit={handleSubmit}>
-            { isSignUp }
+            { formType === 'Sign up' ?
+              (<div>
+                <label className='auth-form__label' htmlFor='name'>Name:</label>
+                <input 
+                  className='auth-form__input' 
+                  type='name'
+                  required 
+                  placeholder='User name'
+                  id='name' 
+                  value={name} 
+                  onChange={(e) => setName(e.target.value)} 
+                />
+              </div>) : ''
+            }
             <div>
               <label className='auth-form__label' htmlFor='email'>Email:</label>
               <input 
@@ -58,9 +93,11 @@ const AuthForm = () => {
               />
             </div>
             <div className='auth-form__register'>
-              <a className='auth-form__link' href='/' onClick={handleClick} >Sign in</a>
+              <a className='auth-form__link' href='/' onClick={handleClick} >
+                { formType === 'Sign in' ? 'Sign up' : 'Sign in' }
+              </a>
             </div>    
-            <button className='auth-form__btn'>Sign in</button>
+            <button className='auth-form__btn'>{formType}</button>
           </form>
         </div>
       </div>

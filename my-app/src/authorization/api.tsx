@@ -50,4 +50,3 @@ export async function signInUser(user: IUser) {
 
   return result;
 };
-  

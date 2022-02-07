@@ -47,6 +47,24 @@ export async function signInUser(user: IUser) {
   localStorage.setItem('userName', String(result.name));
   localStorage.setItem('userId', String(result.userId));
   localStorage.setItem('userToken', String(result.token));
+  localStorage.setItem('refreshToken', String(result.refreshToken));
 
   return result;
 };
+
+export async function refreshToken(userId: string, refToken: string) {
+  const response = await fetch(`${userLogUp}/${userId}/tokens`,{
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${refToken}`,
+    }
+  })
+
+  if (response.ok) {
+    const result = await response.json();
+    localStorage.setItem('userToken', String(result.token));
+    localStorage.setItem('refreshToken', String(result.refreshToken));
+  }
+
+  return response;
+}

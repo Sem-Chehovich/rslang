@@ -1,5 +1,6 @@
 import { refreshToken } from './api';
-
+import { useNavigate } from 'react-router-dom';
+ 
 export async function isAuthorizedUser() {
   if (localStorage.getItem('refreshToken') && localStorage.getItem('userId')) {
     const id = localStorage.getItem('userId')!;
@@ -13,7 +14,8 @@ export async function isAuthorizedUser() {
         localStorage.setItem('userToken', String(result.token));
         localStorage.setItem('refreshToken', String(result.refreshToken));
       } catch (e: unknown) {
-        //Какая-то ошибка перенаправляем пользователя на страницу авторизации
+        const navigate = useNavigate();
+        navigate('/authorization');
       }
     }
   } 

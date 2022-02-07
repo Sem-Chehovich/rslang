@@ -3,6 +3,7 @@ import { useState } from 'react';
 import './AuthForm.css';
 import { signUpUser, signInUser } from './api';
 import { getErrorMessage } from './errorMessages';
+import { useNavigate } from 'react-router-dom';
 
 const AuthForm = () => {
   const [email, setEmail] = useState('');
@@ -10,19 +11,26 @@ const AuthForm = () => {
   const [formType, setFormType] = useState('Sign in');
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formType === 'Sign up') {
       const newUser = { name: name, email: email, password: password };
       const creationResult = await signUpUser(newUser);
+
       if (typeof creationResult === 'number') { 
         setMessage(getErrorMessage(creationResult));
       } else { 
         const user = { email: email, password: password };
         const result = await signInUser(user);
-        if (typeof result === 'number') setMessage(getErrorMessage(result));
-        else setMessage('');
+
+        if (typeof result === 'number') { 
+          setMessage(getErrorMessage(result));
+        } else { 
+          setMessage('');
+          navigate('/home');
+        }
       }
     }
 
@@ -30,8 +38,12 @@ const AuthForm = () => {
       const user = { email: email, password: password };
       const result = await signInUser(user);
       
-      if (typeof result === 'number') setMessage(getErrorMessage(result));
-      else setMessage('');
+      if (typeof result === 'number') { 
+        setMessage(getErrorMessage(result));
+      } else { 
+        setMessage('');   
+        navigate('/home');
+      }
     }
   };
 

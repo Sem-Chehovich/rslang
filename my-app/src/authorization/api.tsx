@@ -36,9 +36,7 @@ export async function signInUser(user: IUser) {
   }).catch();
 
   if (!response.ok) {
-    localStorage.removeItem('userName');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userToken');
+    localStorage.clear();
     return response.status;
   }
 

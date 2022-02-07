@@ -1,0 +1,33 @@
+.footer {
+  height: 70px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: #537895;
+  color: white;
+  position: fixed;
+  width: 100vw;
+  bottom: 0;
+}
+
+.footer__rs-logo {
+  width: 100px;
+  height: 45px;
+  transition: .4s;
+}
+
+.footer__list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 100px;
+}
+
+.footer__list-item {
+  color: white;
+  transition: .4s;
+}
+
+.footer__link:hover {
+  transform: scale(1.1);
+}

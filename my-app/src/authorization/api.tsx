@@ -64,6 +64,8 @@ export async function refreshToken(userId: string, refToken: string) {
     const result = await response.json();
     localStorage.setItem('userToken', String(result.token));
     localStorage.setItem('refreshToken', String(result.refreshToken));
+    
+    return result;
   }
 
   return response;

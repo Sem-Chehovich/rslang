@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import './AuthForm.css';
-import { signUpUser, signInUser, refreshToken } from './api';
+import { signUpUser, signInUser } from './api';
 import { getErrorMessage } from './errorMessages';
 
 const AuthForm = () => {

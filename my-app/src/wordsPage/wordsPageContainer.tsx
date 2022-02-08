@@ -6,7 +6,7 @@ import { Spinner } from '../spiner/spinner';
 import Selector from './components/select';
 import BasicPagination from './components/pagination'
 import './wordPage.scss';
-const BTN_ARR = ['1', '2', '3', '4', '5', '6'];
+
 
 const WordsPageContainer = () => {
 

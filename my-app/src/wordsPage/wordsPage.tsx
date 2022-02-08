@@ -10,13 +10,9 @@ type MyState = { cards: card[]};
 
 export default class WordsPage extends React.Component<MyProps, MyState> {
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-    constructor(props: any) {
-        super(props)
-        // this.state = {
-        //     cards: [],
-        // }
-    }
-
+    // constructor(props: any) {
+    //     super(props)
+    // }
 
     render() {
         return (

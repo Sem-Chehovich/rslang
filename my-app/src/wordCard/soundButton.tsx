@@ -9,29 +9,27 @@ import { purple } from '@mui/material/colors';
 
 const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
   color: theme.palette.getContrastText(purple[500]),
-  backgroundColor: purple[500],
+  backgroundColor: '#d26c6a',
   '&:hover': {
-    backgroundColor: purple[700],
+    backgroundColor: purple[900],
   },
 }));
 
-function CustomizedButtons() {
-  return (
-    <Stack spacing={2} direction="row">
-      <ColorButton variant="contained">Custom CSS</ColorButton>
-    </Stack>
-  );
-}
-
 const SoundButton = ({audio, audioExample, audioMeaning}: card) => {
+    const sound = new Audio()
+    const soundExample = new Audio()
+    const soundMeaning = new Audio()
+    sound.src = getCorrectUrl(audio)
+    soundExample.src = getCorrectUrl(audioExample)
+    soundMeaning.src = getCorrectUrl(audioMeaning)
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
-        const sound = new Audio()
-        sound.src = getCorrectUrl(audio)
-        const soundExample = new Audio()
-        soundExample.src = getCorrectUrl(audioExample)
-        const soundMeaning = new Audio()
-        soundMeaning.src = getCorrectUrl(audioMeaning)
+        sound.pause()
+        soundExample.pause()
+        soundMeaning.pause()
+        sound.currentTime = 0
+        soundExample.currentTime = 0
+        soundMeaning.currentTime = 0
         sound.play()
         sound.onended = () => {
             soundExample.play()
@@ -42,8 +40,11 @@ const SoundButton = ({audio, audioExample, audioMeaning}: card) => {
     }
 
     return (
-        <CustomizedButtons />
-        // <button onClick={ handleClick } className="sound__button"></button>
+        <div className="sound__button">
+            <Stack spacing={2} direction="row">
+                <ColorButton  onClick={ handleClick } variant="contained">listen</ColorButton>
+            </Stack>
+        </div>
     )
 }
 

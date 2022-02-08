@@ -2,18 +2,21 @@
     display: flex;
     background-color: #537895;
     margin: 10px;
+    border-radius: 10px;
+    width: 80%;
 }
 
 .card__img-wrapper {
-    margin: 10px;
+    margin: 20px;
 }
 
 .card__img{
     width: 300px;
+    height: 250px;
 }
 
 .card__content {
-    margin: 10px;
+    margin: 20px;
     margin-left: 10px;
     font-size: 20px;
 }

@@ -2,6 +2,7 @@ import React from "react";
 // import { wordPageApiService } from "./service/wordPageApiService";
 import WordCardContainer from '../wordCard/wordCardContainer'
 import { card } from '../interface/interface'
+import './wordPage.scss';
 
 
 type MyProps = {cards: card[]};
@@ -16,13 +17,6 @@ export default class WordsPage extends React.Component<MyProps, MyState> {
         // }
     }
 
-    // componentDidMount() {
-    //     wordPageApiService.getWords(1,1).then(data => {
-    //         this.setState({
-    //             cards: data,
-    //         })
-    //     })
-    // }
 
     render() {
         return (

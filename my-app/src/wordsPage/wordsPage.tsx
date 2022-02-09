@@ -2,6 +2,7 @@ import React from "react";
 // import { wordPageApiService } from "./service/wordPageApiService";
 import WordCardContainer from '../wordCard/wordCardContainer'
 import { card } from '../interface/interface'
+import './wordPage.scss';
 
 
 type MyProps = {cards: card[]};
@@ -9,19 +10,8 @@ type MyState = { cards: card[]};
 
 export default class WordsPage extends React.Component<MyProps, MyState> {
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-    constructor(props: any) {
-        super(props)
-        // this.state = {
-        //     cards: [],
-        // }
-    }
-
-    // componentDidMount() {
-    //     wordPageApiService.getWords(1,1).then(data => {
-    //         this.setState({
-    //             cards: data,
-    //         })
-    //     })
+    // constructor(props: any) {
+    //     super(props)
     // }
 
     render() {

@@ -4,6 +4,7 @@
   position: fixed;
   width: 100vw;
   top: 0;
+  z-index: 100;
 }
 
 .header__content-list {

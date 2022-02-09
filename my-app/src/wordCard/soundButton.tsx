@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import Button, { ButtonProps } from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { purple } from '@mui/material/colors';
-
+import FormControlLabelPosition from './component/togleButtons'
 
 const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
   color: theme.palette.getContrastText(purple[500]),
@@ -40,11 +40,13 @@ const SoundButton = ({audio, audioExample, audioMeaning}: card) => {
     }
 
     return (
+        <>
         <div className="sound__button">
             <Stack spacing={2} direction="row">
                 <ColorButton  onClick={ handleClick } variant="contained">listen</ColorButton>
             </Stack>
         </div>
+        </>
     )
 }
 

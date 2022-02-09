@@ -23,6 +23,7 @@ const Selector = ({ sections, handleChange }: any) => {
                         <MenuItem value={3}>4</MenuItem>
                         <MenuItem value={4}>5</MenuItem>
                         <MenuItem value={5}>6</MenuItem>
+                        <MenuItem value={6}>7</MenuItem>
                     </Select>
             </FormControl>
         </Box>

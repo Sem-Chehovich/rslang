@@ -2,21 +2,36 @@ import React from "react";
 import './wordCard.scss';
 import SoundButton from './soundButton';
 import { getCorrectUrl, getCorrectMeaning } from '../utilities/utilities';
-import { card } from '../interface/interface';
+import { card, stateObj } from '../interface/interface';
+import FormControlLabelPosition from './component/togleButtons'
+import { isAuthorized } from '../utilities/utilities'
 
 type MyProps = { card: card };
-type MyState = {};
+type MyState = {isLearned: boolean, isDifficult: boolean};
 
 class WordCardContainer extends React.Component<MyProps, MyState> {
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor
     constructor(props: any) {
         super(props)
+        this.state = {
+            isLearned: false,
+            isDifficult: false,
+        }
+    }
+    
+    changeCardClass = (stateObj: stateObj ) => {
+        this.setState({ isLearned: stateObj.isLearned,
+            isDifficult: stateObj.isDifficult })
     }
 
     render() {
         const { image, word, transcription, textMeaning, textExample, wordTranslate, textMeaningTranslate, textExampleTranslate, audio, audioMeaning, audioExample } = this.props.card
+
+        const learnedClass = this.state.isLearned ? 'learned' : '';
+        const difficultClass = this.state.isDifficult ? 'difficult' : '';
+
         return (
-            <div className="card">
+            <div className={`card ${learnedClass} ${difficultClass}`}>
             <div className="card__img-wrapper">
                 <img className="card__img" src={getCorrectUrl(image)} alt="word img" />
             </div>
@@ -24,6 +39,7 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
                 <div className="card__titel-wrapper">
                 <div className="card__titel">{word}</div>
                 <SoundButton audio={audio} audioExample={audioExample} audioMeaning={audioMeaning}/>
+                {isAuthorized() && <FormControlLabelPosition changeCardClass={this.changeCardClass}/>}
                 </div>
                 <div className="card__transcription">Transcription: {transcription}</div>
                 <div className="card__meaning">Meaning: {getCorrectMeaning(textMeaning)}</div>

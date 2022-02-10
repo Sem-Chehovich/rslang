@@ -5,6 +5,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import '../wordCard.scss';
 
+
 export default function FormControlLabelPosition({ changeCardClass }: any) {
 
     const [checkedDif, setCheckedDif] = React.useState(false);

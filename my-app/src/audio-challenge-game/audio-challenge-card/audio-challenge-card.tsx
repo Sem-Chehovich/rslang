@@ -28,7 +28,7 @@ export const AudioChallengeCard: React.FC<Props> = ({words, handleAnswerClick, h
         <button className='audio-challenge-page__audio-btn' onClick={handleSoundClick}>
           <i className='fa fa-volume-up fa-3x'></i>
         </button>
-        <h2>{rightAnswer.word}</h2>
+        <h2 className='audio-challenge-page__right-answer-word'>{rightAnswer.word}</h2>
       </div>
     </div>
     <div className='audio-challenge-page__words'>

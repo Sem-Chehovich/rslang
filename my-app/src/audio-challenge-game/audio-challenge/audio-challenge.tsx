@@ -18,12 +18,16 @@ export type AnswerObject = {
 export let wordsArr = [] as Array<Word>;
 
 export const AudioChallenge: React.FC = () => {
+  const audioBtn = document.querySelector('.audio-challenge-page__audio-btn') as HTMLElement;
+  const answerImage = document.querySelector('.audio-challenge-page__answer-img') as HTMLImageElement;
+  const answerWord = document.querySelector('.audio-challenge-page__right-answer-word') as HTMLElement;
   const [loading, setLoading] = useState(false);
   const [difficulty, setDifficulty] = useState(0);
   const [words, setWords] = useState<Array<Array<Word>>>([]); 
   const [questionNumber, setQuestionNumber] = useState(0);
   const [score, setScore] = useState(0);
   const [chosenAnswers, setChosenAnswers] = useState<AnswerObject[]>([]);
+  const [isAnswered, setIsAnswered] = useState<Array<boolean>>([]);
   const [gameOver, setGameOver] = useState(true);
   const [showScore, setShowScore] = useState(false);
 
@@ -54,10 +58,25 @@ export const AudioChallenge: React.FC = () => {
     setLoading(false);
   }
 
+  const showRightAnswer = () => {
+    audioBtn.style.width = '70px';
+    audioBtn.style.height = '70px';
+    answerImage.style.display = 'block';
+    answerWord.style.display = 'block';
+  }
+
+  const hideRightAnswer = () => {
+    audioBtn.style.width = '120px';
+    audioBtn.style.height = '120px';
+    answerImage.style.display = 'none';
+    answerWord.style.display = 'none';
+  }
+
   const handleAnswerClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const chosenAnswer = event.currentTarget.value as string;
     const correctAnswer = words[questionNumber].find((x) => x.isRight === true) as Word;
     let isCorrect = false as boolean;
+    isAnswered.push(true);
 
     if (chosenAnswer === correctAnswer.wordTranslate) {
       setScore(score + 1);
@@ -79,16 +98,41 @@ export const AudioChallenge: React.FC = () => {
     } as AnswerObject;
 
     setChosenAnswers((prev) => [...prev, answerObject]);
-    console.log(answerObject)
+    showRightAnswer();
   }
 
   const handleNextQuestionClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const correctAnswer = words[questionNumber].find((x) => x.isRight === true) as Word;
+
+    const handleSoundClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      const sound = new Audio();
+      sound.src = getCorrectUrl(correctAnswer.audio as string);
+      sound.play();
+    }
+
+    if (isAnswered[questionNumber] !== true) {
+      isAnswered.push(false);
+    }
     if (questionNumber < 9) {
       setQuestionNumber(questionNumber + 1);
     } else {
       setGameOver(true);
       setShowScore(true);
     }
+
+    const answerObject = {
+      answer: '',
+      correctAnswer: correctAnswer,
+      correct: false,
+      correctAnswerAudioHandler: handleSoundClick
+    } as AnswerObject;
+
+    if (chosenAnswers[questionNumber] === undefined) {
+      setChosenAnswers((prev) => [...prev, answerObject]);
+      // showRightAnswer();
+    }
+    hideRightAnswer();
   }
 
   const handleExitClick = (event: React.MouseEvent<HTMLButtonElement>) => {

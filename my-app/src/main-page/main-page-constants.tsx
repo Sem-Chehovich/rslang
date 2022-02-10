@@ -12,14 +12,13 @@ export const items = [
 ] as Array<NavigationLinks>;
 
 export const members = [
-  { photo: 'madina', name: 'Madina', info: 'Authorization' }, 
-  { photo: 'ann', name: 'Anna', info: 'Application main page' }, 
-  { photo: 'semyon', name: 'Semyon', info: '(Team leader) Electronic textbook' }
+  { photo: 'madina', name: 'Madina', info: 'Authorization, "Sprint"'}, 
+  { photo: 'ann', name: 'Anna', info: 'Application main page, "Audio challenge"'}, 
+  { photo: 'semyon', name: 'Semyon', info: '(Team leader) Electronic textbook, dictionary'}
 ] as Array<ProjectMember>;
 
 export const possibilities = [
-  { icon: 'book', href: '/book', name: 'Textbook', info: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt sapiente cumque sequi quo perferendis, cupiditate deleniti illum quia, iusto officiis dolorem.' }, 
-  { icon: 'bookmark', href: '/dictionary', name: 'Dictionary', info: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt sapiente cumque sequi quo perferendis, cupiditate deleniti illum quia, iusto officiis dolorem.' }, 
+  { icon: 'book', href: '/textbook', name: 'Textbook', info: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt sapiente cumque sequi quo perferendis, cupiditate deleniti illum quia, iusto officiis dolorem.' }, 
   { icon: 'gamepad', href: '/audio', name: 'Games', info: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt sapiente cumque sequi quo perferendis, cupiditate deleniti illum quia, iusto officiis dolorem.' }, 
   { icon: 'balance-scale', name: 'Statistics', href: '/statistics', info: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt sapiente cumque sequi quo perferendis, cupiditate deleniti illum quia, iusto officiis dolorem.' }
 ] as Array<AppPossibility>;

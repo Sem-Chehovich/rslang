@@ -1,11 +1,11 @@
 .audio-challenge__score-table {
-  width: 650px;
+  width: 700px;
   height: 550px;
   background-color: #537895;
   border: 5px solid black;
   border-radius: 25px;
   box-shadow: 12px 12px 2px 1px rgba(83, 120, 149, .3);
-  padding: 30px;
+  padding: 30px 45px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,7 +29,7 @@
   box-shadow: 5px 5px 2px 1px rgba(0, 0, 0, .3);
   font-size: 20px;
   text-transform: uppercase;
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 .audio-challenge__score-exit-btn:hover {
@@ -49,7 +49,22 @@
 .audio-challenge__score-table tr {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  /* align-items: center; */
+  text-align: center;
+}
+
+.audio-challenge__score-table td:nth-child(2),
+.audio-challenge__score-table td:nth-child(3) {
+  width: 25%;
+}
+
+.audio-challenge__score-table td:nth-child(4) {
+  width: 40%;
+}
+
+.audio-challenge__score-table td:first-child,
+.audio-challenge__score-table td:last-child {
+  width: 5%;
 }
 
 .audio-challenge__score-audio-btn {

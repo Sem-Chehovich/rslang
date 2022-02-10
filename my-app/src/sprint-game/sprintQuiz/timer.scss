@@ -1,0 +1,52 @@
+$sec: 60;
+
+.wrapper {
+  position: relative;
+  width: 70px;
+  height: 70px;;
+  border-radius: 50%;
+}
+
+.timer {
+  width: 100%;
+  height: 100%;
+  border: 4px solid #a6bdb0;
+  border-radius: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  &::before {
+    content: '';
+    animation: countdown steps($sec + 1) both #{$sec + 1}s infinite;
+  }
+}
+
+.border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 4px solid #25a70b;
+  border-radius: inherit;
+  animation: round steps($sec + 1) both #{$sec + 1}s infinite;
+}
+
+@keyframes countdown {
+  @for $i from 0 through $sec {
+    $count: $sec - $i;
+    #{$i / $sec * 100%} {
+      content: '#{$count}';
+    }
+  }
+}
+
+@keyframes round {
+  @for $i from 0 through $sec {
+    $pct: $i / $sec * 100%;
+    #{$pct} {
+      mask: conic-gradient(transparent $pct, #000 $pct);
+    }
+  }
+}

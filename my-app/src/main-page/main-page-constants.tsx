@@ -4,7 +4,7 @@ import { AppPossibility } from "./main/main";
   
 export const items = [
   { value: 'Textbook', href: '/dictionary', icon: 'book' }, 
-  { value: '"Sprint"', href: '/game/sprint', icon: 'gamepad' }, 
+  { value: '"Sprint"', href: '/game', icon: 'gamepad' }, 
   { value: '"Audio call"', href: '/audio', icon: 'headphones' }, 
   { value: 'Statistics', href: '/statistics', icon: 'balance-scale' }, 
   { value: 'Home', href: '/home', icon: 'home' }, 

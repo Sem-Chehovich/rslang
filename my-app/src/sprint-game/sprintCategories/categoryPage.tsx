@@ -1,12 +1,16 @@
+import { useNavigate } from 'react-router-dom';
 import './categoryPage.css';
-import Sprint from './Sprint';
 
 const levels = [1, 2, 3, 4, 5, 6];
 
 const GameCategories = () => {
+  const navigate = useNavigate();
+  
   const handleClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     const group = target.dataset.group!;
+    navigate('/sprint');
+    localStorage.setItem('groupSprint', group);
   }
 
   return (

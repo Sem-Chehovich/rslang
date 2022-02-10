@@ -1,0 +1,64 @@
+.audio-challenge__score-table {
+  width: 650px;
+  height: 550px;
+  background-color: #537895;
+  border: 5px solid black;
+  border-radius: 25px;
+  box-shadow: 12px 12px 2px 1px rgba(83, 120, 149, .3);
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.audio-challenge__score-table h2 {
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0;
+}
+
+.audio-challenge__score-exit-btn {
+  background-color: transparent;
+  width: 80px;
+  height: 40px;
+  background-color: white;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  transition: .4s;
+  box-shadow: 5px 5px 2px 1px rgba(0, 0, 0, .3);
+  font-size: 20px;
+  text-transform: uppercase;
+  margin-top: 5px;
+}
+
+.audio-challenge__score-exit-btn:hover {
+  transform: scale(1.1);
+}
+
+.audio-challenge__score-table tbody {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 10px 0;
+  font-size: 22px;
+}
+
+.audio-challenge__score-table tr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.audio-challenge__score-audio-btn {
+  background-color: transparent;
+  border: none;
+}
+
+.audio-challenge__score-audio-btn i:hover {
+  cursor: pointer;
+  color: white;
+  transition: .3s;
+}

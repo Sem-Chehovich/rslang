@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useState } from 'react';
 import WordsPage from './wordsPage'
 import { wordPageApiService } from './service/wordPageApiService'
-import { Spinner } from '../spiner/spinner'
+import { Spinner } from '../spinner/spinner'
 const BTN_ARR = ['1', '2', '3', '4', '5', '6'];
 
 const WordsPageContainer = () => {

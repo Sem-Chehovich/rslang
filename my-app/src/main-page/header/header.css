@@ -4,12 +4,14 @@
   position: fixed;
   width: 100vw;
   top: 0;
+  z-index: 100;
 }
 
 .header__content-list {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  margin-top: 15px;
   padding: 0;
 }
 

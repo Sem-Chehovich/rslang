@@ -5,3 +5,4 @@ export interface card {
 export interface Word {
   [key: string]: string | number | boolean
 }
+

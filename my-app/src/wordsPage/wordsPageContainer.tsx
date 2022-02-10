@@ -1,11 +1,17 @@
 import React, { useEffect } from "react";
 import { useState } from 'react';
-import WordsPage from './wordsPage'
-import { wordPageApiService } from './service/wordPageApiService'
-import { Spinner } from '../spinner/spinner'
-const BTN_ARR = ['1', '2', '3', '4', '5', '6'];
+import WordsPage from './wordsPage';
+import { wordPageApiService } from './service/wordPageApiService';
+import { Spinner } from '../spinner/spinner';
+import Selector from './components/select';
+import BasicPagination from './components/pagination'
+import './wordPage.scss';
 
 const WordsPageContainer = () => {
+
+      const [sections, setSections] = React.useState('');
+      const [page, setPage] = React.useState(1);
+
 
     // const [group, setGroup] = useState('1')
     const [cards, setCards] = useState([])
@@ -19,26 +25,48 @@ const WordsPageContainer = () => {
         })
     }, [])
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        const id = (event.target as HTMLButtonElement).id
+    const handleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setSections(event.target.value);
+        setPage(1);
+        let id = `${event.target.value}`
         // setGroup(id)
         setIsLoading(true)
-        wordPageApiService.getWords('1', id).then(data => {
+        wordPageApiService.getWords('0', id).then(data => {
             setCards(data)
             setIsLoading(false)
         })
-    }
+      };
+
+      
+      const handleChangePag = (event: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value);
+        let id = `${+((event.target as HTMLButtonElement).textContent as string) - 1}`
+        // setGroup(id)
+        setIsLoading(true)
+        wordPageApiService.getWords(id, sections).then(data => {
+            setCards(data)
+            setIsLoading(false)
+        })
+      };
+
     return (
-        <>        
+        <>                                   
             { isLoading ? <Spinner /> : (
+                <>
                 <div>
                     <div className="category__buttons">
-                        {BTN_ARR.map((el, index) => (
-                            <button key={index} id={`${index}`} onClick={handleClick}  className="category__button">{`Category  ${el}`}</button>
-                        ))}
+                        <Selector
+                        handleChange={handleChange}
+                        sections={sections}
+                        />
                     </div>
                     <WordsPage cards={cards} />
                 </div>
+                <div className="pagination__container">
+                    <BasicPagination handleChangePag={handleChangePag}
+                    page={page} />
+                </div> 
+                </>
             )}
         </>
 

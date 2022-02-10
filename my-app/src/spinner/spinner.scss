@@ -68,6 +68,10 @@
   display: inline-block;
   overflow: hidden;
   background: #ffffff;
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
 }
 .ldio-s3gbvg9ffmi {
   width: 100%;

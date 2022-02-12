@@ -1,6 +1,5 @@
 import { AnswerObject } from '../audio-challenge/audio-challenge';
 import './audio-challenge-score.css';
-import { getCorrectUrl } from '../../utilities/utilities';
 
 type Props = {
   answers: Array<AnswerObject>,

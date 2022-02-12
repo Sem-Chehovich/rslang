@@ -23,3 +23,24 @@ export function shuffleWords(array: Array<Word>) {
 
   return array;
 }
+
+export const sliceArrIntoChunks = (arr: Array<Word>) => {
+  const CHUNK_SIZE = 4 as number;
+  const result = [] as Array<Array<Word>>;
+
+  for (let i = 0; i < arr.length; i += CHUNK_SIZE) {
+    const chunk = arr.slice(i, i + CHUNK_SIZE);
+
+    for (let j = 0; j < chunk.length; j++) {
+      chunk[j] = {
+        ...chunk[j],
+        isRight: false
+      }
+    }
+
+    chunk[getRandomNum(0, CHUNK_SIZE - 1)].isRight = true;
+    result.push(chunk);
+  }
+
+  return result;
+}

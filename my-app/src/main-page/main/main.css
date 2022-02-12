@@ -52,14 +52,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   width: 320px;
-  height: 450px;
-  padding: 25px 35px;
+  height: 400px;
+  padding: 35px;
   border: 5px solid black;
   border-radius: 25px;
   transition: .4s;
   background-color: rgba(210, 108, 106, .4);
   color: black;
+  text-align: center;
 }
 
 .main-content__app-advantages-item a {

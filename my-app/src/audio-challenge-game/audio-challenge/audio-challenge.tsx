@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { audioChallengeApiService } from '../audio-challenge-api-service/api-service';
 import { AudioChallengeCard } from '../audio-challenge-card/audio-challenge-card';
 import { Spinner } from '../../spinner/spinner';
-import { shuffleWords, getRandomNum, getCorrectUrl } from '../../utilities/utilities';
+import { shuffleWords, getRandomNum, getCorrectUrl, sliceArrIntoChunks } from '../../utilities/utilities';
 import { Word } from '../../interface/interface';
 import { AudioChallengeScore } from '../audio-challenge-score/audio-challenge-score';
 
@@ -18,9 +18,6 @@ export type AnswerObject = {
 export let wordsArr = [] as Array<Word>;
 
 export const AudioChallenge: React.FC = () => {
-  const audioBtn = document.querySelector('.audio-challenge-page__audio-btn') as HTMLElement;
-  const answerImage = document.querySelector('.audio-challenge-page__answer-img') as HTMLImageElement;
-  const answerWord = document.querySelector('.audio-challenge-page__right-answer-word') as HTMLElement;
   const [loading, setLoading] = useState(false);
   const [difficulty, setDifficulty] = useState(0);
   const [words, setWords] = useState<Array<Array<Word>>>([]); 
@@ -59,6 +56,9 @@ export const AudioChallenge: React.FC = () => {
   }
 
   const showRightAnswer = () => {
+    const audioBtn = document.querySelector('.audio-challenge-card__audio-btn') as HTMLElement;
+    const answerImage = document.querySelector('.audio-challenge-card__answer-img') as HTMLImageElement;
+    const answerWord = document.querySelector('.audio-challenge-card__right-answer-word') as HTMLElement;
     audioBtn.style.width = '70px';
     audioBtn.style.height = '70px';
     answerImage.style.display = 'block';
@@ -66,6 +66,9 @@ export const AudioChallenge: React.FC = () => {
   }
 
   const hideRightAnswer = () => {
+    const audioBtn = document.querySelector('.audio-challenge-card__audio-btn') as HTMLElement;
+    const answerImage = document.querySelector('.audio-challenge-card__answer-img') as HTMLImageElement;
+    const answerWord = document.querySelector('.audio-challenge-card__right-answer-word') as HTMLElement;
     audioBtn.style.width = '120px';
     audioBtn.style.height = '120px';
     answerImage.style.display = 'none';
@@ -73,14 +76,27 @@ export const AudioChallenge: React.FC = () => {
   }
 
   const handleAnswerClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const answerBtns = document.querySelectorAll('.audio-challenge-card__words-btn') as NodeListOf<HTMLElement>;
+    const challengeNextBtn = document.querySelector('.audio-challenge-card__next-btn') as HTMLElement;
     const chosenAnswer = event.currentTarget.value as string;
     const correctAnswer = words[questionNumber].find((x) => x.isRight === true) as Word;
     let isCorrect = false as boolean;
     isAnswered.push(true);
 
+    if (challengeNextBtn.innerHTML === 'I don\'t know') {
+      showRightAnswer();
+      challengeNextBtn.innerHTML = 'Next';
+      event.currentTarget.style.textDecoration = 'line-through';
+      answerBtns.forEach((x) => {
+       if (x.innerHTML === correctAnswer.wordTranslate) {
+        x.innerHTML = `<u>${x.innerHTML}</u>`;
+       }});
+    }
+
     if (chosenAnswer === correctAnswer.wordTranslate) {
       setScore(score + 1);
       isCorrect = true;
+      event.currentTarget.style.textDecoration = 'underline';
     }
 
     const handleSoundClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -98,73 +114,69 @@ export const AudioChallenge: React.FC = () => {
     } as AnswerObject;
 
     setChosenAnswers((prev) => [...prev, answerObject]);
-    showRightAnswer();
   }
 
   const handleNextQuestionClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const answerBtns = document.querySelectorAll('.audio-challenge-card__words-btn') as NodeListOf<HTMLElement>;
     const correctAnswer = words[questionNumber].find((x) => x.isRight === true) as Word;
 
-    const handleSoundClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-      const sound = new Audio();
-      sound.src = getCorrectUrl(correctAnswer.audio as string);
-      sound.play();
-    }
-
-    if (isAnswered[questionNumber] !== true) {
-      isAnswered.push(false);
-    }
-    if (questionNumber < 9) {
-      setQuestionNumber(questionNumber + 1);
+    if (event.currentTarget.innerHTML === 'I don\'t know') {
+      event.currentTarget.innerHTML = 'Next';
+      showRightAnswer();
+      answerBtns.forEach((x) => {
+        if (x.innerHTML === correctAnswer.wordTranslate) {
+         x.innerHTML = `<u>${x.innerHTML}</u>`;
+        }});
     } else {
-      setGameOver(true);
-      setShowScore(true);
-    }
+      hideRightAnswer();
+      answerBtns.forEach((btn) => {
+        btn.style.textDecoration = 'none';
+      });
+      event.currentTarget.innerHTML = 'I don\'t know'
 
-    const answerObject = {
-      answer: '',
-      correctAnswer: correctAnswer,
-      correct: false,
-      correctAnswerAudioHandler: handleSoundClick
-    } as AnswerObject;
+      const handleSoundClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        const sound = new Audio();
+        sound.src = getCorrectUrl(correctAnswer.audio as string);
+        sound.play();
+      }
 
-    if (chosenAnswers[questionNumber] === undefined) {
-      setChosenAnswers((prev) => [...prev, answerObject]);
-      // showRightAnswer();
+      if (isAnswered[questionNumber] !== true) {
+        isAnswered.push(false);
+      }
+
+      if (questionNumber < 9) {
+        setQuestionNumber(questionNumber + 1);
+      } else {
+        setGameOver(true);
+        setShowScore(true);
+        setQuestionNumber(0);
+      }
+
+      const answerObject = {
+        answer: '',
+        correctAnswer: correctAnswer,
+        correct: false,
+        correctAnswerAudioHandler: handleSoundClick
+      } as AnswerObject;
+
+      if (chosenAnswers[questionNumber] === undefined) {
+        setChosenAnswers((prev) => [...prev, answerObject]);
+      }
     }
-    hideRightAnswer();
   }
 
   const handleExitClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setGameOver(true);
     setShowScore(false);
+    setScore(0);
     setQuestionNumber(0);
+    setChosenAnswers([]);
   }
 
   const generateMixedArray = (arr: Array<Word>) => {
     arr = shuffleWords(arr);
     setWords(sliceArrIntoChunks(arr));
-  }
-
-  const sliceArrIntoChunks = (arr: Array<Word>) => {
-    const CHUNK_SIZE = 4 as number;
-    const result = [] as Array<Array<Word>>;
-
-    for (let i = 0; i < arr.length; i += CHUNK_SIZE) {
-      const chunk = arr.slice(i, i + CHUNK_SIZE);
-
-      for (let j = 0; j < chunk.length; j++) {
-        chunk[j] = {
-          ...chunk[j],
-          isRight: false
-        }
-      }
-
-      chunk[getRandomNum(0, CHUNK_SIZE - 1)].isRight = true;
-      result.push(chunk);
-    }
-
-    return result;
   }
 
   return (

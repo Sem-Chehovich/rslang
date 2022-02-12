@@ -6,7 +6,7 @@ import Main from './main-page/main/main';
 import WordsPageContainer from './wordsPage/wordsPageContainer';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthForm from './authorization/AuthForm';
-
+import { GamesPage } from './games/games-page';
 
 function App() {
 
@@ -17,6 +17,7 @@ function App() {
         <main>
           <Routes>
             <Route index element={<Main />} />
+            <Route path='/games' element={<GamesPage />} />
             <Route path="/home" element={<Main />} />
             <Route path="/audio" element={<AudioChallenge />}/>
             <Route path="/textbook" element={<WordsPageContainer />} />

@@ -21,22 +21,22 @@ export const AudioChallengeCard: React.FC<Props> = ({words, handleAnswerClick, h
   }
 
   return (
-    <div className='audio-challenge-page'>
-    <div className='audio-challenge-page__audio-container'>
-      <img className='audio-challenge-page__answer-img' src={getCorrectUrl(rightAnswer.image as string)} alt='' />
-      <div className='audio-challenge-page__right-answer'>
-        <button className='audio-challenge-page__audio-btn' onClick={handleSoundClick}>
+    <div className='audio-challenge-card'>
+    <div className='audio-challenge-card__audio-container'>
+      <img className='audio-challenge-card__answer-img' src={getCorrectUrl(rightAnswer.image as string)} alt='' />
+      <div className='audio-challenge-card__right-answer'>
+        <button className='audio-challenge-card__audio-btn' onClick={handleSoundClick}>
           <i className='fa fa-volume-up fa-3x'></i>
         </button>
-        <h2 className='audio-challenge-page__right-answer-word'>{rightAnswer.word}</h2>
+        <h2 className='audio-challenge-card__right-answer-word'>{rightAnswer.word}</h2>
       </div>
     </div>
-    <div className='audio-challenge-page__words'>
+    <div className='audio-challenge-card__words'>
       {words.map((word: Word, index: number) => 
-        <button key={index} value={word.wordTranslate as string} onClick={handleAnswerClick} className='audio-challenge-page__words-btn'>{word.wordTranslate}</button>
+        <button key={index} value={word.wordTranslate as string} onClick={handleAnswerClick} className='audio-challenge-card__words-btn'>{word.wordTranslate}</button>
       )};
     </div>
-    <button onClick={handleNextQuestionClick} className='audio-challenge-page__next-btn'>Next word</button>
+    <button onClick={handleNextQuestionClick} className='audio-challenge-card__next-btn'>I don't know</button>
   </div>
   )
 }

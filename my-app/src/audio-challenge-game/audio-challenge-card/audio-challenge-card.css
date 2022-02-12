@@ -1,15 +1,16 @@
-.audio-challenge-page {
+.audio-challenge-card {
   width: 100%;
   height: calc(100vh - 70px);
   background-color: rgba(210, 108, 106, .3);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   padding: 150px 0;
 }
 
-.audio-challenge-page__audio-container {
+.audio-challenge-card__audio-container {
+  height: 220px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,14 +18,14 @@
   gap: 10px;
 }
 
-.audio-challenge-page__answer-img {
+.audio-challenge-card__answer-img {
   width: 140px;
   height: 140px;
   border-radius: 50%;
   display: none;
 }
 
-.audio-challenge-page__right-answer {
+.audio-challenge-card__right-answer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,11 +33,11 @@
   gap: 20px;
 }
 
-.audio-challenge-page__right-answer-word {
+.audio-challenge-card__right-answer-word {
   display: none;
 }
 
-.audio-challenge-page__audio-btn {
+.audio-challenge-card__audio-btn {
   background-color: rgba(250, 252, 254, .4);
   border-radius: 50%;
   color: white;
@@ -47,26 +48,21 @@
   transition: .4s;
 }
 
-.audio-challenge-page__audio-btn:active {
-  width: 70px;
-  height: 70px;
-}
-
-.audio-challenge-page__audio-btn:hover {
+.audio-challenge-card__audio-btn:hover {
   background-color: rgba(250, 252, 254, .2);
 }
 
-.audio-challenge-page__audio-btn i {
+.audio-challenge-card__audio-btn i {
   color: white;
 }
 
-.audio-challenge-page__words {
+.audio-challenge-card__words {
   width: 1000px;
   display: flex;
   justify-content: space-between;
 }
 
-.audio-challenge-page__words-btn {
+.audio-challenge-card__words-btn {
   min-width: 180px;
   max-width: 300px;
   border: 3px solid black;
@@ -82,11 +78,11 @@
   text-transform: uppercase;
 }
 
-.audio-challenge-page__words-btn:hover {
+.audio-challenge-card__words-btn:hover {
   transform: scale(1.1);
 }
 
-.audio-challenge-page__next-btn {
+.audio-challenge-card__next-btn {
   width: 190px;
   border: 3px solid black;
   border-radius: 25px;
@@ -100,6 +96,6 @@
   text-transform: uppercase;
 }
 
-.audio-challenge-page__next-btn:hover {
+.audio-challenge-card__next-btn:hover {
   transform: scale(1.1);
 }

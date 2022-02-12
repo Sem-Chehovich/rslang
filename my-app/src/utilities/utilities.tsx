@@ -8,3 +8,19 @@ export function getCorrectMeaning(text: string) {
 export function isAuthorized() {
    return !!localStorage.getItem('userName');
 }
+
+export function checkIfPageLearned(pageArr: [], userArr: []) {
+    let isFalse = true
+    if (userArr.length < 20) {
+        isFalse = false 
+    } else {
+        pageArr.forEach(({ id }) => {
+            let finded = userArr.find(({ wordId }) => wordId === id)
+            if (!finded) {
+             isFalse = false 
+            }
+         })
+    }
+ 
+    return isFalse
+}

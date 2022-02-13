@@ -2,11 +2,10 @@ import React, { useEffect } from "react";
 import { useState } from 'react';
 import WordsPage from './wordsPage';
 import { wordPageApiService } from './service/wordPageApiService';
-import { Spinner } from '../spiner/spinner';
+import { Spinner } from '../spinner/spinner';
 import Selector from './components/select';
 import BasicPagination from './components/pagination'
 import './wordPage.scss';
-
 
 const WordsPageContainer = () => {
 

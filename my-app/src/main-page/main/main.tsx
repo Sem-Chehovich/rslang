@@ -16,19 +16,19 @@ function Main() {
       <div className='main-content__app-description'>
         <h1>Rs-lang</h1>
         <h3>will become your faithful friend on the way of learning English by memorizing new words, playing mini-games and tracking your individual progress</h3>
-        <div className='main-content__png'></div>
+        {/* <div className='main-content__png'></div> */}
       </div>
       <div>
         <h3 className='main-content__headers'>Possibilities and advantages</h3>
         <div className='main-content__app-advantages'>
           {possibilities.map((possibility: AppPossibility) =>
-          <div key={possibility.name} className='main-content__app-advantages-item'>
-            <Link to={possibility.href}>
+          <Link to={possibility.href}>
+            <div key={possibility.name} className='main-content__app-advantages-item'>
               <i className={'fa fa-'+ possibility.icon + ' fa-5x'}></i>
               <h3>{possibility.name}</h3>
               <p>{possibility.info}</p>
-            </Link>
-          </div>
+            </div>
+          </Link>
           )}
         </div>
       </div>

@@ -9,7 +9,7 @@ body {
 }
 
 .form-container {
-  height: 100vh;
+  height: calc(100vh - 70px);
 }
 
 .form-container__box {

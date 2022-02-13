@@ -8,6 +8,7 @@ import BasicPagination from './components/pagination'
 import './wordPage.scss';
 import { card, stateObj } from '../interface/interface';
 import { checkIfPageLearned } from '../utilities/utilities'
+import BasicAlerts from './components/alert'
 
 
 const WordsPageContainer = () => {
@@ -21,15 +22,9 @@ const WordsPageContainer = () => {
       const [cards, setCards] = useState([])
       const [isLoading, setIsLoading] = useState(true)
 
-  
-
     useEffect(() => {
         setIsLoading(true)
         if (+sections < 6) {
-            // wordPageApiService.getWords((+page - 1) + '' , sections || '0').then(data => {
-            //     setCards(data)
-            //     setIsLoading(false)
-            // })
 
             const compareCards = async() => {
                let cards = await wordPageApiService.getWords((+page - 1) + '' , sections || '0')
@@ -42,9 +37,6 @@ const WordsPageContainer = () => {
 
             compareCards()
         }else{
-            // setTimeout(() => {
-            //     setIsLoading(false)
-            // }, 1000)
             const loadUserCards = async () => {
                 let userWordIdArr = await wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string))
                 let promise:  Promise<any> = new Promise((resolve) => { 
@@ -63,7 +55,6 @@ const WordsPageContainer = () => {
                 
                 setTimeout(() => {promise.then((data) => {
                     setCards(data)
-                    // localStorage.setItem('card', JSON.stringify(data))
                     setIsLoading(false)
                 })}, 1000)
             }
@@ -100,7 +91,6 @@ const WordsPageContainer = () => {
             
             setTimeout(() => {promise.then((data) => {
                 setCards(data)
-                // localStorage.setItem('card', JSON.stringify(data))
                 setIsLoading(false)
             })}, 1000)
 
@@ -112,7 +102,6 @@ const WordsPageContainer = () => {
         }
       };
 
-      
       const handleChangePag = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
         let id = `${+((event.target as HTMLButtonElement).textContent as string) - 1}`
@@ -138,8 +127,14 @@ const WordsPageContainer = () => {
                         sections={sections}
                         />
                     </div>
-                    {isPageLearned && <div> Вы изучили весь раздел </div>}
-                    <WordsPage handlePageLearned={handlePageLearned} cards={cards} strongArr={strongArr} weakArr={weakArr}/>
+                    {isPageLearned && <div className="alert__wrapper"> <BasicAlerts /> </div>}
+                    <WordsPage 
+                        handlePageLearned={handlePageLearned} 
+                        cards={cards} 
+                        strongArr={strongArr} 
+                        weakArr={weakArr}
+                        isPageLearned={isPageLearned}
+                    />
                 </div>
                 <div className="pagination__container">
                     {+sections < 6 && <BasicPagination handleChangePag={handleChangePag}

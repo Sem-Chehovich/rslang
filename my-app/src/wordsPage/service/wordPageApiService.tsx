@@ -54,8 +54,6 @@ class WordPageApiService {
       }
     })
       .then((resp) => resp.json());  
-    
-    
 }
 
 export const wordPageApiService = new WordPageApiService();

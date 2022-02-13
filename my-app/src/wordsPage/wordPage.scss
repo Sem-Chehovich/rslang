@@ -44,3 +44,14 @@
 .css-bf9wz-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected  {
     background-color:rgba(210, 108, 106, .4) !important;
 }
+
+.alert__wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.page__learned {
+    background-color: #edf7ed;
+    box-shadow: inset 0px 10px 15px 1px white;
+}

@@ -38,3 +38,17 @@
 .card__titel-wrapper{
     display: flex;
 }
+
+.toggle-buttons {
+    border: 2px solid rgba(210, 108, 106, .4);
+    background-color: #5f8aaa;
+    margin-left: 10px;
+}
+
+.learned {
+    border: 5px solid green;
+}
+
+.difficult {
+    border: 5px solid red;
+}

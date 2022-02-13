@@ -2,9 +2,6 @@ import * as React from 'react';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
-
-
-
 export default function BasicPagination({page, handleChangePag}: any) {
   return (
     <Stack spacing={1}>

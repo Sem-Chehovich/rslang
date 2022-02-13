@@ -103,6 +103,11 @@
   transition: 0.3s;
 }
 
+.bulb-yellow {
+  filter: invert(57%) sepia(100%) saturate(329%) hue-rotate(141deg) brightness(89%) contrast(90%);
+  transition: 0.3s;
+}
+
 .question-box {
   display: flex;
   flex-direction: column;

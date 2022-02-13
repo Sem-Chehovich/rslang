@@ -1,16 +1,20 @@
 import { useNavigate } from 'react-router-dom';
 import './categoryPage.css';
+import { useActions } from '../../hooks/useActions';
 
 const levels = [1, 2, 3, 4, 5, 6];
 
 const GameCategories = () => {
   const navigate = useNavigate();
+  const { fetchWords, setGroup } = useActions();
   
   const handleClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     const group = target.dataset.group!;
+    setGroup(Number(group));
+    fetchWords(Number(group));
+    
     navigate('/sprint');
-    localStorage.setItem('groupSprint', group);
   }
 
   return (

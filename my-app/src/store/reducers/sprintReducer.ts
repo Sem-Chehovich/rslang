@@ -11,7 +11,6 @@ export const sprintReducer = (state = initialState, action: SprintAction): Sprin
     case SprintActionTypes.FETCH_WORDS:
       return {
         ...state,
-        questions: [],
       }
     case SprintActionTypes.FETCH_WORDS_SUCCESS:
       return {

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Dispatch } from 'react';
 import { IResult, IWord, SprintAction, SprintActionTypes } from '../../types/sprint';
 
@@ -11,22 +10,6 @@ function shuffle(array: IWord[]) {
 
   return array;
 }
-
-// export const fetchWords = (group: number) => {
-//   const url = 'https://rs-lang-rs-school.herokuapp.com';
-//   const words = `${url}/words`;
-
-//   return async (dispatch: Dispatch<SprintAction>) => {
-//     try {
-//       dispatch({ type: SprintActionTypes.FETCH_WORDS });
-//       const response = await axios.get(`${words}?group=${group}&page=${0}`);
-
-//       dispatch({ type: SprintActionTypes.FETCH_WORDS_SUCCESS, payload: shuffle(response.data) });
-//     } catch (e) {
-//       console.log('Какая-то ошибка');
-//     } 
-//   }
-// }
 
 const url = 'https://rs-lang-rs-school.herokuapp.com';
 

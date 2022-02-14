@@ -68,6 +68,7 @@
   align-items: center;
   width: 100%;
   background-color: rgb(243 233 233 / 70%);
+  border: 3px solid rgb(243 233 233 / 70%);
   border-radius: 20px;
   padding: 40px;
   text-align: center;
@@ -100,11 +101,6 @@
   background-image: url("../../assets/svg/lightbulb.svg");
   background-size: contain;
   background-repeat: no-repeat;
-  transition: 0.3s;
-}
-
-.bulb-yellow {
-  filter: invert(57%) sepia(100%) saturate(329%) hue-rotate(141deg) brightness(89%) contrast(90%);
   transition: 0.3s;
 }
 

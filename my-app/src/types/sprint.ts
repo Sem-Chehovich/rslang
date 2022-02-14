@@ -35,6 +35,7 @@ export enum SprintActionTypes {
 
 interface FetchWordsAction {
   type: SprintActionTypes.FETCH_WORDS,
+  payload?: IWord[],
 }
 
 interface FetchWordsSuccessAction {

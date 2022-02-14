@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import './categoryPage.css';
 import { useActions } from '../../hooks/useActions';
+import { getRandomNum } from '../../utilities/utilities';
 
 const levels = [1, 2, 3, 4, 5, 6];
 
@@ -11,8 +12,10 @@ const GameCategories = () => {
   const handleClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     const group = target.dataset.group!;
+
+    const page = getRandomNum(0, 29);
     setGroup(Number(group));
-    fetchWords(Number(group));
+    fetchWords(Number(group), page);
     
     navigate('/sprint');
   }

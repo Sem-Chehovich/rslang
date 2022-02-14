@@ -1,7 +1,7 @@
 .sprint-page {
-  background-color: rgb(82, 82, 92);
   height: 100vh;
   font-size: 32px;
+  background: linear-gradient(45deg, #30cfd0, #330867);
 }
 
 .sprint-page__controls {
@@ -36,12 +36,26 @@
   justify-content: space-between;
 }
 
+.centered {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
 .sound-icon {
   background-image: url("../../assets/svg/volume-on.svg");
 }
 
+.sound-of-icon {
+  background-image: url("../../assets/svg/volume-off.svg");
+}
+
 .screen-icon {
   background-image: url("../../assets/svg/expand.svg");
+}
+
+.compress-screen-icon {
+  background-image: url("../../assets/svg/compress.svg");
 }
 
 .game-box {

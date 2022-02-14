@@ -1,5 +1,6 @@
 import { Dispatch } from 'react';
 import { IResult, IWord, SprintAction, SprintActionTypes } from '../../types/sprint';
+import { getCorrectUrl } from '../../utilities/utilities';
 
 
 function shuffle(array: IWord[]) {
@@ -11,12 +12,9 @@ function shuffle(array: IWord[]) {
   return array;
 }
 
-const url = 'https://rs-lang-rs-school.herokuapp.com';
-
-const words = `${url}/words`;
-
-export async function getWords(group: number) {
-  const response = await fetch(`${words}?group=${group}&page=${0}`);
+export async function getWords(group: number, page: number) {
+  const url = getCorrectUrl(`words?group=${group}&page=${page}`);
+  const response = await fetch(url);
 
   if (response.ok) {
     const result = await response.json();
@@ -27,12 +25,13 @@ export async function getWords(group: number) {
   return response;
 }
 
-export const fetchWords = (group: number) => {
+export const fetchWords = (group: number, page = 0) => {
 
   return async (dispatch: Dispatch<SprintAction>) => {
     try {
       dispatch({ type: SprintActionTypes.FETCH_WORDS });
-      const wordList = await getWords(group);
+      const wordList = await getWords(group, page);
+
       dispatch({ type: SprintActionTypes.FETCH_WORDS_SUCCESS, payload: shuffle(wordList) });
     } catch (e) {
       console.log('Какая-то ошибка');
@@ -45,4 +44,8 @@ export function setGroup(group: number): SprintAction {
 
 export function setResults(results: IResult[]): SprintAction {
   return { type: SprintActionTypes.SET_RESULTS, payload: results }
+}
+
+export function setScore(score: number) {
+  return { type: SprintActionTypes.SET_SCORE, payload: score }
 }

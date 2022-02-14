@@ -24,6 +24,7 @@ export interface SprintState {
   questions: IWord[],
   group: number,
   results: IResult[],
+  score: number,
 }
 
 export enum SprintActionTypes {
@@ -31,6 +32,7 @@ export enum SprintActionTypes {
   FETCH_WORDS_SUCCESS = 'FETCH_WORDS_SUCCESS',
   SET_GROUP = 'SET_GROUP',
   SET_RESULTS = 'SET_RESULTS',
+  SET_SCORE = 'SET_SCORE',
 }
 
 interface FetchWordsAction {
@@ -53,4 +55,9 @@ interface SetResultsAction {
   payload: IResult[],
 }
 
-export type SprintAction = FetchWordsAction | FetchWordsSuccessAction | SetGroupAction | SetResultsAction;
+interface SetScoreAction {
+  type: SprintActionTypes.SET_SCORE,
+  payload: number,
+}
+
+export type SprintAction = FetchWordsAction | FetchWordsSuccessAction | SetGroupAction | SetResultsAction | SetScoreAction;

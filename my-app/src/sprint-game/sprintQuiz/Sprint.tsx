@@ -4,23 +4,35 @@ import pokemon1 from '../../assets/png/pokemon1.png';
 import pokemon2 from '../../assets/png/pokemon2.png';
 import pokemon3 from '../../assets/png/pokemon3.png';
 import pokemon4 from '../../assets/png/pokemon4.png';
+import wrongAnswer from '../../assets/sounds/wrongAnswer.mp3';
+import rightAnswer from '../../assets/sounds/rightAnswer.mp3';
 import { useTypedSelector } from '../../hooks/useTypeSelector';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useActions } from '../../hooks/useActions';
 import { IResult, IWord } from '../../types/sprint';
 import { getRandomNum } from '../../utilities/utilities';
+import { useNavigate } from 'react-router';
+import ScrollCrid from '../sprintResults/sprintResults';
+
 
 
 const Sprint: React.FC = () => {
   const [questionNumber, setQuestionNumber] = useState(0);
   const [corrrectAnsCounter, setCorrrectAnsCounter] = useState(1);
+  const [isFullScreen, setFullScreen] = useState(false);
+  const [isSoudOn, setSoundOn] = useState(false);
   const [isCorrect, setIsCorrect] = useState<Array<boolean>>([]);
+  const [gameOver, setGameOver] = useState(false);
   const [points, setPoints] = useState(10);
-  const { questions, group, results } = useTypedSelector(state => state.sprint);
-  const { fetchWords, setResults } = useActions();
+  const { questions, group, results, score } = useTypedSelector(state => state.sprint);
+  const { fetchWords, setResults, setScore } = useActions();
+  const navigate = useNavigate();
+
+  setTimeout(() => {
+    setGameOver(true);
+  }, 60000);
 
   const showRightAnswer = (corrrectAnsCounter: number) => {
-    console.log(corrrectAnsCounter);
     const bulb1 = document.querySelector('.bulb-1') as HTMLElement;
     const bulb2 = document.querySelector('.bulb-2') as HTMLElement;
     const bulb3 = document.querySelector('.bulb-3') as HTMLElement;
@@ -54,6 +66,11 @@ const Sprint: React.FC = () => {
     }
   }
 
+  function soundOn(answerSound: string) {
+    const sound = new Audio(answerSound);
+    sound.play();
+  }
+
   function isCorrectAnswer(question: IWord[], answerId: string, btn: string): IResult[] {
     let  ans: boolean;
 
@@ -85,16 +102,23 @@ const Sprint: React.FC = () => {
     if (isCorrect[isCorrect.length - 1] === false) {
       box.style.borderColor = '#a70b0b'; 
       setCorrrectAnsCounter(1);
-      console.log(isCorrect);
       showRightAnswer(0); 
       isCorrect.length = 0;
       setPoints(10);
+      if (isSoudOn === false) {
+        soundOn(wrongAnswer);
+      }
+      
     } else {
+      setScore(points)
       box.style.borderColor = '#25a70b';
       number = corrrectAnsCounter + 1
       setCorrrectAnsCounter(number);
-      console.log(isCorrect);  
       showRightAnswer(corrrectAnsCounter); 
+      if (isSoudOn === false) {
+        soundOn(rightAnswer);
+      }
+
       if (isCorrect.length % 4 === 0) { 
         setPoints(points + 10);
       }
@@ -102,23 +126,52 @@ const Sprint: React.FC = () => {
 
 
     if (questionNumber > 15) {
+      const page = getRandomNum(0, 29);
       setQuestionNumber(0);
-      fetchWords(group);
+      fetchWords(group, page);
     } else {
       const number = questionNumber + 1;
       setQuestionNumber(number);
     }
   }
 
+  const fullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+      setFullScreen(true);
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+        setFullScreen(false);
+      }
+    }
+  }
+
+  const onSoundOn = () => {
+    if (isSoudOn === false) {
+      setSoundOn(true);
+    } else {
+      setSoundOn(false);
+    }
+  }
+
+  const backPage = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    }
+    navigate('/game');
+  }
+
   return (
     <div className='sprint-page'>
       <div className='sprint-page__controls'>
-        <div className='sprint-btn back-icon'></div>
+        <div className='sprint-btn back-icon' onClick={() => backPage()}></div>
         <div className='game-control'>
-          <div className='sprint-btn sound-icon'></div>
-          <div className='sprint-btn screen-icon'></div>
+          <div className={ isSoudOn === false ? 'sprint-btn sound-icon' : 'sprint-btn sound-of-icon'} onClick={() => onSoundOn()}></div>
+          <div className={ isFullScreen === false ? 'sprint-btn screen-icon' : 'sprint-btn compress-screen-icon'} onClick={(e) => fullScreen()}></div>
         </div>       
       </div>
+       { gameOver === false ?
       <div className='game-box'>
         <div className='sprint-page__game-data'>
           <div className='sprint-page__timer'>
@@ -129,7 +182,7 @@ const Sprint: React.FC = () => {
             </div>
           </div>
           <div className='game-points'>+{points} очков</div> 
-          <div className='sprint-page__score'>{ questionNumber }</div>
+          <div className='sprint-page__score'>{ score }</div>
         </div>
         <div className='sprint-page__game'>
           <div className='game-controls'>
@@ -159,15 +212,10 @@ const Sprint: React.FC = () => {
           </div>
         </div>
       </div>
-      <div>
-        {
-          results.map(res => 
-            res.questions.map(r => <div key={r.id}>{r.word}
-            { res.isRight ? ' yes' : ' no' }
-          </div>))}
-      </div>
+      : 
+        <ScrollCrid />
+      }
     </div>
-  );
-}
+)}
 
 export default Sprint;

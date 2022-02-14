@@ -4,6 +4,7 @@ const initialState: SprintState = {
   questions: [],
   group: 0,
   results: [],
+  score: 0,
 }
 
 export const sprintReducer = (state = initialState, action: SprintAction): SprintState => {
@@ -26,6 +27,11 @@ export const sprintReducer = (state = initialState, action: SprintAction): Sprin
       return {
         ...state,
         results: [...state.results, ...action.payload],
+      }
+    case SprintActionTypes.SET_SCORE:
+      return {
+        ...state,
+        score: state.score + action.payload,
       }
     default: 
       return state;

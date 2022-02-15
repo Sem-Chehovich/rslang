@@ -24,9 +24,15 @@ const Sprint: React.FC = () => {
   const [isCorrect, setIsCorrect] = useState<Array<boolean>>([]);
   const [gameOver, setGameOver] = useState(false);
   const [points, setPoints] = useState(10);
-  const { questions, group, results, score } = useTypedSelector(state => state.sprint);
+  const { questions, group, score } = useTypedSelector(state => state.sprint);
   const { fetchWords, setResults, setScore } = useActions();
   const navigate = useNavigate();
+  
+  // setTimeout(() => {
+  //   const box = document.querySelector('.sprint-page__game') as HTMLElement;
+  //   box.style.borderColor = 'rgb(243 233 233 / 70%)';
+  // }, 500);
+
 
   setTimeout(() => {
     setGameOver(true);
@@ -90,14 +96,9 @@ const Sprint: React.FC = () => {
   const wordEng = questions.slice(questionNumber, questionNumber + 1);
   const wordRu = questions.slice(randomAns, randomAns + 1);
 
-  const nextQuestion = (e: React.MouseEvent) => {
-    let number: number;
-    const target = e.target as HTMLElement;
-    const btn = target.dataset.btn!;
-    const res = isCorrectAnswer(wordEng, wordRu[0].id, btn);
-    setResults(res);
+  const checkAnswer = () => {
+    let number: number; 
     const box = document.querySelector('.sprint-page__game') as HTMLElement;
-    box.style.borderColor = 'rgb(243 233 233 / 70%)';
 
     if (isCorrect[isCorrect.length - 1] === false) {
       box.style.borderColor = '#a70b0b'; 
@@ -133,6 +134,29 @@ const Sprint: React.FC = () => {
       const number = questionNumber + 1;
       setQuestionNumber(number);
     }
+  }
+
+  document.onkeydown = function(e) {
+    switch ((e || window.event).keyCode) {
+      case 37:
+        const res1 = isCorrectAnswer(wordEng, wordRu[0].id, '0');
+        setResults(res1);
+        checkAnswer();
+      break;
+      case 39:
+        const res2 = isCorrectAnswer(wordEng, wordRu[0].id, '1');
+        setResults(res2);
+        checkAnswer();
+      break;
+    }
+  }
+
+  const nextQuestion = (e: React.MouseEvent) => {    
+    const target = e.target as HTMLElement;
+    const btn = target.dataset.btn!;
+    const res = isCorrectAnswer(wordEng, wordRu[0].id, btn);
+    setResults(res);
+    checkAnswer();
   }
 
   const fullScreen = () => {

@@ -11,7 +11,7 @@ type Props = {
 }
 
 export const AudioChallengeCard: React.FC<Props> = ({words, handleAnswerClick, handleNextQuestionClick}) => {
-  let rightAnswer = words.find((x) => x.isRight === true) as Word;
+  let rightAnswer = words?.find((x) => x.isRight === true) as Word;
 
   const handleSoundClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -23,17 +23,17 @@ export const AudioChallengeCard: React.FC<Props> = ({words, handleAnswerClick, h
   return (
     <div className='audio-challenge-card'>
     <div className='audio-challenge-card__audio-container'>
-      <img className='audio-challenge-card__answer-img' src={getCorrectUrl(rightAnswer.image as string)} alt='' />
+      <img className='audio-challenge-card__answer-img' src={getCorrectUrl(rightAnswer?.image as string)} alt='' />
       <div className='audio-challenge-card__right-answer'>
         <button className='audio-challenge-card__audio-btn' onClick={handleSoundClick}>
           <i className='fa fa-volume-up fa-3x'></i>
         </button>
-        <h2 className='audio-challenge-card__right-answer-word'>{rightAnswer.word}</h2>
+        <h2 className='audio-challenge-card__right-answer-word'>{rightAnswer?.word}</h2>
       </div>
     </div>
     <div className='audio-challenge-card__words'>
-      {words.map((word: Word, index: number) => 
-        <button key={index} value={word.wordTranslate as string} onClick={handleAnswerClick} className='audio-challenge-card__words-btn'>{word.wordTranslate}</button>
+      {words?.map((word: Word, index: number) => 
+        <button key={index} value={word?.wordTranslate as string} onClick={handleAnswerClick} className='audio-challenge-card__words-btn'>{word?.wordTranslate}</button>
       )};
     </div>
     <button onClick={handleNextQuestionClick} className='audio-challenge-card__next-btn'>I don't know</button>

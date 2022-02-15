@@ -22,8 +22,8 @@ function Main() {
         <h3 className='main-content__headers'>Possibilities and advantages</h3>
         <div className='main-content__app-advantages'>
           {possibilities.map((possibility: AppPossibility) =>
-          <Link to={possibility.href}>
-            <div key={possibility.name} className='main-content__app-advantages-item'>
+          <Link key={possibility.name} to={possibility.href}>
+            <div  className='main-content__app-advantages-item'>
               <i className={'fa fa-'+ possibility.icon + ' fa-5x'}></i>
               <h3>{possibility.name}</h3>
               <p>{possibility.info}</p>

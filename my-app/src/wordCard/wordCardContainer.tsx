@@ -22,7 +22,7 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
     }
 
     componentDidMount() {
-        wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string)).then(data => {
+        localStorage.getItem('userId') && wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string)).then(data => {
             let strong: any = []
             let weak: any = []
             data.forEach((word: { difficulty: string; wordId: string; }) => {

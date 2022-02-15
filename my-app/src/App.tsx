@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthForm from './authorization/AuthForm';
 import { GamesPage } from './games/games-page';
 
+
 function App() {
 
   return (

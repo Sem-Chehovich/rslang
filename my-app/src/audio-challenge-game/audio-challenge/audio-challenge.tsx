@@ -17,16 +17,54 @@ export type AnswerObject = {
 
 export let wordsArr = [] as Array<Word>;
 
-export const AudioChallenge: React.FC = () => {
+export const AudioChallenge: React.FC = (props: any) => {
   const [loading, setLoading] = useState(false);
   const [difficulty, setDifficulty] = useState(0);
   const [words, setWords] = useState<Array<Array<Word>>>([]); 
   const [questionNumber, setQuestionNumber] = useState(0);
   const [score, setScore] = useState(0);
   const [chosenAnswers, setChosenAnswers] = useState<AnswerObject[]>([]);
-  const [isAnswered, setIsAnswered] = useState<Array<boolean>>([]);
+  const [isAnswered] = useState<Array<boolean>>([]);
   const [gameOver, setGameOver] = useState(true);
   const [showScore, setShowScore] = useState(false);
+  const [isOpenFromDictionary] = useState(localStorage.getItem('isAudioGameTurnOnByDictionary'))
+
+   React.useEffect(() => {
+    
+    console.log(isOpenFromDictionary)
+    
+    async function renderPage() {
+      setLoading(true);
+      const section = localStorage.getItem('section') as string
+      let pageNumber1 = (+(localStorage.getItem('page') as string) - 1) + ''
+      let pageNumber2
+
+      if (pageNumber1 === '0') {
+         pageNumber2 = '29';
+      } else {
+        pageNumber2 = (+pageNumber1 - 1) + ''
+      }
+      
+      await audioChallengeApiService.getWords(pageNumber1, section)
+      .then((data) => {
+        wordsArr.push(...data);
+      })
+  
+      await audioChallengeApiService.getWords(pageNumber2, section)
+      .then((data) => {
+        wordsArr.push(...data);
+      })
+  
+      generateMixedArray(wordsArr);
+      setGameOver(false);
+      setLoading(false);
+    }
+
+    isOpenFromDictionary && renderPage()
+    return function cleanUp() {
+      localStorage.removeItem('isAudioGameTurnOnByDictionary')
+    }
+  }, [isOpenFromDictionary])
 
   async function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setLoading(true);
@@ -182,7 +220,7 @@ export const AudioChallenge: React.FC = () => {
   return (
     <div className='audio-challenge'>
       {loading === true ? <Spinner /> : 
-        gameOver === true && showScore === false ?
+        gameOver === true && showScore === false && !isOpenFromDictionary ?
         <section className='audio-challenge-memo-page'>
           <div className='audio-challenge-memo'>
             <h2>Audio challenge</h2>

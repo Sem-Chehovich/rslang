@@ -8,14 +8,17 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthForm from './authorization/AuthForm';
 import GameCategories from './sprint-game/sprintCategories/categoryPage';
 import Sprint from './sprint-game/sprintQuiz/Sprint';
+import { useTypedSelector } from './hooks/useTypeSelector';
 
 
 
 function App() {
+  const { pagePath } = useTypedSelector(state => state.sprint);
+
   return (
     <BrowserRouter>
       <div className="app">
-          <Header />  
+          { pagePath === 'game-page' ? '' : <Header /> } 
         <main>
           {/* <Main /> */}
           
@@ -27,8 +30,8 @@ function App() {
               <Route path="/game" element={<GameCategories /> } />
               <Route path="/sprint" element={<Sprint /> } />
             </Routes>
-        </main>
-        <Footer />    
+        </main>  
+        { pagePath === 'game-page' ? '' : <Footer /> }   
       </div>
     </BrowserRouter>
   );

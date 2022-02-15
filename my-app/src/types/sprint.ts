@@ -25,6 +25,8 @@ export interface SprintState {
   group: number,
   results: IResult[],
   score: number,
+  page: number,
+  pagePath: string,
 }
 
 export enum SprintActionTypes {
@@ -33,6 +35,9 @@ export enum SprintActionTypes {
   SET_GROUP = 'SET_GROUP',
   SET_RESULTS = 'SET_RESULTS',
   SET_SCORE = 'SET_SCORE',
+  SET_PAGE = 'SET_PAGE',
+  SET_PAGE_PATH = 'SET_PAGE_PATH',
+  CLEAR_WORDS = 'CLEAR_WORDS',
 }
 
 interface FetchWordsAction {
@@ -60,4 +65,26 @@ interface SetScoreAction {
   payload: number,
 }
 
-export type SprintAction = FetchWordsAction | FetchWordsSuccessAction | SetGroupAction | SetResultsAction | SetScoreAction;
+interface SetPageAction {
+  type: SprintActionTypes.SET_PAGE,
+  payload: number,
+}
+
+interface SetPagePathAction {
+  type: SprintActionTypes.SET_PAGE_PATH,
+  payload: string,
+}
+
+interface ClearWordsAction {
+  type: SprintActionTypes.CLEAR_WORDS,
+  payload: string,
+}
+
+export type SprintAction = FetchWordsAction 
+  | FetchWordsSuccessAction 
+  | SetGroupAction 
+  | SetResultsAction 
+  | SetScoreAction
+  | SetPageAction
+  | SetPagePathAction
+  | ClearWordsAction;

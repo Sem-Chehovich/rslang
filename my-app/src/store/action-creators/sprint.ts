@@ -49,3 +49,15 @@ export function setResults(results: IResult[]): SprintAction {
 export function setScore(score: number) {
   return { type: SprintActionTypes.SET_SCORE, payload: score }
 }
+
+export function setPage(page: number) {
+  return { type: SprintActionTypes.SET_PAGE, payload: page }
+}
+
+export function setPagePath(pagePath: string) {
+  return { type: SprintActionTypes.SET_PAGE_PATH, payload: pagePath }
+}
+
+export function clearWords(emptyArr: []) {
+  return { type: SprintActionTypes.CLEAR_WORDS, payload: emptyArr }
+}

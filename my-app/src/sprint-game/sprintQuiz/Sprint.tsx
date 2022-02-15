@@ -7,7 +7,7 @@ import pokemon4 from '../../assets/png/pokemon4.png';
 import wrongAnswer from '../../assets/sounds/wrongAnswer.mp3';
 import rightAnswer from '../../assets/sounds/rightAnswer.mp3';
 import { useTypedSelector } from '../../hooks/useTypeSelector';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useActions } from '../../hooks/useActions';
 import { IResult, IWord } from '../../types/sprint';
 import { getRandomNum } from '../../utilities/utilities';
@@ -21,19 +21,15 @@ const Sprint: React.FC = () => {
   const [corrrectAnsCounter, setCorrrectAnsCounter] = useState(1);
   const [isFullScreen, setFullScreen] = useState(false);
   const [isSoudOn, setSoundOn] = useState(false);
-  const [isCorrect, setIsCorrect] = useState<Array<boolean>>([]);
+  const [isCorrect] = useState<Array<boolean>>([]);
   const [gameOver, setGameOver] = useState(false);
   const [points, setPoints] = useState(10);
-  const { questions, group, score } = useTypedSelector(state => state.sprint);
-  const { fetchWords, setResults, setScore } = useActions();
+  const { questions, group, score, page } = useTypedSelector(state => state.sprint);
+  const { fetchWords, setResults, setScore, setPage, setPagePath, clearWords } = useActions();
   const navigate = useNavigate();
+  const [randAns, setRandAns] = useState(0);
   
-  // setTimeout(() => {
-  //   const box = document.querySelector('.sprint-page__game') as HTMLElement;
-  //   box.style.borderColor = 'rgb(243 233 233 / 70%)';
-  // }, 500);
-
-
+  
   setTimeout(() => {
     setGameOver(true);
   }, 60000);
@@ -77,7 +73,7 @@ const Sprint: React.FC = () => {
     sound.play();
   }
 
-  function isCorrectAnswer(question: IWord[], answerId: string, btn: string): IResult[] {
+  function isCorrectAnswer(question: IWord[], answerId: string, btn: string) {
     let  ans: boolean;
 
     if (question[0].id === answerId) { 
@@ -90,11 +86,6 @@ const Sprint: React.FC = () => {
     isCorrect.push(ans);
     return [{ questions: question, isRight: ans }];
   }
-
-  const randomAns = getRandomNum(questionNumber);
-
-  const wordEng = questions.slice(questionNumber, questionNumber + 1);
-  const wordRu = questions.slice(randomAns, randomAns + 1);
 
   const checkAnswer = () => {
     let number: number; 
@@ -126,27 +117,29 @@ const Sprint: React.FC = () => {
     }  
 
 
-    if (questionNumber > 15) {
-      const page = getRandomNum(0, 29);
-      setQuestionNumber(0);
+    if (questionNumber % 15 === 0) {
+      const nextPage = page + 1;
+      setPage(nextPage);
       fetchWords(group, page);
-    } else {
-      const number = questionNumber + 1;
-      setQuestionNumber(number);
     }
+
+    const numb = questionNumber + 1;
+    setQuestionNumber(numb);
   }
 
   document.onkeydown = function(e) {
     switch ((e || window.event).keyCode) {
       case 37:
-        const res1 = isCorrectAnswer(wordEng, wordRu[0].id, '0');
+        const res1 = isCorrectAnswer([questions[questionNumber]], questions[randAns].id, '0');
         setResults(res1);
         checkAnswer();
+        setRandAns(getRandomNum(questionNumber));
       break;
       case 39:
-        const res2 = isCorrectAnswer(wordEng, wordRu[0].id, '1');
+        const res2 = isCorrectAnswer([questions[questionNumber]], questions[randAns].id, '1');
         setResults(res2);
         checkAnswer();
+        setRandAns(getRandomNum(questionNumber));
       break;
     }
   }
@@ -154,9 +147,10 @@ const Sprint: React.FC = () => {
   const nextQuestion = (e: React.MouseEvent) => {    
     const target = e.target as HTMLElement;
     const btn = target.dataset.btn!;
-    const res = isCorrectAnswer(wordEng, wordRu[0].id, btn);
+    const res = isCorrectAnswer([questions[questionNumber]], questions[randAns].id, btn);
     setResults(res);
     checkAnswer();
+    setRandAns(getRandomNum(questionNumber));
   }
 
   const fullScreen = () => {
@@ -183,6 +177,8 @@ const Sprint: React.FC = () => {
     if (document.fullscreenElement) {
       document.exitFullscreen();
     }
+    clearWords([]);
+    setPagePath('');
     navigate('/game');
   }
 
@@ -224,15 +220,15 @@ const Sprint: React.FC = () => {
           </div>
           <div className='question-box'>
             <div className='question'>
-              { wordEng.map(q => <div key={q.id}>{q.word}</div>) }
+              { questions.slice(questionNumber, questionNumber + 1).map(q => <div key={q.id}>{q.word}</div>) }
             </div>
             <div className='answer'>
-              { wordRu.map(q => <div key={q.id}>{q.wordTranslate}</div>) }
+              { questions.slice(randAns, randAns + 1).map(q => <div key={q.id}>{q.wordTranslate}</div>) } 
             </div>
           </div>
           <div className='game-keys'>
-            <button className='answer-btn key-wrong' data-btn={0} onClick={(e) => nextQuestion(e)}>Неверно</button>
-            <button className='answer-btn key-right' data-btn={1} onClick={(e) => nextQuestion(e)}>Верно</button>
+            <button className='answer-btn key-wrong' data-btn={0} onClick={(e) => nextQuestion(e)}>&#8249; Неверно</button>
+            <button className='answer-btn key-right' data-btn={1} onClick={(e) => nextQuestion(e)}>Верно &#8250;</button>
           </div>
         </div>
       </div>

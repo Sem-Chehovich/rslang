@@ -7,13 +7,15 @@ const levels = [1, 2, 3, 4, 5, 6];
 
 const GameCategories = () => {
   const navigate = useNavigate();
-  const { fetchWords, setGroup } = useActions();
+  const { fetchWords, setGroup, setPage, setPagePath } = useActions();
   
   const handleClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     const group = target.dataset.group!;
 
     const page = getRandomNum(0, 29);
+    setPagePath('game-page');
+    setPage(page);
     setGroup(Number(group));
     fetchWords(Number(group), page);
     

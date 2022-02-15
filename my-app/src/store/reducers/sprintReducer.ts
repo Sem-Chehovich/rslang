@@ -5,6 +5,8 @@ const initialState: SprintState = {
   group: 0,
   results: [],
   score: 0,
+  page: 0,
+  pagePath: '',
 }
 
 export const sprintReducer = (state = initialState, action: SprintAction): SprintState => {
@@ -32,6 +34,21 @@ export const sprintReducer = (state = initialState, action: SprintAction): Sprin
       return {
         ...state,
         score: state.score + action.payload,
+      }
+    case SprintActionTypes.SET_PAGE:
+      return {
+        ...state,
+        page: action.payload,
+      }
+    case SprintActionTypes.SET_PAGE_PATH:
+      return {
+        ...state,
+        pagePath: action.payload,
+      }
+    case SprintActionTypes.CLEAR_WORDS:
+      return {
+        ...state,
+        questions: [],
       }
     default: 
       return state;

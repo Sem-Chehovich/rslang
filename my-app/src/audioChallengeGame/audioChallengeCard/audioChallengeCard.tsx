@@ -7,10 +7,11 @@ import { getCorrectUrl } from '../../utilities/utilities';
 type Props = {
   words: Array<Word>,
   handleAnswerClick: React.MouseEventHandler,
-  handleNextQuestionClick: React.MouseEventHandler
+  handleNextQuestionClick: React.MouseEventHandler,
+  isRightAnswerShown: boolean
 }
 
-export const AudioChallengeCard: React.FC<Props> = ({words, handleAnswerClick, handleNextQuestionClick}) => {
+export const AudioChallengeCard: React.FC<Props> = ({words, handleAnswerClick, handleNextQuestionClick, isRightAnswerShown}) => {
   let rightAnswer = words.find((x) => x.isRight === true) as Word;
 
   const handleSoundClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -23,12 +24,12 @@ export const AudioChallengeCard: React.FC<Props> = ({words, handleAnswerClick, h
   return (
     <div className='audio-challenge-card'>
     <div className='audio-challenge-card__audio-container'>
-      <img className='audio-challenge-card__answer-img' src={getCorrectUrl(rightAnswer.image as string)} alt='' />
+      <img className={ isRightAnswerShown === true ? 'audio-challenge-card__answer-img_active' : 'audio-challenge-card__answer-img' } src={getCorrectUrl(rightAnswer.image as string)} alt='' />
       <div className='audio-challenge-card__right-answer'>
-        <button className='audio-challenge-card__audio-btn' onClick={handleSoundClick}>
+        <button className={ isRightAnswerShown === true ? 'audio-challenge-card__audio-btn_active' : 'audio-challenge-card__audio-btn' } onClick={handleSoundClick}>
           <i className='fa fa-volume-up fa-3x'></i>
         </button>
-        <h2 className='audio-challenge-card__right-answer-word'>{rightAnswer.word}</h2>
+        <h2 className={ isRightAnswerShown === true ? 'audio-challenge-card__right-answer-word_active' : 'audio-challenge-card__right-answer-word' }>{rightAnswer.word}</h2>
       </div>
     </div>
     <div className='audio-challenge-card__words'>

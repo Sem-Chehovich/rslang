@@ -27,6 +27,7 @@ export const AudioChallenge: React.FC = () => {
   const [isAnswered, setIsAnswered] = useState<Array<boolean>>([]);
   const [gameOver, setGameOver] = useState(true);
   const [showScore, setShowScore] = useState(false);
+  const [isRightAnswerShown, setIsRightAnswerShown] = useState(false);
 
   async function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setLoading(true);
@@ -55,26 +56,6 @@ export const AudioChallenge: React.FC = () => {
     setLoading(false);
   }
 
-  const showRightAnswer = () => {
-    const audioBtn = document.querySelector('.audio-challenge-card__audio-btn') as HTMLElement;
-    const answerImage = document.querySelector('.audio-challenge-card__answer-img') as HTMLImageElement;
-    const answerWord = document.querySelector('.audio-challenge-card__right-answer-word') as HTMLElement;
-    audioBtn.style.width = '70px';
-    audioBtn.style.height = '70px';
-    answerImage.style.display = 'block';
-    answerWord.style.display = 'block';
-  }
-
-  const hideRightAnswer = () => {
-    const audioBtn = document.querySelector('.audio-challenge-card__audio-btn') as HTMLElement;
-    const answerImage = document.querySelector('.audio-challenge-card__answer-img') as HTMLImageElement;
-    const answerWord = document.querySelector('.audio-challenge-card__right-answer-word') as HTMLElement;
-    audioBtn.style.width = '120px';
-    audioBtn.style.height = '120px';
-    answerImage.style.display = 'none';
-    answerWord.style.display = 'none';
-  }
-
   const handleAnswerClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const answerBtns = document.querySelectorAll('.audio-challenge-card__words-btn') as NodeListOf<HTMLElement>;
     const challengeNextBtn = document.querySelector('.audio-challenge-card__next-btn') as HTMLElement;
@@ -84,7 +65,7 @@ export const AudioChallenge: React.FC = () => {
     isAnswered.push(true);
 
     if (challengeNextBtn.innerHTML === 'I don\'t know') {
-      showRightAnswer();
+      setIsRightAnswerShown(true);
       challengeNextBtn.innerHTML = 'Next';
       event.currentTarget.style.textDecoration = 'line-through';
       answerBtns.forEach((x) => {
@@ -122,13 +103,13 @@ export const AudioChallenge: React.FC = () => {
 
     if (event.currentTarget.innerHTML === 'I don\'t know') {
       event.currentTarget.innerHTML = 'Next';
-      showRightAnswer();
+      setIsRightAnswerShown(true);
       answerBtns.forEach((x) => {
         if (x.innerHTML === correctAnswer.wordTranslate) {
          x.innerHTML = `<u>${x.innerHTML}</u>`;
         }});
     } else {
-      hideRightAnswer();
+      setIsRightAnswerShown(false);
       answerBtns.forEach((btn) => {
         btn.style.textDecoration = 'none';
       });
@@ -199,6 +180,7 @@ export const AudioChallenge: React.FC = () => {
         :
         (showScore === false ? 
           <AudioChallengeCard words={words[questionNumber]} 
+          isRightAnswerShown={isRightAnswerShown}
           handleAnswerClick={handleAnswerClick}
           handleNextQuestionClick={handleNextQuestionClick}/>
           : 

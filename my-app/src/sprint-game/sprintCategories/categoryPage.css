@@ -1,0 +1,48 @@
+.game-categories-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(45deg, #30cfd0, #330867);
+}
+
+.game-categories__box {
+  width: 550px;
+  height: 350px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  background-color: rgb(243 233 233 / 70%);
+  border: 5px solid black;
+  border-radius: 25px;
+  box-shadow: 12px 12px 2px 1px rgba(159, 176, 189, 0.3);
+}
+
+.sprint-categories__title {
+  text-transform: uppercase;
+}
+
+.sprint-categories {
+  display: flex;
+  justify-content: space-evenly;
+  padding-top: 20px;
+}
+
+.sprint-categories__btn {
+  width: 50px;
+  height: 50px;
+  background-color: white;
+  border-radius: 17px;
+  border: none;
+  cursor: pointer;
+  transition: .4s;
+  box-shadow: 5px 5px 2px 1px rgba(0, 0, 0, .3);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.sprint-categories__btn:hover {
+  transform: scale(1.05);
+}

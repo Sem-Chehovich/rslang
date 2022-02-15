@@ -6,17 +6,18 @@ import { Spinner } from '../spinner/spinner';
 import Selector from './components/select';
 import BasicPagination from './components/pagination'
 import './wordPage.scss';
-import { card, stateObj } from '../interface/interface';
+import { card } from '../interface/interface';
 import { checkIfPageLearned } from '../utilities/utilities'
 import BasicAlerts from './components/alert'
+import DisableElevation from './components/gamesButtons'
 
 const WordsPageContainer = () => {
 
       const [sections, setSections] = React.useState(localStorage.getItem('section') || '');
-      const [page, setPage] = React.useState(localStorage.getItem('page') || 1);
-      const [userId, setUserId] = React.useState(localStorage.getItem('userId') || undefined);
-      const [strongArr, setStrongArr] = useState<any>([]);
-      const [weakArr, setWeakArr] = useState<any>([]);
+      const [page, setPage] = React.useState(localStorage.getItem('page') || '1');
+      const [userId] = React.useState(localStorage.getItem('userId') || undefined);
+      const [strongArr] = useState<any>([]);
+      const [weakArr] = useState<any>([]);
       const [isPageLearned, setIsPageLearned] = React.useState(false)
       const [cards, setCards] = useState([])
       const [isLoading, setIsLoading] = useState(true)
@@ -29,7 +30,7 @@ const WordsPageContainer = () => {
                let cards = await wordPageApiService.getWords((+page - 1) + '' , sections || '0')
                     setCards(cards)
                     setIsLoading(false)
-               let userCards = await wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string))
+               let userCards = userId ? await wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string)) : []
                
                setIsPageLearned(checkIfPageLearned(cards, userCards))
             }
@@ -37,7 +38,7 @@ const WordsPageContainer = () => {
             compareCards()
         }else{
             const loadUserCards = async () => {
-                let userWordIdArr = await wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string))
+                let userWordIdArr = userId ? await wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string)) : []
                 let promise:  Promise<any> = new Promise((resolve) => { 
                     let arr: any[] = []
                     let newArray = userWordIdArr.filter((el: { difficulty: string; }) =>  el.difficulty === 'strong' )
@@ -68,7 +69,7 @@ const WordsPageContainer = () => {
 
     const handleChange = async (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setSections(event.target.value);
-        setPage(1);
+        setPage('1');
         let id = `${event.target.value}`
         localStorage.setItem('section', id)
         setIsLoading(true)
@@ -101,7 +102,7 @@ const WordsPageContainer = () => {
         }
       };
 
-      const handleChangePag = (event: React.ChangeEvent<unknown>, value: number) => {
+      const handleChangePag = (event: React.ChangeEvent<unknown>, value: string) => {
         setPage(value);
         let id = `${+((event.target as HTMLButtonElement).textContent as string) - 1}`
         localStorage.setItem('page', `${value}`)
@@ -114,7 +115,7 @@ const WordsPageContainer = () => {
             })
         }
       };
-
+      
     return (
         <>                                   
             { isLoading ? <Spinner /> : (
@@ -125,6 +126,7 @@ const WordsPageContainer = () => {
                         handleChange={handleChange}
                         sections={sections}
                         />
+                        <DisableElevation sections={sections} page={page} />
                     </div>
                     {isPageLearned && <div className="alert__wrapper"> <BasicAlerts /> </div>}
                     <WordsPage 

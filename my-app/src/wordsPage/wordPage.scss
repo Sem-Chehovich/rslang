@@ -28,6 +28,7 @@
     margin-top: 80px;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 
@@ -54,4 +55,8 @@
 .page__learned {
     background-color: #edf7ed;
     box-shadow: inset 0px 10px 15px 1px white;
+}
+
+.games__buttons button {
+    margin-left: 10px;
 }

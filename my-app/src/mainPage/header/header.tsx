@@ -1,5 +1,5 @@
 import './header.css';
-import { items } from '../main-page-constants';
+import { items } from '../mainPageConstants';
 import { Outlet, Link } from "react-router-dom";
 
 export interface NavigationLink {

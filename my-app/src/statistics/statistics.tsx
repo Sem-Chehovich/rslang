@@ -1,5 +1,5 @@
 // import { isAuthorizedUser } from '../authorization/validateToken';
-import { statisticsItems } from './statistics-constants';
+import { statisticsItems } from './statisticsConstants';
 import './statistics.css';
 
 export interface statisticsItem {

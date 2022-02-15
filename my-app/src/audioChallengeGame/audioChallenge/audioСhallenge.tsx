@@ -1,12 +1,12 @@
-import { levels } from '../audio-challenge-constants';
-import './audio-challenge.css';
+import { levels } from '../audioChallengeConstants';
+import './audioСhallenge.css';
 import React, { useState } from 'react';
-import { audioChallengeApiService } from '../audio-challenge-api-service/api-service';
-import { AudioChallengeCard } from '../audio-challenge-card/audio-challenge-card';
+import { audioChallengeApiService } from '../audioChallengeApiService/apiService';
+import { AudioChallengeCard } from '../audioChallengeCard/audioChallengeCard';
 import { Spinner } from '../../spinner/spinner';
 import { shuffleWords, getRandomNum, getCorrectUrl, sliceArrIntoChunks } from '../../utilities/utilities';
 import { Word } from '../../interface/interface';
-import { AudioChallengeScore } from '../audio-challenge-score/audio-challenge-score';
+import { AudioChallengeScore } from '../audioChallengeScore/audioChallengeScore';
 
 export type AnswerObject = {
   answer: string,

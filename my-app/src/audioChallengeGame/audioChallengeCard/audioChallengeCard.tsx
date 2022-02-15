@@ -1,5 +1,5 @@
-import {  } from '../audio-challenge-constants';
-import './audio-challenge-card.css';
+import {  } from '../audioChallengeConstants';
+import './audioChallengeCard.css';
 import React from 'react';
 import { Word } from '../../interface/interface';
 import { getCorrectUrl } from '../../utilities/utilities';

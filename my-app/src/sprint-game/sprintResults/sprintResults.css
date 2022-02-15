@@ -1,0 +1,42 @@
+.sprint-results {
+	height: 60%;
+  width: 60%;
+  overflow-x: auto;
+  margin: 0px auto;
+  margin-top: 50px;
+}
+
+.sprint-results table {
+	display: flex;
+  justify-content: center;
+}
+
+.result-title {
+  text-align: center;
+  font-size: 38px;
+}
+
+.sprint-results tbody td {
+	padding: 7px;
+}
+
+.sprint-results__btn {
+  width: 30px;
+  height: 30px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+
+.sond-field-icon {
+  background-image: url("../../assets/svg/volume-on.svg");
+}
+
+.correct-ans-icon {
+  background-image: url("../../assets/svg/correct-ans.svg");
+}
+
+.wrong-ans-icon {
+  background-image: url("../../assets/svg/wrong-ans.svg");
+}

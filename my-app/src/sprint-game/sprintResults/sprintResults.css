@@ -1,8 +1,9 @@
 .sprint-results {
-	height: 50%;
+	height: 60%;
   width: 60%;
-	overflow-x: auto;
-	margin: 0px auto;
+  overflow-x: auto;
+  margin: 0px auto;
+  margin-top: 50px;
 }
 
 .sprint-results table {

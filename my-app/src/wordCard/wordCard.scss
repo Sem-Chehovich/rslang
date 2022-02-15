@@ -2,18 +2,21 @@
     display: flex;
     background-color: #537895;
     margin: 10px;
+    border-radius: 10px;
+    width: 80%;
 }
 
 .card__img-wrapper {
-    margin: 10px;
+    margin: 20px;
 }
 
 .card__img{
     width: 300px;
+    height: 250px;
 }
 
 .card__content {
-    margin: 10px;
+    margin: 20px;
     margin-left: 10px;
     font-size: 20px;
 }
@@ -29,13 +32,23 @@
 }
 
 .sound__button {
-    width: 50px;
-    height: 50px;
-    background-image:url('../assets/sound.svg');
-    background-color: #537895;
     margin-left: 10px;
 }
 
 .card__titel-wrapper{
     display: flex;
+}
+
+.toggle-buttons {
+    border: 2px solid rgba(210, 108, 106, .4);
+    background-color: #5f8aaa;
+    margin-left: 10px;
+}
+
+.learned {
+    border: 5px solid green;
+}
+
+.difficult {
+    border: 5px solid red;
 }

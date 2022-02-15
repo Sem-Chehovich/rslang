@@ -1,5 +1,5 @@
 .game-categories-page {
-  height: calc(100vh - 150px);
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -7,6 +7,7 @@ const initialState: SprintState = {
   score: 0,
   page: 0,
   pagePath: '',
+  pagePathSecond: '',
 }
 
 export const sprintReducer = (state = initialState, action: SprintAction): SprintState => {
@@ -49,6 +50,11 @@ export const sprintReducer = (state = initialState, action: SprintAction): Sprin
       return {
         ...state,
         questions: [],
+      }
+    case SprintActionTypes.SET_PAGE_SECOND:
+      return {
+        ...state,
+        pagePathSecond: action.payload,
       }
     default: 
       return state;

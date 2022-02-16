@@ -61,3 +61,7 @@ export function setPagePath(pagePath: string) {
 export function clearWords(emptyArr: []) {
   return { type: SprintActionTypes.CLEAR_WORDS, payload: emptyArr }
 }
+
+export function setPagePathSecond(pagePathSecond: string) {
+  return { type: SprintActionTypes.SET_PAGE_SECOND, payload: pagePathSecond }
+}

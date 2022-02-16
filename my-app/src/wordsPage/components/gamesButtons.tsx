@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 // export default function DisableElevation({ sections, page }: { sections: string; page: string }) {
   export default function DisableElevation(props: any) {
-    const { setPagePath } = useActions();
+    const { setPagePathSecond, setPagePath } = useActions();
     const navigate = useNavigate();
 
 
@@ -18,7 +18,8 @@ import { useNavigate } from 'react-router-dom';
 }
 
 const handleClickSprint = (event: React.MouseEvent<HTMLButtonElement>) => {
-  setPagePath('isSprintFromDictionary');
+  setPagePath('game-page');
+  setPagePathSecond('isSprintFromDictionary');
   navigate('/game');
 }
 

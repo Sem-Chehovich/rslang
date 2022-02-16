@@ -1,22 +1,22 @@
 import { refreshToken } from './api';
-import { useNavigate } from 'react-router-dom';
  
 export async function isAuthorizedUser() {
+
   if (localStorage.getItem('refreshToken') && localStorage.getItem('userId')) {
     const id = localStorage.getItem('userId')!;
     const token = localStorage.getItem('userId')!;
+    const enterTime = Number(localStorage.getItem('enterTime'))!;
     const EXPIPES_IN = 14400;
-
-    if (Date.now() >= EXPIPES_IN * 1000) { 
-      console.log('Время жизни истекло');
+    
+    if (enterTime >= enterTime + EXPIPES_IN * 1000) { 
       try {
         const result = await refreshToken(id, token);
-        localStorage.setItem('userToken', String(result.token));
-        localStorage.setItem('refreshToken', String(result.refreshToken));
+        console.log('Токен обновлен');
       } catch (e: unknown) {
-        const navigate = useNavigate();
-        navigate('/authorization');
+        console.log('Какая-то ошибка');
       }
     }
-  } 
+  } else {
+    console.log('Вы не авторизованы');
+  }
 }

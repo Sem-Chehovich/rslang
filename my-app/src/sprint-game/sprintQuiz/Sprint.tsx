@@ -13,6 +13,7 @@ import { IResult, IWord } from '../../types/sprint';
 import { getRandomNum } from '../../utilities/utilities';
 import { useNavigate } from 'react-router';
 import ScrollCrid from '../sprintResults/sprintResults';
+import { isAuthorizedUser } from '../../authorization/validateToken';
 
 
 
@@ -29,7 +30,7 @@ const Sprint: React.FC = () => {
   const navigate = useNavigate();
   const [randAns, setRandAns] = useState(0);
   
-  
+  isAuthorizedUser();
   setTimeout(() => {
     setGameOver(true);
   }, 60000);
@@ -117,10 +118,10 @@ const Sprint: React.FC = () => {
     }  
 
 
-    if (questionNumber % 15 === 0) {
+    if (questionNumber % 15 === 0 && questionNumber !== 0) {
       const nextPage = page + 1;
       setPage(nextPage);
-      fetchWords(group, page);
+      fetchWords(group, nextPage);
     }
 
     const numb = questionNumber + 1;

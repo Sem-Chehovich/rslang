@@ -1,12 +1,16 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
+import { useActions } from '../../hooks/useActions';
+import { useNavigate } from 'react-router-dom';
 
 
 
 
 // export default function DisableElevation({ sections, page }: { sections: string; page: string }) {
   export default function DisableElevation(props: any) {
+    const { setPagePath } = useActions();
+    const navigate = useNavigate();
 
 
   const handleClickAudio = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -14,6 +18,8 @@ import { Link } from "react-router-dom";
 }
 
 const handleClickSprint = (event: React.MouseEvent<HTMLButtonElement>) => {
+  setPagePath('isSprintFromDictionary');
+  navigate('/game');
 }
 
 

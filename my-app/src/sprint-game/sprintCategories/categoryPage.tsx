@@ -2,11 +2,13 @@ import { useNavigate } from 'react-router-dom';
 import './categoryPage.css';
 import { useActions } from '../../hooks/useActions';
 import { getRandomNum } from '../../utilities/utilities';
+import { useTypedSelector } from '../../hooks/useTypeSelector';
 
 const levels = [1, 2, 3, 4, 5, 6];
 
 const GameCategories = () => {
   const navigate = useNavigate();
+  const { pagePath } = useTypedSelector(state => state.sprint);
   const { fetchWords, setGroup, setPage, setPagePath } = useActions();
   
   const handleClick = (e: React.MouseEvent) => {
@@ -30,11 +32,13 @@ const GameCategories = () => {
           <p>Test yourself, indicate if the translation of the word we showed you is correct.</p>
           <p>You will have only one minute!</p>
           <p>Select word difficulty level:</p>
-          <div className='sprint-categories'>
-            {levels.map((level: number, index) => 
-              <button key={level} className='sprint-categories__btn' data-group={index} onClick={handleClick}>{level}</button>
-            )}
-          </div>
+          {
+            <div className='sprint-categories'>
+              {levels.map((level: number, index) => 
+                <button key={level} className='sprint-categories__btn' data-group={index} onClick={handleClick}>{level}</button>
+              )}
+            </div>
+          }
         </div>
       </section>
     </div>

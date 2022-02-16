@@ -36,7 +36,11 @@ export async function signInUser(user: IUser) {
   }).catch();
 
   if (!response.ok) {
-    localStorage.clear();
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('enterTime');
     return response.status;
   }
 
@@ -46,6 +50,7 @@ export async function signInUser(user: IUser) {
   localStorage.setItem('userId', String(result.userId));
   localStorage.setItem('userToken', String(result.token));
   localStorage.setItem('refreshToken', String(result.refreshToken));
+  localStorage.setItem('enterTime', String(Date.now()));
 
   return result;
 };
@@ -62,7 +67,8 @@ export async function refreshToken(userId: string, refToken: string) {
     const result = await response.json();
     localStorage.setItem('userToken', String(result.token));
     localStorage.setItem('refreshToken', String(result.refreshToken));
-    
+    localStorage.setItem('enterTime', String(Date.now()));
+
     return result;
   }
 

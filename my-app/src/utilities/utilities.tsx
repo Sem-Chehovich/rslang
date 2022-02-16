@@ -55,7 +55,7 @@ export function checkIfPageLearned(pageArr: [], userArr: []) {
       isFalse = false 
   } else {
     pageArr.forEach(({ id }) => {
-      let finded = userArr.find(({ wordId }) => wordId === id)
+      let finded = userArr.filter(({ difficulty }) => !!difficulty)?.find(({ wordId }) => wordId === id)
       if (!finded) {
         isFalse = false 
       }

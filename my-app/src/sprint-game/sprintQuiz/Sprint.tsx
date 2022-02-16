@@ -13,7 +13,6 @@ import { IWord } from '../../types/sprint';
 import { getRandomNum } from '../../utilities/utilities';
 import { useNavigate } from 'react-router';
 import ScrollCrid from '../sprintResults/sprintResults';
-import { isAuthorizedUser } from '../../authorization/validateToken';
 
 
 
@@ -30,7 +29,6 @@ const Sprint: React.FC = () => {
   const navigate = useNavigate();
   const [randAns, setRandAns] = useState(0);
   
-  isAuthorizedUser();
   let timerId = setTimeout(() => {
     setGameOver(true);
   }, 60000);

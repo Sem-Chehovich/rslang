@@ -4,6 +4,7 @@ import { useActions } from '../../hooks/useActions';
 import { getRandomNum } from '../../utilities/utilities';
 import { useTypedSelector } from '../../hooks/useTypeSelector';
 
+
 const levels = [1, 2, 3, 4, 5, 6];
 
 const GameCategories = () => {
@@ -11,11 +12,11 @@ const GameCategories = () => {
   const { pagePathSecond } = useTypedSelector(state => state.sprint);
   const { fetchWords, setGroup, setPage, setPagePath, setPagePathSecond } = useActions();
   
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = async (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     const group = target.dataset.group!;
-
     const page = getRandomNum(0, 29);
+
     setPagePath('game-page');
     setPage(page);
     setGroup(Number(group));

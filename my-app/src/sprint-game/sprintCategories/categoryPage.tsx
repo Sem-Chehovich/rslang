@@ -4,18 +4,19 @@ import { useActions } from '../../hooks/useActions';
 import { getRandomNum } from '../../utilities/utilities';
 import { useTypedSelector } from '../../hooks/useTypeSelector';
 
+
 const levels = [1, 2, 3, 4, 5, 6];
 
 const GameCategories = () => {
   const navigate = useNavigate();
-  const { pagePath } = useTypedSelector(state => state.sprint);
-  const { fetchWords, setGroup, setPage, setPagePath } = useActions();
+  const { pagePathSecond } = useTypedSelector(state => state.sprint);
+  const { fetchWords, setGroup, setPage, setPagePath, setPagePathSecond } = useActions();
   
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = async (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     const group = target.dataset.group!;
-
     const page = getRandomNum(0, 29);
+
     setPagePath('game-page');
     setPage(page);
     setGroup(Number(group));
@@ -24,15 +25,42 @@ const GameCategories = () => {
     navigate('/sprint');
   }
 
+  const clickSingleBtn = () => {
+    const group = localStorage.getItem('section')!;
+    const page = localStorage.getItem('page')!;
+    setPagePath('game-page');
+    setGroup(Number(group));
+    setPage(Number(page) - 1);
+    fetchWords(Number(group), Number(page) - 1);
+    
+    navigate('/sprint');
+  }
+
+  const backPage = () => {
+    setPagePath('');
+    if (pagePathSecond === 'isSprintFromDictionary') {
+      setPagePathSecond('');
+      navigate('/textbook');
+    } else {
+      navigate('/home');
+    }
+  }
+
   return (
     <div className='game-categories-page'>
+      <div className='game-categories__controls'>
+        <div className='sprint-btn back-icon' onClick={() => backPage()}></div>
+      </div> 
       <section>
         <div className='game-categories__box'>
           <h2 className='sprint-categories__title'>Sprint</h2>
           <p>Test yourself, indicate if the translation of the word we showed you is correct.</p>
           <p>You will have only one minute!</p>
-          <p>Select word difficulty level:</p>
-          {
+          { pagePathSecond === 'isSprintFromDictionary' ?
+            <div className='sprint-categories'> 
+              <button className='sprint-play__btn' onClick={clickSingleBtn}>Play</button>
+            </div>
+            :
             <div className='sprint-categories'>
               {levels.map((level: number, index) => 
                 <button key={level} className='sprint-categories__btn' data-group={index} onClick={handleClick}>{level}</button>

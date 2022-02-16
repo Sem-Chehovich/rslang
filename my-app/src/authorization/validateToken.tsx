@@ -1,22 +1,25 @@
 import { refreshToken } from './api';
  
-export async function isAuthorizedUser() {
-
+export async function isAuthorizedUser(): Promise<string> {
   if (localStorage.getItem('refreshToken') && localStorage.getItem('userId')) {
+    console.log('Проверка');
     const id = localStorage.getItem('userId')!;
-    const token = localStorage.getItem('userId')!;
+    const token = localStorage.getItem('refreshToken')!;
     const enterTime = Number(localStorage.getItem('enterTime'))!;
     const EXPIPES_IN = 14400;
     
-    if (enterTime >= enterTime + EXPIPES_IN * 1000) { 
+    if (enterTime <= enterTime + EXPIPES_IN * 1000) { 
       try {
         const result = await refreshToken(id, token);
-        console.log('Токен обновлен');
+
+        return 'ok';
       } catch (e: unknown) {
-        console.log('Какая-то ошибка');
+        return 'redirect';
       }
+    } else {
+      return 'ok';
     }
   } else {
-    console.log('Вы не авторизованы');
+    return 'redirect';
   }
 }

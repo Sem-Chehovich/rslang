@@ -7,13 +7,12 @@ import pokemon4 from '../../assets/png/pokemon4.png';
 import wrongAnswer from '../../assets/sounds/wrongAnswer.mp3';
 import rightAnswer from '../../assets/sounds/rightAnswer.mp3';
 import { useTypedSelector } from '../../hooks/useTypeSelector';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useActions } from '../../hooks/useActions';
-import { IResult, IWord } from '../../types/sprint';
+import { IWord } from '../../types/sprint';
 import { getRandomNum } from '../../utilities/utilities';
 import { useNavigate } from 'react-router';
 import ScrollCrid from '../sprintResults/sprintResults';
-import { isAuthorizedUser } from '../../authorization/validateToken';
 
 
 
@@ -25,13 +24,12 @@ const Sprint: React.FC = () => {
   const [isCorrect] = useState<Array<boolean>>([]);
   const [gameOver, setGameOver] = useState(false);
   const [points, setPoints] = useState(10);
-  const { questions, group, score, page } = useTypedSelector(state => state.sprint);
-  const { fetchWords, setResults, setScore, setPage, setPagePath, clearWords } = useActions();
+  const { questions, group, score, page, pagePathSecond } = useTypedSelector(state => state.sprint);
+  const { fetchWords, setResults, setScore, setPage, setPagePath, clearWords, setPagePathSecond } = useActions();
   const navigate = useNavigate();
   const [randAns, setRandAns] = useState(0);
   
-  isAuthorizedUser();
-  setTimeout(() => {
+  let timerId = setTimeout(() => {
     setGameOver(true);
   }, 60000);
 
@@ -119,7 +117,18 @@ const Sprint: React.FC = () => {
 
 
     if (questionNumber % 15 === 0 && questionNumber !== 0) {
-      const nextPage = page + 1;
+      let nextPage: number;
+      if (pagePathSecond === 'isSprintFromDictionary') {
+        if (page > 0) nextPage = page - 1;
+        else { 
+          nextPage = 0;
+          clearTimeout(timerId);
+          setGameOver(true);
+        }
+      } else {
+        nextPage = page + 1;
+      }
+      
       setPage(nextPage);
       fetchWords(group, nextPage);
     }
@@ -179,8 +188,16 @@ const Sprint: React.FC = () => {
       document.exitFullscreen();
     }
     clearWords([]);
+    setResults([]);
     setPagePath('');
-    navigate('/game');
+    if (pagePathSecond === 'isSprintFromDictionary') {
+      setPagePathSecond('');
+      navigate('/textbook');
+    } else {
+      navigate('/game');
+    }
+    
+    clearTimeout(timerId);
   }
 
   return (

@@ -65,3 +65,7 @@ export function clearWords(emptyArr: []) {
 export function setPagePathSecond(pagePathSecond: string) {
   return { type: SprintActionTypes.SET_PAGE_SECOND, payload: pagePathSecond }
 }
+
+export function setUserInGame(userInGame: boolean) {
+  return { type: SprintActionTypes.SET_USER_IN_GAME, payload: userInGame }
+}

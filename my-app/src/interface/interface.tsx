@@ -10,3 +10,15 @@ export interface stateObj {
     [key: string]: boolean
 }
 
+export interface IUserWord {
+  difficulty: string, 
+  optional: {
+    sprintGame: {
+      date: string,
+      newWord: boolean,
+      wrongAns: number,
+      rightAns: number,
+      totalRightAns: number,
+    }
+  },
+}

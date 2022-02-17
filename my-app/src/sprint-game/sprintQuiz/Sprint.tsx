@@ -13,8 +13,24 @@ import { IWord } from '../../types/sprint';
 import { getRandomNum } from '../../utilities/utilities';
 import { useNavigate } from 'react-router';
 import ScrollCrid from '../sprintResults/sprintResults';
+import { createUserWord, getUserWord, updateUserWord } from '../serviсe';
+import { IUserWord } from '../../interface/interface';
 
+const currDate = new Date();
+const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}`;
 
+const initialWordOptional: IUserWord = {
+  difficulty: 'weak',
+  optional: {
+    sprintGame: {
+      date: currDateStr,
+      newWord: true,
+      wrongAns: 0,
+      rightAns: 0,
+      totalRightAns: 0,
+    }
+  } 
+}
 
 const Sprint: React.FC = () => {
   const [questionNumber, setQuestionNumber] = useState(0);
@@ -24,7 +40,7 @@ const Sprint: React.FC = () => {
   const [isCorrect] = useState<Array<boolean>>([]);
   const [gameOver, setGameOver] = useState(false);
   const [points, setPoints] = useState(10);
-  const { questions, group, score, page, pagePathSecond } = useTypedSelector(state => state.sprint);
+  const { questions, group, score, page, pagePathSecond, userInGame } = useTypedSelector(state => state.sprint);
   const { fetchWords, setResults, setScore, setPage, setPagePath, clearWords, setPagePathSecond } = useActions();
   const navigate = useNavigate();
   const [randAns, setRandAns] = useState(0);
@@ -72,17 +88,68 @@ const Sprint: React.FC = () => {
     sound.play();
   }
 
+  async function checkWord(wordId: string, wordOptional: IUserWord) {
+    const userWord = await getUserWord(wordId);
+    const currDate = new Date();
+    const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}`;
+
+    if (typeof userWord === 'number') {
+      await createUserWord(wordId, wordOptional);
+    } else {
+      if (userWord.optional.sprintGame.date === currDateStr) { 
+        wordOptional.optional.sprintGame.newWord = true;
+      } else {
+        wordOptional.optional.sprintGame.newWord = false;
+      }
+
+      if (wordOptional.optional.sprintGame.rightAns === 1) { 
+        wordOptional.optional.sprintGame.rightAns += userWord.optional.sprintGame.rightAns;
+      } else {
+        wordOptional.optional.sprintGame.wrongAns += userWord.optional.sprintGame.wrongAns;
+      }
+
+      if (wordOptional.optional.sprintGame.wrongAns === 1) { 
+        wordOptional.difficulty = 'strong';
+        wordOptional.optional.sprintGame.totalRightAns = 0;
+      } else {
+        wordOptional.optional.sprintGame.totalRightAns += userWord.optional.sprintGame.rightAns;
+      }
+
+      if (wordOptional.optional.sprintGame.totalRightAns >= 3) {
+        wordOptional.difficulty = 'weak';
+      }
+      
+      await updateUserWord(wordId, wordOptional);
+    }
+  }
+
   function isCorrectAnswer(question: IWord[], answerId: string, btn: string) {
     let  ans: boolean;
 
     if (question[0].id === answerId) { 
       ans = btn === '1' ? true : false;
       isCorrect.push(ans);
+
+      if (userInGame === true)  { 
+        initialWordOptional.optional.sprintGame.rightAns = ans === true ? 1 : 0;
+        initialWordOptional.optional.sprintGame.wrongAns = ans === true ? 0 : 1;
+        initialWordOptional.optional.sprintGame.totalRightAns = ans === true ? 1 : 0;
+        
+        checkWord(question[0].id, initialWordOptional);  
+      } 
+
       return [{ questions: question, isRight: ans }];
     } 
     
     ans = btn === '0' ? true : false;
     isCorrect.push(ans);
+    if (userInGame === true)  { 
+      initialWordOptional.optional.sprintGame.rightAns = ans === true ? 1 : 0;
+      initialWordOptional.optional.sprintGame.wrongAns = ans === true ? 0 : 1;
+
+      checkWord(question[0].id, initialWordOptional);
+    } 
+
     return [{ questions: question, isRight: ans }];
   }
 

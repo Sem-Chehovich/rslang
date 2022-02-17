@@ -7,7 +7,16 @@ export interface Word {
 }
 
 export interface stateObj {
-    [key: string]: boolean
+  [key: string]: boolean
+}
+
+export interface AudioUserWord {
+  difficulty: string, 
+  optional: {
+    audioGame: {
+      [key: string]: string | number | boolean
+    }
+  }
 }
 
 export interface IUserWord {

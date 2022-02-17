@@ -18,7 +18,7 @@ export const members = [
 ] as Array<ProjectMember>;
 
 export const possibilities = [
-  { icon: 'book', href: '/textbook', name: 'Textbook', info: 'Amet consectetur adipisicing elit. Nesciunt sapiente cumque sequi quo perferendis, cupiditate deleniti illum quia, iusto officiis dolorem.' }, 
-  { icon: 'gamepad', href: '/games', name: 'Games', info: 'Reinforce your memorization and auditory perception in a playful way.' }, 
-  { icon: 'balance-scale', name: 'Statistics', href: '/statistics', info: 'Sectetur adipisicing elit. Nesciunt sapiente cumque sequi quo perferendis, cupiditate deleniti illum quia, iusto officiis dolorem.' }
+  { icon: 'book', href: '/textbook', name: 'Textbook', info: 'Learn  new words from a collection of 3600 ones divided into sections depending on your actual skill level' },
+  { icon: 'gamepad', href: '/games', name: 'Games', info: 'Reinforce your memorization and auditory perception in a playful way' },
+  { icon: 'balance-scale', name: 'Statistics', href: '/statistics', info: 'Log in and track your daily progress based on all the knowledge you get on the RS-Lang platform' }
 ] as Array<AppPossibility>;

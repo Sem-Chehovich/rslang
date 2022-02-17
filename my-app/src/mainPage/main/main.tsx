@@ -1,5 +1,5 @@
 import './main.css';
-import { members, possibilities } from '../main-page-constants';
+import { members, possibilities } from '../mainPageConstants';
 import { Outlet, Link } from "react-router-dom";
 
 export interface ProjectMember {

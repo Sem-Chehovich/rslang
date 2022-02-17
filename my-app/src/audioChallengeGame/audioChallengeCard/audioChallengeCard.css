@@ -7,6 +7,32 @@
   align-items: center;
   justify-content: center;
   gap: 50px;
+  position: relative;
+}
+.audio-challenge-card__fullscreen-btn {
+  position: absolute;
+  right: 30px;
+  top: 100px;
+  width: 40px;
+  height: 40px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  transition: .3s
+}
+
+.audio-challenge-card__fullscreen-btn:hover {
+  transform: scale(1.1);
+  transition: .4s ease-out;
+}
+
+.screen-icon {
+  background-image: url("../../assets/svg/expand.svg");
+}
+
+.compress-screen-icon {
+  background-image: url("../../assets/svg/compress.svg");
 }
 
 .audio-challenge-card__audio-container {

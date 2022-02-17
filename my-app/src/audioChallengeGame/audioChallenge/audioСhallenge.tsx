@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { AudioChallengeCard } from '../audioChallengeCard/audioChallengeCard';
 import { Spinner } from '../../spinner/spinner';
 import { shuffleWords, getRandomNum, getCorrectUrl, sliceArrIntoChunks } from '../../utilities/utilities';
-import { Word } from '../../interface/interface';
+import { Word, AudioUserWord } from '../../interface/interface';
 import { AudioChallengeScore } from '../audioChallengeScore/audioChallengeScore';
 import { wordPageApiService } from '../../wordsPage/service/wordPageApiService';
 import { isAuthorizedUser } from '../../authorization/validateToken';
@@ -102,25 +102,31 @@ export const AudioChallenge: React.FC = (props: any) => {
     if (userId != null) {
       isAuthorizedUser();
       const userWords = await wordPageApiService.getAllUserWords(userId) as Array<Word>;
+      const currDate = new Date() as Date;
+      const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}` as string;
       let dbWord = userWords.find((dbWord: Word) => dbWord.wordId === word.id) as any;
+      
       if (dbWord === undefined) {
         console.log('новое')
         const progressObj = {
           difficulty: 'strong',
           optional: {
-            'audioDate': new Date().toUTCString(),
-            'audioRightAnswer': isRight ? 1 : 0,
-            'audioWrongAnswer': isRight ? 0 : 1,
-            'audioTotalRightAnswers': isRight ? 1 : 0,
+            audioGame: {
+              audioDate: currDateStr,
+              audioRightAnswer: isRight ? 1 : 0,
+              audioWrongAnswer: isRight ? 0 : 1,
+              audioTotalRightAnswers: isRight ? 1 : 0,
+            }
           }
-        };
+        } as AudioUserWord;
         await wordPageApiService.createUserWord(userId, word.id as string, progressObj);
+        console.log(userWords)
+
       } else {
         console.log('было уже!')
-        let optional = Object.assign(dbWord.optional);
+        let optional = Object.assign(dbWord?.optional?.audioGame);
         let wordDifficulty = dbWord.difficulty;
-        console.log(dbWord.optional);
-        let data = {} as any;
+        let data = {} as AudioUserWord;
         if (isRight) {
           optional['audioRightAnswer'] = optional['audioRightAnswer'] + 1;
           optional['audioTotalRightAnswers'] = optional['audioTotalRightAnswers'] + 1;
@@ -135,11 +141,11 @@ export const AudioChallenge: React.FC = (props: any) => {
           wordDifficulty = 'strong';
           optional['audioTotalRightAnswers'] = 0;
         }
-
         data['optional'] = optional;
         data['difficulty'] = wordDifficulty;
-
         await wordPageApiService.updateUserWord(userId, word.id as string, data);
+        console.log(data)
+        console.log(userWords)
       }
     }
   }

@@ -12,6 +12,16 @@ class WordPageApiService {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(word)
+    })
+
+    updateUserWord = (id: string, wordId: string, word: any) => fetch(`https://rs-lang-rs-school.herokuapp.com/users/${id}/words/${wordId}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('userToken')}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(word)
     })  
 
     deleteUserWord = (id: string, wordId: string) => fetch(`https://rs-lang-rs-school.herokuapp.com/users/${id}/words/${wordId}`, {
@@ -43,7 +53,6 @@ class WordPageApiService {
               weak.push(word.wordId)
           }
       })
-      return ({ strong, weak })
     }
 
       getUserWords = (id: string) => fetch(`https://rs-lang-rs-school.herokuapp.com/words/${id}`, {

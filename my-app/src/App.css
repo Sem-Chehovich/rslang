@@ -28,6 +28,7 @@ h2 {
 }
 
 main {
+  /* margin-top: 70px; */
   position: relative;
-  min-height: 100vh;
+  /* min-height: 100vh; */
 }

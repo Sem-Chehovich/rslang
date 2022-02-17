@@ -7,6 +7,5 @@ export interface Word {
 }
 
 export interface stateObj {
-    [key: string]: boolean
+  [key: string]: boolean
 }
-

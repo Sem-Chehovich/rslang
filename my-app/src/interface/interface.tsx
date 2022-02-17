@@ -18,3 +18,16 @@ export interface AudioUserWord {
     }
   }
 }
+
+export interface IUserWord {
+  difficulty: string, 
+  optional: {
+    sprintGame: {
+      date: string,
+      newWord: boolean,
+      wrongAns: number,
+      rightAns: number,
+      totalRightAns: number,
+    }
+  },
+}

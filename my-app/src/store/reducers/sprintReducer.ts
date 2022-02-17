@@ -8,6 +8,7 @@ const initialState: SprintState = {
   page: 0,
   pagePath: '',
   pagePathSecond: '',
+  userInGame: false,
 }
 
 export const sprintReducer = (state = initialState, action: SprintAction): SprintState => {
@@ -55,6 +56,11 @@ export const sprintReducer = (state = initialState, action: SprintAction): Sprin
       return {
         ...state,
         pagePathSecond: action.payload,
+      }
+    case SprintActionTypes.SET_USER_IN_GAME:
+      return {
+        ...state,
+        userInGame: action.payload,
       }
     default: 
       return state;

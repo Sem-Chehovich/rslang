@@ -28,6 +28,7 @@ export interface SprintState {
   page: number,
   pagePath: string,
   pagePathSecond: string,
+  userInGame: boolean,
 }
 
 export enum SprintActionTypes {
@@ -39,6 +40,7 @@ export enum SprintActionTypes {
   SET_PAGE = 'SET_PAGE',
   SET_PAGE_PATH = 'SET_PAGE_PATH',
   SET_PAGE_SECOND = 'SET_PAGE_SECOND',
+  SET_USER_IN_GAME = 'SET_USER_IN_GAME',
   CLEAR_WORDS = 'CLEAR_WORDS',
 }
 
@@ -87,6 +89,11 @@ interface SetPagePathSecondAction {
   payload: string,
 }
 
+interface SetUserInGameAction {
+  type: SprintActionTypes.SET_USER_IN_GAME,
+  payload: boolean,
+}
+
 export type SprintAction = FetchWordsAction 
   | FetchWordsSuccessAction 
   | SetGroupAction 
@@ -95,4 +102,5 @@ export type SprintAction = FetchWordsAction
   | SetPageAction
   | SetPagePathAction
   | ClearWordsAction
-  | SetPagePathSecondAction;
+  | SetPagePathSecondAction
+  | SetUserInGameAction;

@@ -1,5 +1,5 @@
-import { AnswerObject } from '../audio-challenge/audio-challenge';
-import './audio-challenge-score.css';
+import { AnswerObject } from '../audioChallenge/audioСhallenge';
+import './audioChallengeScore.css';
 
 type Props = {
   answers: Array<AnswerObject>,

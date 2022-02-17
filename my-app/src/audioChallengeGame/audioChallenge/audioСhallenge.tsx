@@ -1,12 +1,12 @@
-import { levels } from '../audio-challenge-constants';
-import './audio-challenge.css';
+import { levels } from '../audioChallengeConstants';
+import './audioСhallenge.css';
 import React, { useState } from 'react';
-import { audioChallengeApiService } from '../audio-challenge-api-service/api-service';
-import { AudioChallengeCard } from '../audio-challenge-card/audio-challenge-card';
+import { audioChallengeApiService } from '../audioChallengeApiService/apiService';
+import { AudioChallengeCard } from '../audioChallengeCard/audioChallengeCard';
 import { Spinner } from '../../spinner/spinner';
 import { shuffleWords, getRandomNum, getCorrectUrl, sliceArrIntoChunks } from '../../utilities/utilities';
 import { Word } from '../../interface/interface';
-import { AudioChallengeScore } from '../audio-challenge-score/audio-challenge-score';
+import { AudioChallengeScore } from '../audioChallengeScore/audioChallengeScore';
 
 export type AnswerObject = {
   answer: string,
@@ -17,54 +17,17 @@ export type AnswerObject = {
 
 export let wordsArr = [] as Array<Word>;
 
-export const AudioChallenge: React.FC = (props: any) => {
+export const AudioChallenge: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [difficulty, setDifficulty] = useState(0);
   const [words, setWords] = useState<Array<Array<Word>>>([]); 
   const [questionNumber, setQuestionNumber] = useState(0);
   const [score, setScore] = useState(0);
   const [chosenAnswers, setChosenAnswers] = useState<AnswerObject[]>([]);
-  const [isAnswered] = useState<Array<boolean>>([]);
+  const [isAnswered, setIsAnswered] = useState<Array<boolean>>([]);
   const [gameOver, setGameOver] = useState(true);
   const [showScore, setShowScore] = useState(false);
-  const [isOpenFromDictionary] = useState(localStorage.getItem('isAudioGameTurnOnByDictionary'))
-
-   React.useEffect(() => {
-    
-    console.log(isOpenFromDictionary)
-    
-    async function renderPage() {
-      setLoading(true);
-      const section = localStorage.getItem('section') as string
-      let pageNumber1 = (+(localStorage.getItem('page') as string) - 1) + ''
-      let pageNumber2
-
-      if (pageNumber1 === '0') {
-         pageNumber2 = '29';
-      } else {
-        pageNumber2 = (+pageNumber1 - 1) + ''
-      }
-      
-      await audioChallengeApiService.getWords(pageNumber1, section)
-      .then((data) => {
-        wordsArr.push(...data);
-      })
-  
-      await audioChallengeApiService.getWords(pageNumber2, section)
-      .then((data) => {
-        wordsArr.push(...data);
-      })
-  
-      generateMixedArray(wordsArr);
-      setGameOver(false);
-      setLoading(false);
-    }
-
-    isOpenFromDictionary && renderPage()
-    return function cleanUp() {
-      localStorage.removeItem('isAudioGameTurnOnByDictionary')
-    }
-  }, [isOpenFromDictionary])
+  const [isRightAnswerShown, setIsRightAnswerShown] = useState(false);
 
   async function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setLoading(true);
@@ -93,26 +56,6 @@ export const AudioChallenge: React.FC = (props: any) => {
     setLoading(false);
   }
 
-  const showRightAnswer = () => {
-    const audioBtn = document.querySelector('.audio-challenge-card__audio-btn') as HTMLElement;
-    const answerImage = document.querySelector('.audio-challenge-card__answer-img') as HTMLImageElement;
-    const answerWord = document.querySelector('.audio-challenge-card__right-answer-word') as HTMLElement;
-    audioBtn.style.width = '70px';
-    audioBtn.style.height = '70px';
-    answerImage.style.display = 'block';
-    answerWord.style.display = 'block';
-  }
-
-  const hideRightAnswer = () => {
-    const audioBtn = document.querySelector('.audio-challenge-card__audio-btn') as HTMLElement;
-    const answerImage = document.querySelector('.audio-challenge-card__answer-img') as HTMLImageElement;
-    const answerWord = document.querySelector('.audio-challenge-card__right-answer-word') as HTMLElement;
-    audioBtn.style.width = '120px';
-    audioBtn.style.height = '120px';
-    answerImage.style.display = 'none';
-    answerWord.style.display = 'none';
-  }
-
   const handleAnswerClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const answerBtns = document.querySelectorAll('.audio-challenge-card__words-btn') as NodeListOf<HTMLElement>;
     const challengeNextBtn = document.querySelector('.audio-challenge-card__next-btn') as HTMLElement;
@@ -122,7 +65,7 @@ export const AudioChallenge: React.FC = (props: any) => {
     isAnswered.push(true);
 
     if (challengeNextBtn.innerHTML === 'I don\'t know') {
-      showRightAnswer();
+      setIsRightAnswerShown(true);
       challengeNextBtn.innerHTML = 'Next';
       event.currentTarget.style.textDecoration = 'line-through';
       answerBtns.forEach((x) => {
@@ -160,13 +103,13 @@ export const AudioChallenge: React.FC = (props: any) => {
 
     if (event.currentTarget.innerHTML === 'I don\'t know') {
       event.currentTarget.innerHTML = 'Next';
-      showRightAnswer();
+      setIsRightAnswerShown(true);
       answerBtns.forEach((x) => {
         if (x.innerHTML === correctAnswer.wordTranslate) {
          x.innerHTML = `<u>${x.innerHTML}</u>`;
         }});
     } else {
-      hideRightAnswer();
+      setIsRightAnswerShown(false);
       answerBtns.forEach((btn) => {
         btn.style.textDecoration = 'none';
       });
@@ -220,7 +163,7 @@ export const AudioChallenge: React.FC = (props: any) => {
   return (
     <div className='audio-challenge'>
       {loading === true ? <Spinner /> : 
-        gameOver === true && showScore === false && !isOpenFromDictionary ?
+        gameOver === true && showScore === false ?
         <section className='audio-challenge-memo-page'>
           <div className='audio-challenge-memo'>
             <h2>Audio challenge</h2>
@@ -237,6 +180,7 @@ export const AudioChallenge: React.FC = (props: any) => {
         :
         (showScore === false ? 
           <AudioChallengeCard words={words[questionNumber]} 
+          isRightAnswerShown={isRightAnswerShown}
           handleAnswerClick={handleAnswerClick}
           handleNextQuestionClick={handleNextQuestionClick}/>
           : 

@@ -1,7 +1,7 @@
 import './games-page.css';
 import { Link } from 'react-router-dom';
-import { items } from '../main-page/main-page-constants';
-import { NavigationLink } from '../main-page/header/header';
+import { items } from '../mainPage/mainPageConstants';
+import { NavigationLink } from '../mainPage/header/header';
 
 export const GamesPage: React.FC = () => {
   const games = [items.find((x) => x.value === '"Audio challenge"'), items.find((x) => x.value === '"Sprint"')] as Array<NavigationLink>;

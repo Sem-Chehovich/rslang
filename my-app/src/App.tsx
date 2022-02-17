@@ -1,19 +1,19 @@
 import './App.css';
-import { AudioChallenge } from './audio-challenge-game/audio-challenge/audio-challenge'
-import Footer from './main-page/footer/footer';
-import Header from './main-page/header/header';
-import Main from './main-page/main/main';
+import { AudioChallenge } from './audioChallengeGame/audioChallenge/audioСhallenge'
+import Footer from './mainPage/footer/footer';
+import Header from './mainPage/header/header';
+import Main from './mainPage/main/main';
 import WordsPageContainer from './wordsPage/wordsPageContainer';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthForm from './authorization/AuthForm';
 import { GamesPage } from './games/games-page';
+import { Statistics } from './statistics/statistics';
 import GameCategories from './sprint-game/sprintCategories/categoryPage';
 import Sprint from './sprint-game/sprintQuiz/Sprint';
 import { useTypedSelector } from './hooks/useTypeSelector';
 
-
 function App() {
-  const { pagePath } = useTypedSelector(state => state.sprint);
+  const { pagePath } = useTypedSelector((state) => state.sprint);
 
   return (
       <BrowserRouter>
@@ -26,6 +26,7 @@ function App() {
             <Route path="/home" element={<Main />} />
             <Route path="/audio" element={<AudioChallenge />}/>
             <Route path="/textbook" element={<WordsPageContainer />} />
+            <Route path='/statistics' element={<Statistics />} />
             <Route path="/authorization" element={<AuthForm />} />
             <Route path="/game" element={<GameCategories /> } />
             <Route path="/sprint" element={<Sprint /> } />

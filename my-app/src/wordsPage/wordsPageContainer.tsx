@@ -37,12 +37,19 @@ const WordsPageContainer = () => {
 
             compareCards()
         }else{
+            setIsPageLearned(false)
             const loadUserCards = async () => {
                 let userWordIdArr = userId ? await wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string)) : []
                 let promise:  Promise<any> = new Promise((resolve) => { 
                     let arr: any[] = []
                     let newArray = userWordIdArr.filter((el: { difficulty: string; }) =>  el.difficulty === 'strong' )
-    
+                    if (newArray.length === 0) {
+                        wordPageApiService.getWords('0', '6').then(data => {
+                            setCards(data)
+                            setIsLoading(false)
+                        })
+                        return
+                    }
                     newArray.forEach(async (card: card, index: number) => {
                         let data = await wordPageApiService.getUserWords(card.wordId)
                         arr.push(data)
@@ -73,12 +80,19 @@ const WordsPageContainer = () => {
         let id = `${event.target.value}`
         localStorage.setItem('section', id)
         setIsLoading(true)
-        if (id === '6') {
+        if (id === '6' && localStorage.getItem('userName')) {
+            setIsPageLearned(false)
             let userWordIdArr = await wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string))
             let promise:  Promise<any> = new Promise((resolve) => { 
                 let arr: any[] = []
                 let newArray = userWordIdArr.filter((el: { difficulty: string; }) =>  el.difficulty === 'strong' )
-
+                if (newArray.length === 0) {
+                    wordPageApiService.getWords('0', '6').then(data => {
+                        setCards(data)
+                        setIsLoading(false)
+                    })
+                    return
+                }
                 newArray.forEach(async (card: card, index: number) => {
                     let data = await wordPageApiService.getUserWords(card.wordId)
                     arr.push(data)
@@ -126,7 +140,7 @@ const WordsPageContainer = () => {
                         handleChange={handleChange}
                         sections={sections}
                         />
-                        <DisableElevation sections={sections} page={page} />
+                        {+sections < 6 && <DisableElevation sections={sections} page={page} />}
                     </div>
                     {isPageLearned && <div className="alert__wrapper"> <BasicAlerts /> </div>}
                     <WordsPage 

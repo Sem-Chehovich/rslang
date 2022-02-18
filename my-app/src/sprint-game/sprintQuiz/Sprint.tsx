@@ -94,26 +94,36 @@ const Sprint: React.FC = () => {
     const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}`;
 
     if (typeof userWord === 'number') {
-      await createUserWord(wordId, wordOptional);
-    } else {
-      if (userWord.optional.sprintGame.date === currDateStr) { 
-        wordOptional.optional.sprintGame.newWord = true;
-      } else {
-        wordOptional.optional.sprintGame.newWord = false;
-      }
-
-      if (wordOptional.optional.sprintGame.rightAns === 1) { 
-        wordOptional.optional.sprintGame.rightAns += userWord.optional.sprintGame.rightAns;
-      } else {
-        wordOptional.optional.sprintGame.wrongAns += userWord.optional.sprintGame.wrongAns;
-      }
-
       if (wordOptional.optional.sprintGame.wrongAns === 1) { 
         wordOptional.difficulty = 'strong';
         wordOptional.optional.sprintGame.totalRightAns = 0;
       } else {
-        wordOptional.optional.sprintGame.totalRightAns += userWord.optional.sprintGame.rightAns;
+        wordOptional.difficulty = 'weak';
       }
+      
+      await createUserWord(wordId, wordOptional);
+    } else {
+      if (userWord.optional.sprintGame.date) {
+        if (userWord.optional.sprintGame.date === currDateStr) { 
+          wordOptional.optional.sprintGame.newWord = true;
+        } else {
+          wordOptional.optional.sprintGame.newWord = false;
+        }
+  
+        if (wordOptional.optional.sprintGame.rightAns === 1) { 
+          wordOptional.optional.sprintGame.rightAns += userWord.optional.sprintGame.rightAns;
+        } else {
+          wordOptional.optional.sprintGame.wrongAns += userWord.optional.sprintGame.wrongAns;
+        }
+  
+        if (wordOptional.optional.sprintGame.wrongAns === 1) { 
+          wordOptional.difficulty = 'strong';
+          wordOptional.optional.sprintGame.totalRightAns = 0;
+        } else {
+          wordOptional.optional.sprintGame.totalRightAns += userWord.optional.sprintGame.rightAns;
+        }
+      }
+      
 
       if (wordOptional.optional.sprintGame.totalRightAns >= 3) {
         wordOptional.difficulty = 'weak';
@@ -146,6 +156,7 @@ const Sprint: React.FC = () => {
     if (userInGame === true)  { 
       initialWordOptional.optional.sprintGame.rightAns = ans === true ? 1 : 0;
       initialWordOptional.optional.sprintGame.wrongAns = ans === true ? 0 : 1;
+      initialWordOptional.optional.sprintGame.totalRightAns = ans === true ? 1 : 0;
 
       checkWord(question[0].id, initialWordOptional);
     } 
@@ -198,6 +209,12 @@ const Sprint: React.FC = () => {
       
       setPage(nextPage);
       fetchWords(group, nextPage);
+    }
+
+    if (page === 0 && questions.length < questionNumber + 1) {
+      clearTimeout(timerId);
+      setGameOver(true);
+      console.log(gameOver);
     }
 
     const numb = questionNumber + 1;

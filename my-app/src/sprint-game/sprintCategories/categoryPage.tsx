@@ -10,7 +10,7 @@ const levels = [1, 2, 3, 4, 5, 6];
 
 const GameCategories = () => {
   const navigate = useNavigate();
-  const { pagePathSecond } = useTypedSelector(state => state.sprint);
+  const { pagePathSecond, questions } = useTypedSelector(state => state.sprint);
   const { fetchWords, setGroup, setPage, setPagePath, setPagePathSecond, setUserInGame } = useActions();
   
   const handleClick = async (e: React.MouseEvent) => {
@@ -33,13 +33,23 @@ const GameCategories = () => {
     const group = localStorage.getItem('section')!;
     const page = localStorage.getItem('page')!;
 
-    const userIn = checkUser();
-    userIn === 'authorized' ? setUserInGame(true) : setUserInGame(false);
-
     setPagePath('game-page');
     setGroup(Number(group));
     setPage(Number(page) - 1);
-    fetchWords(Number(group), Number(page) - 1);
+
+    const userIn = checkUser();
+    if (userIn === 'authorized') { 
+      setUserInGame(true);
+      fetchWords(Number(group), Number(page) - 1, userIn);
+    } else { 
+      setUserInGame(false);
+      fetchWords(Number(group),Number(page) - 1);
+    }
+
+    if (questions.length === 0) {
+      console.log('Все слова выучены');
+      
+    }
     
     navigate('/sprint');
   }

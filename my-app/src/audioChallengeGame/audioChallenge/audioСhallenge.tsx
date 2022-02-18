@@ -8,6 +8,8 @@ import { Word, AudioUserWord } from '../../interface/interface';
 import { AudioChallengeScore } from '../audioChallengeScore/audioChallengeScore';
 import { wordPageApiService } from '../../wordsPage/service/wordPageApiService';
 import { isAuthorizedUser } from '../../authorization/validateToken';
+import wrongAnswer from '../../assets/sounds/wrongAnswer.mp3';
+import rightAnswer from '../../assets/sounds/rightAnswer.mp3';
 
 export type AnswerObject = {
   answer: string,
@@ -30,6 +32,7 @@ export const AudioChallenge: React.FC = (props: any) => {
   const [showScore, setShowScore] = useState(false);
   const [isRightAnswerShown, setIsRightAnswerShown] = useState(false);
   const [isOpenFromDictionary] = useState(localStorage.getItem('isAudioGameTurnOnByDictionary'));
+  const [isSoundOn, setSoundOn] = useState(false);
 
   React.useEffect(() => {
     
@@ -174,6 +177,13 @@ export const AudioChallenge: React.FC = (props: any) => {
       setScore(score + 1);
       isCorrect = true;
       event.currentTarget.style.textDecoration = 'underline';
+      if (!isSoundOn) {
+        soundOn(rightAnswer);
+      }
+    } else {
+      if (!isSoundOn) {
+        soundOn(wrongAnswer);
+      }
     }
 
     const handleSoundClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -205,6 +215,9 @@ export const AudioChallenge: React.FC = (props: any) => {
     if (event.currentTarget.innerHTML === 'I don\'t know') {
       event.currentTarget.innerHTML = 'Next';
       setIsRightAnswerShown(true);
+      if (!isSoundOn) {
+        soundOn(wrongAnswer);
+      }
       answerBtns.forEach((x) => {
         if (x.innerHTML === correctAnswer.wordTranslate) {
          x.innerHTML = `<u>${x.innerHTML}</u>`;
@@ -261,6 +274,19 @@ export const AudioChallenge: React.FC = (props: any) => {
     setWords(sliceArrIntoChunks(arr));
   }
 
+  const onSoundOn = () => {
+    if (!isSoundOn) {
+      setSoundOn(true);
+    } else {
+      setSoundOn(false);
+    }
+  }
+
+  function soundOn(answerSound: string) {
+    const sound = new Audio(answerSound);
+    sound.play();
+  }
+
   return (
     <div className='audio-challenge'>
       {loading === true ? <Spinner /> : 
@@ -283,7 +309,9 @@ export const AudioChallenge: React.FC = (props: any) => {
           <AudioChallengeCard words={words[questionNumber]} 
           isRightAnswerShown={isRightAnswerShown}
           handleAnswerClick={handleAnswerClick}
-          handleNextQuestionClick={handleNextQuestionClick}/>
+          handleNextQuestionClick={handleNextQuestionClick}
+          isSoundOn={isSoundOn}
+          onSoundOn={onSoundOn}/>
           : 
           <section className='audio-challenge-memo-page'>
             <AudioChallengeScore answers={chosenAnswers} handleExitClick={handleExitClick} score={score} />

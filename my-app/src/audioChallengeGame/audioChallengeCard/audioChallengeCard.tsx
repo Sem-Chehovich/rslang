@@ -52,7 +52,7 @@ export const AudioChallengeCard: React.FC<Props> = ({words, handleAnswerClick, h
       </div>
       <div className='audio-challenge-card__words'>
         {words?.map((word: Word, index: number) => 
-          <button key={index} value={word?.wordTranslate as string} onClick={handleAnswerClick} className='audio-challenge-card__words-btn'>{word?.wordTranslate as string}</button>
+          <button key={index} id={index.toString()} value={word?.wordTranslate as string} onClick={handleAnswerClick} className='audio-challenge-card__words-btn'>{word?.wordTranslate as string}</button>
         )};
       </div>
       <button onClick={handleNextQuestionClick} className='audio-challenge-card__next-btn'>I don't know</button>

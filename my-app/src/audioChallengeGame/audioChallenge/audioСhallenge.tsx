@@ -69,7 +69,7 @@ export const AudioChallenge: React.FC = (props: any) => {
     return function cleanUp() {
       localStorage.removeItem('isAudioGameTurnOnByDictionary');
     }
-  }, [isOpenFromDictionary])
+  }, [isOpenFromDictionary]);
 
   async function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setLoading(true);
@@ -105,18 +105,19 @@ export const AudioChallenge: React.FC = (props: any) => {
 
     if (userId != null) {
       const userWords = await wordPageApiService.getAllUserWords(userId) as Array<Word>;
-      userWords.filter((word: Word) => word.difficulty != 'weak');
+      userWords.filter((word: Word) => word.difficulty !== 'weak');
       const currDate = new Date() as Date;
       const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}` as string;
       let dbWord = userWords.find((dbWord: Word) => dbWord.wordId === word.id) as any;
-      
+
       if (dbWord === undefined) {
-        console.log('новое')
+        console.log('новое');
         const progressObj = {
           difficulty: 'strong',
           optional: {
             audioGame: {
               audioDate: currDateStr,
+              audioIsNewWord: true,
               audioRightAnswer: isRight ? 1 : 0,
               audioWrongAnswer: isRight ? 0 : 1,
               audioTotalRightAnswers: isRight ? 1 : 0,
@@ -125,10 +126,16 @@ export const AudioChallenge: React.FC = (props: any) => {
         } as AudioUserWord;
         await wordPageApiService.createUserWord(userId, word.id as string, progressObj);
       } else {
-        console.log('было уже!')
+        console.log('было уже!');
         let optional = Object.assign(dbWord?.optional?.audioGame);
         let wordDifficulty = dbWord.difficulty;
         let data = {} as AudioUserWord;
+        if (optional['audioDate'] === currDateStr) {
+          optional['audioIsNewWord'] = true;
+        } else {
+          optional['audioIsNewWord'] = false;
+        }
+
         if (isRight) {
           optional['audioRightAnswer'] = optional['audioRightAnswer'] + 1;
           optional['audioTotalRightAnswers'] = optional['audioTotalRightAnswers'] + 1;
@@ -152,8 +159,8 @@ export const AudioChallenge: React.FC = (props: any) => {
   }
 
   const handleAnswerClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const answerBtns = document.querySelectorAll('.audio-challenge-card__words-btn') as NodeListOf<HTMLElement>;
-    const challengeNextBtn = document.querySelector('.audio-challenge-card__next-btn') as HTMLElement;
+    const answerBtns = document.querySelectorAll('.audio-challenge-card__words-btn') as NodeListOf<HTMLButtonElement>;
+    const challengeNextBtn = document.querySelector('.audio-challenge-card__next-btn') as HTMLButtonElement;
     const chosenAnswer = event.currentTarget.value as string;
     const correctAnswer = words[questionNumber].find((x) => x.isRight === true) as Word;
     let isCorrect = false as boolean;
@@ -285,6 +292,25 @@ export const AudioChallenge: React.FC = (props: any) => {
   function soundOn(answerSound: string) {
     const sound = new Audio(answerSound);
     sound.play();
+  }
+
+  // const answerBtns = document.querySelectorAll('.audio-challenge-card__words-btn') as NodeListOf<HTMLButtonElement>;
+  // const challengeNextBtn = document.querySelector('.audio-challenge-card__next-btn') as HTMLButtonElement;
+  
+  document.onkeydown = function(event) {
+    switch (event.code) {
+      case 'Digit1':
+        break;
+      case 'Digit2':
+        return;
+      case 'Digit3':
+        return;
+      case 'Digit4':
+        return;
+      case 'Enter':
+        console.log('enter');
+      break; 
+    }
   }
 
   return (

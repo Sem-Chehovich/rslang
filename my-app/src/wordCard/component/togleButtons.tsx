@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Switch from '@mui/material/Switch';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -8,7 +8,7 @@ import { wordPageApiService } from '../../wordsPage/service/wordPageApiService';
 import { checkIfPageLearned } from '../../utilities/utilities'
 
 
-export default function FormControlLabelPosition({ changeCardClass, isLearned, isDifficult, handlePageLearned }: any) {
+export default function FormControlLabelPosition({ changeCardClass, isLearned, isDifficult, handlePageLearned, userArr }: any) {
 
     const [checkedDif, setCheckedDif] = React.useState(false);
     const [checkedLean, setCheckedLean] = React.useState(false);
@@ -18,8 +18,7 @@ export default function FormControlLabelPosition({ changeCardClass, isLearned, i
         const section = localStorage.getItem('section')
         let cards = await wordPageApiService.getWords((+(page as string) - 1) + '' , section || '0')
         let userCards = await wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string))
-        
-        handlePageLearned(checkIfPageLearned(cards, userCards))
+        await handlePageLearned(checkIfPageLearned(cards, await userCards))
      }
 
     const handleChangeDif = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +30,9 @@ export default function FormControlLabelPosition({ changeCardClass, isLearned, i
 
         setCheckedDif(event.target.checked);
         setCheckedLean(false);
-        compareCards()
+        setTimeout(() => {
+            compareCards()
+        }, 1000)
       };
 
       const handleChangeLean = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +43,9 @@ export default function FormControlLabelPosition({ changeCardClass, isLearned, i
         changeCardClass(obj)
         setCheckedDif(false);
         setCheckedLean(event.target.checked);
-        compareCards()
+        setTimeout(() => {
+            compareCards()
+        }, 1000)
       };  
 
     return (

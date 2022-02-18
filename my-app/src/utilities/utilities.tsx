@@ -51,11 +51,12 @@ export function isAuthorized() {
 
 export function checkIfPageLearned(pageArr: [], userArr: []) {
   let isFalse = true
+  let userFilterArr = userArr.filter(({ difficulty }) => difficulty !== 'noStatus')
   if (userArr.length < 20) {
       isFalse = false 
   } else {
     pageArr.forEach(({ id }) => {
-      let finded = userArr.filter(({ difficulty }) => !!difficulty)?.find(({ wordId }) => wordId === id)
+      let finded = userFilterArr?.find(({ wordId }) => wordId === id)
       if (!finded) {
         isFalse = false 
       }

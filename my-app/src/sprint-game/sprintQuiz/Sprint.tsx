@@ -13,7 +13,7 @@ import { IWord } from '../../types/sprint';
 import { getRandomNum } from '../../utilities/utilities';
 import { useNavigate } from 'react-router';
 import ScrollCrid from '../sprintResults/sprintResults';
-import { createUserWord, getUserWord, updateUserWord } from '../serviсe';
+import { createUserWord, getUserWord, updateUserWord } from '../service';
 import { IUserWord } from '../../interface/interface';
 
 const currDate = new Date();
@@ -123,7 +123,6 @@ const Sprint: React.FC = () => {
           wordOptional.optional.sprintGame.totalRightAns += userWord.optional.sprintGame.rightAns;
         }
       }
-      
 
       if (wordOptional.optional.sprintGame.totalRightAns >= 3) {
         wordOptional.difficulty = 'weak';
@@ -191,30 +190,14 @@ const Sprint: React.FC = () => {
       if (isCorrect.length % 4 === 0) { 
         setPoints(points + 10);
       }
-    }  
+    }
 
-
-    if (questionNumber % 15 === 0 && questionNumber !== 0) {
+    if (questionNumber % 15 === 0 && questionNumber !== 0 && pagePathSecond !== 'isSprintFromDictionary') {
       let nextPage: number;
-      if (pagePathSecond === 'isSprintFromDictionary') {
-        if (page > 0) nextPage = page - 1;
-        else { 
-          nextPage = 0;
-          clearTimeout(timerId);
-          setGameOver(true);
-        }
-      } else {
-        nextPage = page + 1;
-      }
+      nextPage = page + 1;
       
       setPage(nextPage);
       fetchWords(group, nextPage);
-    }
-
-    if (page === 0 && questions.length < questionNumber + 1) {
-      clearTimeout(timerId);
-      setGameOver(true);
-      console.log(gameOver);
     }
 
     const numb = questionNumber + 1;
@@ -227,13 +210,13 @@ const Sprint: React.FC = () => {
         const res1 = isCorrectAnswer([questions[questionNumber]], questions[randAns].id, '0');
         setResults(res1);
         checkAnswer();
-        setRandAns(getRandomNum(questionNumber));
+        setRandAns(getRandomNum(questionNumber, questions.length - 1));
       break;
       case 39:
         const res2 = isCorrectAnswer([questions[questionNumber]], questions[randAns].id, '1');
         setResults(res2);
         checkAnswer();
-        setRandAns(getRandomNum(questionNumber));
+        setRandAns(getRandomNum(questionNumber, questions.length - 1));
       break;
     }
   }
@@ -244,7 +227,13 @@ const Sprint: React.FC = () => {
     const res = isCorrectAnswer([questions[questionNumber]], questions[randAns].id, btn);
     setResults(res);
     checkAnswer();
-    setRandAns(getRandomNum(questionNumber));
+    
+    if (questionNumber === questions.length - 1) {
+      clearTimeout(timerId);
+      setGameOver(true);
+    }
+
+    setRandAns(getRandomNum(questionNumber, questions.length - 1));
   }
 
   const fullScreen = () => {

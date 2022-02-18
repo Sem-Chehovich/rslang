@@ -21,6 +21,10 @@
   text-transform: uppercase;
 }
 
+.sprint-categories__title.green {
+  color: #25a70b;
+}
+
 .sprint-categories {
   display: flex;
   justify-content: space-evenly;
@@ -60,4 +64,14 @@
 
 .game-categories__controls {
   padding: 30px;
+}
+
+.victorious-icon {
+  width: 60px;
+  height: 60px;
+  background-image: url("../../assets/svg/championCup.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  transition: 0.3s;
+  margin: 0px auto;
 }

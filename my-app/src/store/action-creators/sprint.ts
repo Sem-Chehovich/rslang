@@ -1,5 +1,5 @@
 import { Dispatch } from 'react';
-import { filterWeakWords, getAllUserWords } from '../../sprint-game/serviсe';
+import { filterWeakWords, getAllUserWords } from '../../sprint-game/service';
 import { IResult, IWord, SprintAction, SprintActionTypes } from '../../types/sprint';
 import { getCorrectUrl } from '../../utilities/utilities';
 

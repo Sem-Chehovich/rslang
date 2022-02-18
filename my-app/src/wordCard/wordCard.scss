@@ -52,3 +52,24 @@
 .difficult {
     border: 5px solid red;
 }
+
+.study-progress__container {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #d26c6a;
+    background-color: #5f8aaa;
+    margin-top: 10px;
+}
+
+.game__container {
+    display: flex;
+    margin-left: 10px;
+}
+
+.audio-answer {
+    margin-left: 10px;
+}
+
+.audio-title {
+    font-weight: bold;
+}

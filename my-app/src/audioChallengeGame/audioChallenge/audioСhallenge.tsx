@@ -94,14 +94,15 @@ export const AudioChallenge: React.FC = (props: any) => {
     generateMixedArray(wordsArr);
     setGameOver(false);
     setLoading(false);
+    isAuthorizedUser();
   }
 
   async function pushNewWord(word: Word, isRight: boolean) {
     const userId = localStorage.getItem('userId') as string;
 
     if (userId != null) {
-      isAuthorizedUser();
       const userWords = await wordPageApiService.getAllUserWords(userId) as Array<Word>;
+      userWords.filter((word: Word) => word.difficulty != 'weak');
       const currDate = new Date() as Date;
       const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}` as string;
       let dbWord = userWords.find((dbWord: Word) => dbWord.wordId === word.id) as any;
@@ -120,8 +121,6 @@ export const AudioChallenge: React.FC = (props: any) => {
           }
         } as AudioUserWord;
         await wordPageApiService.createUserWord(userId, word.id as string, progressObj);
-        console.log(userWords)
-
       } else {
         console.log('было уже!')
         let optional = Object.assign(dbWord?.optional?.audioGame);
@@ -133,6 +132,7 @@ export const AudioChallenge: React.FC = (props: any) => {
         } else {
           optional['audioWrongAnswer'] = optional['audioWrongAnswer'] + 1;
           optional['audioTotalRightAnswers'] = 0;
+          wordDifficulty = 'strong';
         }
 
         if (optional['audioTotalRightAnswers'] === 3) {
@@ -144,8 +144,6 @@ export const AudioChallenge: React.FC = (props: any) => {
         data['optional'] = optional;
         data['difficulty'] = wordDifficulty;
         await wordPageApiService.updateUserWord(userId, word.id as string, data);
-        console.log(data)
-        console.log(userWords)
       }
     }
   }

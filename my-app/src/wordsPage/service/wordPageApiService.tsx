@@ -63,6 +63,19 @@ class WordPageApiService {
       }
     })
       .then((resp) => resp.json());  
+
+    getUserWordById = (id: string, wordId: string) => fetch(`https://rs-lang-rs-school.herokuapp.com/users/${id}/words/${wordId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('userToken')}`,
+        'Accept': 'application/json',
+      },
+    })
+    .then((resp) => resp.json())
+    .catch(() => {
+      console.log('not faund')
+      return null
+    })  
 }
 
 export const wordPageApiService = new WordPageApiService();

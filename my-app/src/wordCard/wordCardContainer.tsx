@@ -6,9 +6,11 @@ import { card, stateObj } from '../interface/interface';
 import FormControlLabelPosition from './component/togleButtons'
 import { isAuthorized } from '../utilities/utilities'
 import { wordPageApiService } from '../wordsPage/service/wordPageApiService'
+import StudyProgress from './component/studyProgress'
 
 type MyProps = { card: card,  weakArr: string[], strongArr:string[], handlePageLearned: any };
-type MyState = {isLearned: boolean, isDifficult: boolean};
+type MyState = { isLearned: boolean, isDifficult: boolean, sprintRightCount: number, sprintWrongCount: number, audioRightCount: number, audioWrongCount: number, userArr: string[] };
+
 
 class WordCardContainer extends React.Component<MyProps, MyState> {
     cardRef: React.RefObject<HTMLDivElement>;
@@ -17,6 +19,11 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
         this.state = {
             isLearned: false,
             isDifficult: false,
+            sprintRightCount: 0,
+            sprintWrongCount: 0,
+            audioRightCount: 0,
+            audioWrongCount: 0,
+            userArr: [],
         }
         this.cardRef = React.createRef()
     }
@@ -25,14 +32,33 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
         localStorage.getItem('userId') && wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string)).then(data => {
             let strong: any = []
             let weak: any = []
-            data.forEach((word: { difficulty: string; wordId: string; }) => {
+            console.log(data)
+            data.forEach((word: { difficulty: string; wordId: string; optional: {sprintGame: {wrongAns: number, rightAns: number}, audioGame: { audioRightAnswer: number, audioWrongAnswer: number,}} }) => {
                 if (word.difficulty === 'strong') {
                     strong.push(word.wordId)
                 }
                 if (word.difficulty === 'weak') {
                     weak.push(word.wordId)
                 }
+                if (word.optional?.sprintGame?.wrongAns && this.props.card.id === word.wordId) {
+                    this.setState({sprintWrongCount: word.optional.sprintGame.wrongAns})
+                }
+                if (word.optional?.sprintGame?.rightAns && this.props.card.id === word.wordId) {
+                    this.setState({sprintRightCount: word.optional.sprintGame.rightAns})
+                }
+                if (word.optional?.audioGame?.audioRightAnswer && this.props.card.id === word.wordId) {
+                    this.setState({audioRightCount: word.optional.audioGame.audioRightAnswer})
+                }
+                if (word.optional?.audioGame?.audioWrongAnswer && this.props.card.id === word.wordId) {
+                    this.setState({audioWrongCount: word.optional.audioGame.audioWrongAnswer})
+                }
             })
+
+            wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string))
+            .then(data => {
+                this.setState({ userArr: data })
+            })
+
             return ({ strong, weak })
             }).then((data) => {
                 if (data.weak.includes(this.props.card.id)) {
@@ -42,6 +68,7 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
                     this.setState({ isDifficult: true })
                 }
             })
+
     }
 
     componentWillUnmount() {
@@ -59,18 +86,31 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
     changeCardClass = async (stateObj: stateObj ) => {
         this.setState({ isLearned: stateObj.isLearned,
             isDifficult: stateObj.isDifficult })
+            let word
+        const isWordAvailable = await wordPageApiService.getUserWordById((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string))   
         if (stateObj.isDifficult) {
-           await wordPageApiService.deleteUserWord((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string))
-            let  word = { "difficulty": "strong"}
-            await wordPageApiService.createUserWord((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string), word)
+            word = { "difficulty": "strong"}
         } else if (stateObj.isLearned) {
-            await wordPageApiService.deleteUserWord((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string))
-            let  word = { "difficulty": "weak"}
-            await  wordPageApiService.createUserWord((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string), word)
+            word = { "difficulty": "weak"}
         }  
         else if (!stateObj.isDifficult) {
-            await wordPageApiService.deleteUserWord((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string))  
+            word = { "difficulty": "noStatus"}
+        }  else if (!stateObj.isLearned) {
+            word = { "difficulty": "noStatus"}
         }  
+        if(isWordAvailable) {
+            await  wordPageApiService.updateUserWord((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string), word)
+        } else {
+            await wordPageApiService.createUserWord((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string), word)
+        }
+        // let arr = await wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string))
+        // wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string))
+        //     .then(data => {
+        //         this.setState({ userArr: data })
+        //     })
+        // this.setState({ userArr: await arr })
+        // isWordAvailable ? await  wordPageApiService.updateUserWord((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string), word)
+            // : await wordPageApiService.createUserWord((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string), word)
     }
 
     render() {
@@ -88,7 +128,7 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
                 <div className="card__titel-wrapper">
                 <div className="card__titel">{word}</div>
                 <SoundButton audio={audio} audioExample={audioExample} audioMeaning={audioMeaning}/>
-                {isAuthorized() && <FormControlLabelPosition handlePageLearned={this.props.handlePageLearned} changeCardClass={this.changeCardClass} 
+                {isAuthorized() && <FormControlLabelPosition userArr={this.state.userArr} handlePageLearned={this.props.handlePageLearned} changeCardClass={this.changeCardClass} 
                                         isLearned={this.state.isLearned} isDifficult={this.state.isDifficult}/>}
                 </div>
                 <div className="card__transcription">Transcription: {transcription}</div>
@@ -97,6 +137,12 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
                 <div className="card__translate">Перевод: {wordTranslate}</div>
                 <div className="card__meaning-translate">Значение: {textMeaningTranslate}</div>
                 <div className="card__example-translate">Пример: {textExampleTranslate}</div>
+               {isAuthorized() && <StudyProgress 
+                sprintRightCount={this.state.sprintRightCount}  
+                sprintWrongCount={this.state.sprintWrongCount}
+                audioRightCount={this.state.audioRightCount}
+                audioWrongCount={this.state.audioWrongCount}
+                />}
             </div>
         </div>
         )

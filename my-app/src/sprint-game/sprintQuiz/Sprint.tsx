@@ -20,7 +20,6 @@ import { IUserStatistic, IUserWord } from '../../interface/interface';
 const currDateStr = getCurrentDate();
 
 const initSprintWordOpt: IUserWord = {
-  wordId: '',
   difficulty: 'weak',
   optional: {
     sprintGame: {

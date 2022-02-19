@@ -20,7 +20,28 @@ export type AnswerObject = {
 
 export let wordsArr = [] as Array<Word>;
 
-export const AudioChallenge: React.FC = (props: any) => {
+export interface IDataUserWord {
+  wordId: string;
+  difficulty: string, 
+  optional: {
+    sprintGame: {
+      date: string,
+      newWord: boolean,
+      wrongAns: number,
+      rightAns: number,
+      totalRightAns: number,
+    },
+    audioGame: {
+      date: string,
+      newWord: boolean,
+      wrongAns: number,
+      rightAns: number,
+      totalRightAns: number,
+    }
+  }
+}
+
+export const AudioChallenge: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [difficulty, setDifficulty] = useState(0);
   const [words, setWords] = useState<Array<Array<Word>>>([]); 
@@ -104,12 +125,12 @@ export const AudioChallenge: React.FC = (props: any) => {
     const userId = localStorage.getItem('userId') as string;
 
     if (userId != null) {
-      const userWords = await wordPageApiService.getAllUserWords(userId) as Array<IUserWord>;
-      userWords.filter((word: IUserWord) => word.difficulty !== 'weak');
+      const userWords = await wordPageApiService.getAllUserWords(userId) as Array<IDataUserWord>;
+      userWords.filter((word: IDataUserWord) => word.difficulty !== 'weak');
       const currDate = new Date() as Date;
       const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}` as string;
       console.log(userWords)
-      let dbWord = userWords.find((dbWord: IUserWord) => dbWord.wordId === wordId) as IUserWord;
+      let dbWord = userWords.find((dbWord: IDataUserWord) => dbWord.wordId === wordId) as IDataUserWord;
 
       if (dbWord === undefined) {
         // console.log('новое');

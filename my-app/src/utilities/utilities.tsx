@@ -1,4 +1,5 @@
-import { Word } from "../interface/interface";
+import { Word, IUserStatistic } from "../interface/interface";
+import { getUserStatistics, upsetUserStatistics } from "../sprint-game/service";
 
 export function getCorrectUrl(path: string) {
   return `https://rs-lang-rs-school.herokuapp.com/${path}`
@@ -70,4 +71,31 @@ export function getCurrentDate(): string {
   const currDate = new Date();
   const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}`;
   return currDateStr;
+}
+
+export async function setUserInitialStatistics() {
+  const currDateStr = getCurrentDate();
+  const initStatOptional: IUserStatistic = {
+    learnedWords: 0,
+    optional: {
+      date: currDateStr,
+      sprintGame: {
+        newWord: 0,
+        rightAnsCount: 0,
+        longestBatch: 0,
+      },
+      audioGame: {
+        newWord: 0,
+        rightAnsCount: 0,
+        longestBatch: 0,
+      }
+    }
+  }
+  const userStatistic = await getUserStatistics();
+
+  if (userStatistic === 404) {
+    await upsetUserStatistics(initStatOptional);
+    return initStatOptional;
+  }
+  return userStatistic;
 }

@@ -13,7 +13,7 @@ import { IWord } from '../../types/sprint';
 import { getCurrentDate, getRandomNum } from '../../utilities/utilities';
 import { useNavigate } from 'react-router';
 import ScrollCrid from '../sprintResults/sprintResults';
-import { createUserWord, getUserStatistics, getUserWord, updateUserWord } from '../service';
+import { createUserWord, getUserStatistics, getUserWord, updateUserWord, upsetUserStatistics } from '../service';
 import { IUserStatistic, IUserWord } from '../../interface/interface';
 
 
@@ -37,23 +37,6 @@ const initSprintWordOpt: IUserWord = {
       totalRightAns: 0,
     }
   } 
-}
-
-const initStatOptional: IUserStatistic = {
-  learnedWords: 0,
-  optional: {
-    date: currDateStr,
-    sprintGame: {
-      newWord: 0,
-      rightAnsCount: 0,
-      longestBatch: 0,
-    },
-    audioGame: {
-      newWord: 0,
-      rightAnsCount: 0,
-      longestBatch: 0,
-    }
-  }
 }
 
 const Sprint: React.FC = () => {
@@ -110,15 +93,6 @@ const Sprint: React.FC = () => {
   function soundOn(answerSound: string) {
     const sound = new Audio(answerSound);
     sound.play();
-  }
-
-  async function setUserInitialStatistics() {
-    const userStatistic = await getUserStatistics();
-
-    if (userStatistic === 404) {
-      return initStatOptional;
-    }
-    return userStatistic;
   }
 
   async function checkWord(wordId: string, wordOptional: IUserWord) {

@@ -1,5 +1,5 @@
 import { isAuthorizedUser } from "../authorization/validateToken";
-import { IUserWord } from "../interface/interface";
+import { IUserStatistic, IUserWord } from "../interface/interface";
 import { IWord } from "../types/sprint";
 import { getCorrectUrl } from "../utilities/utilities";
 
@@ -99,4 +99,43 @@ export async function updateUserWord(wordId: string, wordOptional: IUserWord) {
   });
 
   return response.status;
+}
+
+export async function upsetUserStatistics(statisticOptional: IUserStatistic) {
+  const userId = localStorage.getItem('userId')!;
+  const url = getCorrectUrl(`users/${userId}/statistics`);
+  const userToken = localStorage.getItem('userToken')!;
+
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${userToken}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(statisticOptional)
+  });
+
+  return response.status;
+}
+
+export async function getUserStatistics() {
+  const userId = localStorage.getItem('userId')!;
+  const url = getCorrectUrl(`users/${userId}/statistics`);
+  const userToken = localStorage.getItem('userToken')!;
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${userToken}`,
+      'Accept': 'application/json',
+    }
+  });
+
+  if (!response.ok) {
+    return response.status;
+  }
+
+  const result = await response.json();
+  return result;
 }

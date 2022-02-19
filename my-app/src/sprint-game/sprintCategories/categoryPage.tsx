@@ -4,7 +4,7 @@ import { useActions } from '../../hooks/useActions';
 import { getRandomNum } from '../../utilities/utilities';
 import { useTypedSelector } from '../../hooks/useTypeSelector';
 import { checkUser } from '../service';
-import React, { useState } from 'react';
+import React from 'react';
 import { clearWords } from '../../store/action-creators/sprint';
 
 
@@ -40,21 +40,6 @@ const GameCategories = () => {
     setPage(startPage - 1);
     let prevPage = startPage;
 
-    // const userIn = checkUser();
-    // if (userIn === 'authorized') { 
-    //   setUserInGame(true);
-      
-    //   while (prevPage--) {
-    //     fetchWords(group, prevPage, userIn);
-    //   }
-    // } else { 
-    //   setUserInGame(false);
-
-    //   while (prevPage--) {
-    //     fetchWords(group, prevPage);
-    //   }
-    // }
-
     const userIn = checkUser();
     if (userIn === 'unauthorized') { 
       setUserInGame(false);
@@ -78,15 +63,6 @@ const GameCategories = () => {
     }
   }
 
-  // const renderCongradAlert = () => {
-  //   return (
-  //     <div className='game-categories__box'>
-  //         <h2 className='sprint-categories__title'>Good job!</h2>
-  //         <p>You have learned all words from this and the previous pages of this section</p>
-  //     </div>
-  //   );
-  // }
-
   return (
     <div className='game-categories-page'>
       <div className='game-categories__controls'>
@@ -94,13 +70,7 @@ const GameCategories = () => {
       </div> 
       <section>
           { pagePathSecond === 'isSprintFromDictionary' ?
-              questions.length === 0 ? 
-              <div className='game-categories__box'>
-                  <div className='victorious-icon'></div>
-                  <h2 className='sprint-categories__title green'>Good job!</h2>
-                  <p>You have learned all words from this and the previous pages of this section</p>
-              </div>
-              :
+              questions.length !== 0 ? 
               <div className='game-categories__box'>
                 <h2 className='sprint-categories__title'>Sprint</h2>
                 <p>Test yourself, indicate if the translation of the word we showed you is correct.</p>
@@ -108,6 +78,12 @@ const GameCategories = () => {
                 <div className='sprint-categories'> 
                   <button className='sprint-play__btn' onClick={clickSingleBtn}>Play</button>
                 </div>
+              </div>
+              :
+              <div className='game-categories__box'>
+                  <div className='victorious-icon'></div>
+                  <h2 className='sprint-categories__title green'>Good job!</h2>
+                  <p>You have learned all words from this and the previous pages of this section</p>
               </div>
             :
             <div className='game-categories__box'>

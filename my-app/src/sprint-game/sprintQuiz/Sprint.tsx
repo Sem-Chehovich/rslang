@@ -10,16 +10,16 @@ import { useTypedSelector } from '../../hooks/useTypeSelector';
 import React, { useState } from 'react';
 import { useActions } from '../../hooks/useActions';
 import { IWord } from '../../types/sprint';
-import { getRandomNum } from '../../utilities/utilities';
+import { getCurrentDate, getRandomNum } from '../../utilities/utilities';
 import { useNavigate } from 'react-router';
 import ScrollCrid from '../sprintResults/sprintResults';
-import { createUserWord, getUserWord, updateUserWord } from '../service';
-import { IUserWord } from '../../interface/interface';
+import { createUserWord, getUserStatistics, getUserWord, updateUserWord } from '../service';
+import { IUserStatistic, IUserWord } from '../../interface/interface';
 
-const currDate = new Date();
-const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}`;
 
-const initialWordOptional: IUserWord = {
+const currDateStr = getCurrentDate();
+
+const initSprintWordOpt: IUserWord = {
   difficulty: 'weak',
   optional: {
     sprintGame: {
@@ -28,8 +28,32 @@ const initialWordOptional: IUserWord = {
       wrongAns: 0,
       rightAns: 0,
       totalRightAns: 0,
+    },
+    audioGame: {
+      date: '',
+      newWord: true,
+      wrongAns: 0,
+      rightAns: 0,
+      totalRightAns: 0,
     }
   } 
+}
+
+const initStatOptional: IUserStatistic = {
+  learnedWords: 0,
+  optional: {
+    date: currDateStr,
+    sprintGame: {
+      newWord: 0,
+      rightAnsCount: 0,
+      longestBatch: 0,
+    },
+    audioGame: {
+      newWord: 0,
+      rightAnsCount: 0,
+      longestBatch: 0,
+    }
+  }
 }
 
 const Sprint: React.FC = () => {
@@ -88,11 +112,19 @@ const Sprint: React.FC = () => {
     sound.play();
   }
 
+  async function setUserInitialStatistics() {
+    const userStatistic = await getUserStatistics();
+
+    if (userStatistic === 404) {
+      return initStatOptional;
+    }
+    return userStatistic;
+  }
+
   async function checkWord(wordId: string, wordOptional: IUserWord) {
     const userWord = await getUserWord(wordId);
-    const currDate = new Date();
-    const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}`;
-
+    const currDateStr = getCurrentDate();
+     
     if (typeof userWord === 'number') {
       if (wordOptional.optional.sprintGame.wrongAns === 1) { 
         wordOptional.difficulty = 'strong';
@@ -103,31 +135,37 @@ const Sprint: React.FC = () => {
       
       await createUserWord(wordId, wordOptional);
     } else {
+      console.log('Update');
       if (userWord.optional.sprintGame.date) {
-        if (userWord.optional.sprintGame.date === currDateStr) { 
+        if (userWord.optional.sprintGame.date === '' || userWord.optional.sprintGame.date === currDateStr) { 
           wordOptional.optional.sprintGame.newWord = true;
         } else {
           wordOptional.optional.sprintGame.newWord = false;
         }
-  
+
         if (wordOptional.optional.sprintGame.rightAns === 1) { 
           wordOptional.optional.sprintGame.rightAns += userWord.optional.sprintGame.rightAns;
         } else {
           wordOptional.optional.sprintGame.wrongAns += userWord.optional.sprintGame.wrongAns;
         }
-  
+
         if (wordOptional.optional.sprintGame.wrongAns === 1) { 
           wordOptional.difficulty = 'strong';
           wordOptional.optional.sprintGame.totalRightAns = 0;
         } else {
           wordOptional.optional.sprintGame.totalRightAns += userWord.optional.sprintGame.rightAns;
         }
-      }
 
-      if (wordOptional.optional.sprintGame.totalRightAns >= 3) {
-        wordOptional.difficulty = 'weak';
+        if (wordOptional.optional.sprintGame.totalRightAns >= 3) {
+          wordOptional.difficulty = 'weak';
+        }
+
+        wordOptional.optional.audioGame.date = userWord.optional.audioGame.date;
+        wordOptional.optional.audioGame.newWord = userWord.optional.audioGame.newWord;
+        wordOptional.optional.audioGame.rightAns = userWord.optional.audioGame.rightAns;
+        wordOptional.optional.audioGame.wrongAns = userWord.optional.audioGame.wrongAns;
+        wordOptional.optional.audioGame.totalRightAns = userWord.optional.audioGame.totalRightAns;
       }
-      
       await updateUserWord(wordId, wordOptional);
     }
   }
@@ -140,11 +178,11 @@ const Sprint: React.FC = () => {
       isCorrect.push(ans);
 
       if (userInGame === true)  { 
-        initialWordOptional.optional.sprintGame.rightAns = ans === true ? 1 : 0;
-        initialWordOptional.optional.sprintGame.wrongAns = ans === true ? 0 : 1;
-        initialWordOptional.optional.sprintGame.totalRightAns = ans === true ? 1 : 0;
+        initSprintWordOpt.optional.sprintGame.rightAns = ans === true ? 1 : 0;
+        initSprintWordOpt.optional.sprintGame.wrongAns = ans === true ? 0 : 1;
+        initSprintWordOpt.optional.sprintGame.totalRightAns = ans === true ? 1 : 0;
         
-        checkWord(question[0].id, initialWordOptional);  
+        checkWord(question[0].id, initSprintWordOpt);  
       } 
 
       return [{ questions: question, isRight: ans }];
@@ -153,11 +191,11 @@ const Sprint: React.FC = () => {
     ans = btn === '0' ? true : false;
     isCorrect.push(ans);
     if (userInGame === true)  { 
-      initialWordOptional.optional.sprintGame.rightAns = ans === true ? 1 : 0;
-      initialWordOptional.optional.sprintGame.wrongAns = ans === true ? 0 : 1;
-      initialWordOptional.optional.sprintGame.totalRightAns = ans === true ? 1 : 0;
+      initSprintWordOpt.optional.sprintGame.rightAns = ans === true ? 1 : 0;
+      initSprintWordOpt.optional.sprintGame.wrongAns = ans === true ? 0 : 1;
+      initSprintWordOpt.optional.sprintGame.totalRightAns = ans === true ? 1 : 0;
 
-      checkWord(question[0].id, initialWordOptional);
+      checkWord(question[0].id, initSprintWordOpt);
     } 
 
     return [{ questions: question, isRight: ans }];

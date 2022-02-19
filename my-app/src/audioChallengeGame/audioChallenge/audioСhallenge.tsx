@@ -20,7 +20,7 @@ export type AnswerObject = {
 
 export let wordsArr = [] as Array<Word>;
 
-export const AudioChallenge: React.FC = (props: any) => {
+export const AudioChallenge: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [difficulty, setDifficulty] = useState(0);
   const [words, setWords] = useState<Array<Array<Word>>>([]); 
@@ -104,12 +104,9 @@ export const AudioChallenge: React.FC = (props: any) => {
     const userId = localStorage.getItem('userId') as string;
 
     if (userId != null) {
-      const userWords = await wordPageApiService.getAllUserWords(userId) as Array<IUserWord>;
-      userWords.filter((word: IUserWord) => word.difficulty !== 'weak');
+      const dbWord = await wordPageApiService.getUserWordById(userId, wordId) as IUserWord;
       const currDate = new Date() as Date;
       const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}` as string;
-      console.log(userWords)
-      let dbWord = userWords.find((dbWord: IUserWord) => dbWord.wordId === wordId) as IUserWord;
 
       if (dbWord === undefined) {
         // console.log('новое');

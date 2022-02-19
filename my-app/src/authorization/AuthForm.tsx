@@ -4,6 +4,7 @@ import './AuthForm.css';
 import { signUpUser, signInUser } from './api';
 import { getErrorMessage } from './errorMessages';
 import { useNavigate } from 'react-router-dom';
+import { useActions } from '../hooks/useActions';
 
 const AuthForm = () => {
   const [email, setEmail] = useState('');
@@ -12,7 +13,8 @@ const AuthForm = () => {
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
-  const [isAutorized, setIsAutorized] = useState(localStorage.getItem('userName'))
+  const { setUserInGame } = useActions();
+  const [isAutorized, setIsAutorized] = useState(localStorage.getItem('userName'));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,6 +62,7 @@ const AuthForm = () => {
   }
 
   const changingAuthorizationPages = () => {
+    setUserInGame(false);
     localStorage.removeItem('userName')
     localStorage.removeItem('userToken')
     localStorage.removeItem('refreshToken')
@@ -127,7 +130,7 @@ const AuthForm = () => {
     return (
       <div className='form-container__box'>
          <h2 className='form-container__title'>Username: {isAutorized}</h2>
-         <button onClick={changingAuthorizationPages} className='auth-form__btn'>Log off</button>
+         <button onClick={changingAuthorizationPages} className='auth-form__btn'>Log out</button>
       </div>
      
     )

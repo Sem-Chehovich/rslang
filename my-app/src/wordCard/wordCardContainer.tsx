@@ -32,7 +32,7 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
         localStorage.getItem('userId') && wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string)).then(data => {
             let strong: any = []
             let weak: any = []
-            console.log(data)
+            //console.log(data)
             data.forEach((word: { difficulty: string; wordId: string; optional: {sprintGame: {wrongAns: number, rightAns: number}, audioGame: { audioRightAnswer: number, audioWrongAnswer: number,}} }) => {
                 if (word.difficulty === 'strong') {
                     strong.push(word.wordId)

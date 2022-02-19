@@ -65,3 +65,9 @@ export function checkIfPageLearned(pageArr: [], userArr: []) {
 
   return isFalse
 }
+
+export function getCurrentDate(): string {
+  const currDate = new Date();
+  const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}`;
+  return currDateStr;
+}

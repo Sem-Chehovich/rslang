@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { AudioChallengeCard } from '../audioChallengeCard/audioChallengeCard';
 import { Spinner } from '../../spinner/spinner';
 import { shuffleWords, getRandomNum, getCorrectUrl, sliceArrIntoChunks } from '../../utilities/utilities';
-import { Word, AudioUserWord } from '../../interface/interface';
+import { Word, IUserWord } from '../../interface/interface';
 import { AudioChallengeScore } from '../audioChallengeScore/audioChallengeScore';
 import { wordPageApiService } from '../../wordsPage/service/wordPageApiService';
 import { isAuthorizedUser } from '../../authorization/validateToken';
@@ -100,60 +100,74 @@ export const AudioChallenge: React.FC = (props: any) => {
     isAuthorizedUser();
   }
 
-  async function pushNewWord(word: Word, isRight: boolean) {
+  async function pushNewWord(wordId: string, isRight: boolean) {
     const userId = localStorage.getItem('userId') as string;
 
     if (userId != null) {
-      const userWords = await wordPageApiService.getAllUserWords(userId) as Array<Word>;
-      userWords.filter((word: Word) => word.difficulty !== 'weak');
+      const userWords = await wordPageApiService.getAllUserWords(userId) as Array<IUserWord>;
+      userWords.filter((word: IUserWord) => word.difficulty !== 'weak');
       const currDate = new Date() as Date;
       const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}` as string;
-      let dbWord = userWords.find((dbWord: Word) => dbWord.wordId === word.id) as any;
+      console.log(userWords)
+      let dbWord = userWords.find((dbWord: IUserWord) => dbWord.wordId === wordId) as IUserWord;
 
       if (dbWord === undefined) {
-        console.log('новое');
+        // console.log('новое');
         const progressObj = {
           difficulty: 'strong',
           optional: {
             audioGame: {
-              audioDate: currDateStr,
-              audioIsNewWord: true,
-              audioRightAnswer: isRight ? 1 : 0,
-              audioWrongAnswer: isRight ? 0 : 1,
-              audioTotalRightAnswers: isRight ? 1 : 0,
+              date: currDateStr,
+              newWord: true,
+              wrongAns: isRight ? 0 : 1,
+              rightAns: isRight ? 1 : 0,
+              totalRightAns: isRight ? 1 : 0,
+            },
+            sprintGame: {
+              date: '',
+              newWord: true,
+              wrongAns: 0,
+              rightAns: 0,
+              totalRightAns: 0,
             }
           }
-        } as AudioUserWord;
-        await wordPageApiService.createUserWord(userId, word.id as string, progressObj);
+        };
+        await wordPageApiService.createUserWord(userId, wordId as string, progressObj);
       } else {
-        console.log('было уже!');
-        let optional = Object.assign(dbWord?.optional?.audioGame);
+        // console.log('было уже!');
+        let audioGameObj = Object.assign(dbWord?.optional?.audioGame);
         let wordDifficulty = dbWord.difficulty;
-        let data = {} as AudioUserWord;
-        if (optional['audioDate'] === currDateStr) {
-          optional['audioIsNewWord'] = true;
+        let data = {} as IUserWord;
+        if (audioGameObj['date'] === currDateStr) {
+          audioGameObj['newWord'] = true;
         } else {
-          optional['audioIsNewWord'] = false;
+          audioGameObj['newWord'] = false;
         }
 
         if (isRight) {
-          optional['audioRightAnswer'] = optional['audioRightAnswer'] + 1;
-          optional['audioTotalRightAnswers'] = optional['audioTotalRightAnswers'] + 1;
+          audioGameObj['rightAns'] = audioGameObj['rightAns'] + 1;
+          audioGameObj['totalRightAns'] = audioGameObj['totalRightAns'] + 1;
         } else {
-          optional['audioWrongAnswer'] = optional['audioWrongAnswer'] + 1;
-          optional['audioTotalRightAnswers'] = 0;
+          audioGameObj['wrongAns'] = audioGameObj['wrongAns'] + 1;
+          audioGameObj['totalRightAns'] = 0;
           wordDifficulty = 'strong';
         }
 
-        if (optional['audioTotalRightAnswers'] === 3) {
+        if (audioGameObj['totalRightAns'] === 3) {
           wordDifficulty = 'weak';
         } else {
           wordDifficulty = 'strong';
-          optional['audioTotalRightAnswers'] = 0;
+          audioGameObj['totalRightAns'] = 0;
         }
-        data['optional'] = optional;
-        data['difficulty'] = wordDifficulty;
-        await wordPageApiService.updateUserWord(userId, word.id as string, data);
+        data.difficulty = wordDifficulty;
+        data.optional.audioGame = audioGameObj;
+        data.optional.sprintGame.date = dbWord.optional.sprintGame.date;
+        data.optional.sprintGame.newWord = dbWord.optional.sprintGame.newWord;
+        data.optional.sprintGame.rightAns = dbWord.optional.sprintGame.rightAns;
+        data.optional.sprintGame.wrongAns = dbWord.optional.sprintGame.wrongAns;
+        data.optional.sprintGame.totalRightAns = dbWord.optional.sprintGame.totalRightAns;
+
+        await wordPageApiService.updateUserWord(userId, wordId as string, data);
       }
     }
   }
@@ -208,7 +222,7 @@ export const AudioChallenge: React.FC = (props: any) => {
     } as AnswerObject;
 
     setChosenAnswers((prev) => [...prev, answerObject]);
-    pushNewWord(correctAnswer, isCorrect);
+    pushNewWord(correctAnswer.id as string, isCorrect);
   }
 
   const handleNextQuestionClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -292,25 +306,6 @@ export const AudioChallenge: React.FC = (props: any) => {
   function soundOn(answerSound: string) {
     const sound = new Audio(answerSound);
     sound.play();
-  }
-
-  // const answerBtns = document.querySelectorAll('.audio-challenge-card__words-btn') as NodeListOf<HTMLButtonElement>;
-  // const challengeNextBtn = document.querySelector('.audio-challenge-card__next-btn') as HTMLButtonElement;
-  
-  document.onkeydown = function(event) {
-    switch (event.code) {
-      case 'Digit1':
-        break;
-      case 'Digit2':
-        return;
-      case 'Digit3':
-        return;
-      case 'Digit4':
-        return;
-      case 'Enter':
-        console.log('enter');
-      break; 
-    }
   }
 
   return (

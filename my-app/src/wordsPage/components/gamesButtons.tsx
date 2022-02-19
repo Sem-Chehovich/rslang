@@ -3,13 +3,14 @@ import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
 import { useActions } from '../../hooks/useActions';
 import { useNavigate } from 'react-router-dom';
+import { checkUser } from '../../sprint-game/service';
 
 
 
 
 // export default function DisableElevation({ sections, page }: { sections: string; page: string }) {
   export default function DisableElevation(props: any) {
-    const { setPagePathSecond, setPagePath } = useActions();
+    const { setPagePathSecond, setPagePath, setGroup, setPage, setUserInGame, fetchWords } = useActions();
     const navigate = useNavigate();
 
 
@@ -18,6 +19,22 @@ import { useNavigate } from 'react-router-dom';
 }
 
 const handleClickSprint = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const group = Number(localStorage.getItem('section')) | 0;
+  const startPage = Number(localStorage.getItem('page')) | 0;
+
+  setGroup(group);
+  setPage(startPage - 1);
+  let prevPage = startPage;
+
+  const userIn = checkUser();
+  
+  
+  setUserInGame(true);
+      
+  while (prevPage--) {
+    fetchWords(group, prevPage, userIn);
+  }
+   
   setPagePath('game-page');
   setPagePathSecond('isSprintFromDictionary');
   navigate('/game');

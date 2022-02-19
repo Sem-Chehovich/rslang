@@ -1,4 +1,5 @@
 import { Dispatch } from 'react';
+import { filterWeakWords, getAllUserWords } from '../../sprint-game/service';
 import { IResult, IWord, SprintAction, SprintActionTypes } from '../../types/sprint';
 import { getCorrectUrl } from '../../utilities/utilities';
 
@@ -25,13 +26,17 @@ export async function getWords(group: number, page: number) {
   return response;
 }
 
-export const fetchWords = (group: number, page = 0) => {
-
+export const fetchWords = (group = 0, page = 0, userIn?: string) => {
+  let wordList;
   return async (dispatch: Dispatch<SprintAction>) => {
     try {
       dispatch({ type: SprintActionTypes.FETCH_WORDS });
-      const wordList = await getWords(group, page);
-
+      wordList = await getWords(group, page);
+      if (userIn) {
+        const userWords = await getAllUserWords();
+        wordList = await filterWeakWords(userWords, wordList);
+      }
+      
       dispatch({ type: SprintActionTypes.FETCH_WORDS_SUCCESS, payload: shuffle(wordList) });
     } catch (e) {
       console.log('Какая-то ошибка');

@@ -2,7 +2,6 @@ import { refreshToken } from './api';
  
 export async function isAuthorizedUser(): Promise<string> {
   if (localStorage.getItem('refreshToken') && localStorage.getItem('userId')) {
-    console.log('Проверка');
     const id = localStorage.getItem('userId')!;
     const token = localStorage.getItem('refreshToken')!;
     const enterTime = Number(localStorage.getItem('enterTime'))!;

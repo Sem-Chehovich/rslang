@@ -3,48 +3,57 @@ import './categoryPage.css';
 import { useActions } from '../../hooks/useActions';
 import { getRandomNum } from '../../utilities/utilities';
 import { useTypedSelector } from '../../hooks/useTypeSelector';
-import { checkUser } from '../serviсe';
+import { checkUser } from '../service';
+import React from 'react';
+import { clearWords } from '../../store/action-creators/sprint';
 
 
 const levels = [1, 2, 3, 4, 5, 6];
 
 const GameCategories = () => {
   const navigate = useNavigate();
-  const { pagePathSecond } = useTypedSelector(state => state.sprint);
+  const { pagePathSecond, questions } = useTypedSelector(state => state.sprint);
   const { fetchWords, setGroup, setPage, setPagePath, setPagePathSecond, setUserInGame } = useActions();
   
-  const handleClick = async (e: React.MouseEvent) => {
+  const handleClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     const group = target.dataset.group!;
-    const page = getRandomNum(0, 29);
+    const startPage = getRandomNum(0, 29);
 
     const userIn = checkUser();
     userIn === 'authorized' ? setUserInGame(true) : setUserInGame(false);
     
     setPagePath('game-page');
-    setPage(page);
+    setPage(startPage);
     setGroup(Number(group));
-    fetchWords(Number(group), page);
+    fetchWords(Number(group), startPage);
     
     navigate('/sprint');
   }
 
   const clickSingleBtn = () => {
-    const group = localStorage.getItem('section')!;
-    const page = localStorage.getItem('page')!;
-
-    const userIn = checkUser();
-    userIn === 'authorized' ? setUserInGame(true) : setUserInGame(false);
+    const group = Number(localStorage.getItem('section')) | 0;
+    const startPage = Number(localStorage.getItem('page')) | 0;
 
     setPagePath('game-page');
-    setGroup(Number(group));
-    setPage(Number(page) - 1);
-    fetchWords(Number(group), Number(page) - 1);
-    
+    setGroup(group);
+    setPage(startPage - 1);
+    let prevPage = startPage;
+
+    const userIn = checkUser();
+    if (userIn === 'unauthorized') { 
+      setUserInGame(false);
+
+      while (prevPage--) {
+        fetchWords(group, prevPage);
+      }
+    }
+
     navigate('/sprint');
   }
 
   const backPage = () => {
+    clearWords([]);
     setPagePath('');
     if (pagePathSecond === 'isSprintFromDictionary') {
       setPagePathSecond('');
@@ -60,22 +69,34 @@ const GameCategories = () => {
         <div className='sprint-btn back-icon' onClick={() => backPage()}></div>
       </div> 
       <section>
-        <div className='game-categories__box'>
-          <h2 className='sprint-categories__title'>Sprint</h2>
-          <p>Test yourself, indicate if the translation of the word we showed you is correct.</p>
-          <p>You will have only one minute!</p>
           { pagePathSecond === 'isSprintFromDictionary' ?
-            <div className='sprint-categories'> 
-              <button className='sprint-play__btn' onClick={clickSingleBtn}>Play</button>
-            </div>
+              questions.length !== 0 ? 
+              <div className='game-categories__box'>
+                <h2 className='sprint-categories__title'>Sprint</h2>
+                <p>Test yourself, indicate if the translation of the word we showed you is correct.</p>
+                <p>You will have only one minute!</p>
+                <div className='sprint-categories'> 
+                  <button className='sprint-play__btn' onClick={clickSingleBtn}>Play</button>
+                </div>
+              </div>
+              :
+              <div className='game-categories__box'>
+                  <div className='victorious-icon'></div>
+                  <h2 className='sprint-categories__title green'>Good job!</h2>
+                  <p>You have learned all words from this and the previous pages of this section</p>
+              </div>
             :
-            <div className='sprint-categories'>
-              {levels.map((level: number, index) => 
-                <button key={level} className='sprint-categories__btn' data-group={index} onClick={handleClick}>{level}</button>
-              )}
+            <div className='game-categories__box'>
+              <h2 className='sprint-categories__title'>Sprint</h2>
+              <p>Test yourself, indicate if the translation of the word we showed you is correct.</p>
+              <p>You will have only one minute!</p>
+              <div className='sprint-categories'>
+                {levels.map((level: number, index) => 
+                  <button key={level} className='sprint-categories__btn' data-group={index} onClick={handleClick}>{level}</button>
+                )}
+              </div>
             </div>
           }
-        </div>
       </section>
     </div>
   );

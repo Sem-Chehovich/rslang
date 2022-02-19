@@ -12,14 +12,13 @@ export const AudioChallengeStatistics = () => {
   let [todayNewWords] = useState(0);
   const currDate = new Date() as Date;
   const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}` as string;
-  // getAudioStatistics();
+  getAudioStatistics();
   console.log("hello")
   async function getAudioStatistics() {
     const userId = localStorage.getItem('userId') as string;
     const userWords = await wordPageApiService.getAllUserWords(userId) as Array<IUserWord>;
     
     todayNewWords = userWords.filter((word: IUserWord) => word?.optional?.audioGame?.date === currDateStr).length;
-    console.log(todayNewWords)
     // const rightAnswers = userWords.filter((word: IUserWord) => word.optional.audioGame.rightAns >= 1).length as number;
     // const wrongAnswers = userWords.filter((word: IUserWord) => word.optional.audioGame.wrongAns >= 1).length as number;
     // const correctAnswersPercentage = Math.round(((rightAnswers) / (rightAnswers + wrongAnswers)) * 100) as number;
@@ -28,6 +27,7 @@ export const AudioChallengeStatistics = () => {
     // console.log(wrongAnswers)
     // console.log(correctAnswersPercentage)
   }
+  console.log(todayNewWords)
 
   return (
     <div className='statistics-page__cards-item'>

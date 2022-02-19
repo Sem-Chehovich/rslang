@@ -1,4 +1,3 @@
-// import { isAuthorizedUser } from '../authorization/validateToken';
 import { statisticsItems } from './statisticsConstants';
 import './statistics.css';
 import { WordStatistics } from './components/wordStatistic'
@@ -22,12 +21,10 @@ export const Statistics = () => {
       setData(wordStatistickObj as {newWord: number, lernWords: number, percentageOfCorrectAnswers: number})
     }
     getData()
-  })
+  }, []);
 
   return (
-
     <div className='statistics-page'>
-      {console.log('hello')}
       <h2>Statistics for today</h2>
       <div className='statistics-page__cards'>
       <div className='statistics-page__cards-item'>

@@ -70,10 +70,6 @@ const AuthForm = () => {
     setIsAutorized(null)
   }
 
-  const isUserAutorized = () => {
-    return !!localStorage.getItem('userName')
-  }
-
   const renderAutorizeForm = () => {
     return (
       <div className='form-container__box'>

@@ -9,7 +9,8 @@
   gap: 50px;
   position: relative;
 }
-.audio-challenge-card__fullscreen-btn {
+
+.audio-challenge-card__icon-btn {
   position: absolute;
   right: 30px;
   top: 100px;
@@ -22,9 +23,19 @@
   transition: .3s
 }
 
-.audio-challenge-card__fullscreen-btn:hover {
+.audio-challenge-card__icon-btn:hover {
   transform: scale(1.1);
   transition: .4s ease-out;
+}
+
+.sound-icon {
+  background-image: url("../../assets/svg/volume-on.svg");
+  right: 100px;
+}
+
+.sound-off-icon {
+  background-image: url("../../assets/svg/volume-off.svg");
+  right: 100px;
 }
 
 .screen-icon {

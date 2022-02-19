@@ -26,6 +26,7 @@ export const AudioChallenge: React.FC = () => {
   const [words, setWords] = useState<Array<Array<Word>>>([]); 
   const [questionNumber, setQuestionNumber] = useState(0);
   const [score, setScore] = useState(0);
+  const [scoreLimit, setScoreLimit] = useState(0);
   const [chosenAnswers, setChosenAnswers] = useState<AnswerObject[]>([]);
   const [isAnswered] = useState<Array<boolean>>([]);
   const [gameOver, setGameOver] = useState(true);
@@ -49,7 +50,7 @@ export const AudioChallenge: React.FC = () => {
       } else {
         pageNumber2 = (+pageNumber1 - 1) + '';
       }
-      
+
       await wordPageApiService.getWords(pageNumber1, section)
       .then((data) => {
         wordsArr.push(...data as any);
@@ -107,7 +108,6 @@ export const AudioChallenge: React.FC = () => {
       const dbWord = await wordPageApiService.getUserWordById(userId, wordId) as IUserWord;
       const currDate = new Date() as Date;
       const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}` as string;
-
       if (dbWord === undefined) {
         // console.log('новое');
         const progressObj = {
@@ -225,10 +225,9 @@ export const AudioChallenge: React.FC = () => {
   const handleNextQuestionClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const answerBtns = document.querySelectorAll('.audio-challenge-card__words-btn') as NodeListOf<HTMLElement>;
     const correctAnswer = words[questionNumber].find((x) => x.isRight === true) as Word;
-
     answerBtns.forEach((x) => {
       x.removeAttribute('disabled');
-    })
+    });
 
     if (event.currentTarget.innerHTML === 'I don\'t know') {
       event.currentTarget.innerHTML = 'Next';
@@ -245,7 +244,7 @@ export const AudioChallenge: React.FC = () => {
       answerBtns.forEach((btn) => {
         btn.style.textDecoration = 'none';
       });
-      event.currentTarget.innerHTML = 'I don\'t know'
+      event.currentTarget.innerHTML = 'I don\'t know';
 
       const handleSoundClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -266,6 +265,8 @@ export const AudioChallenge: React.FC = () => {
         setQuestionNumber(0);
       }
 
+      setScoreLimit(scoreLimit + 1);
+
       const answerObject = {
         answer: '',
         correctAnswer: correctAnswer,
@@ -285,6 +286,7 @@ export const AudioChallenge: React.FC = () => {
     setScore(0);
     setQuestionNumber(0);
     setChosenAnswers([]);
+    setScoreLimit(0);
   }
 
   const generateMixedArray = (arr: Array<Word>) => {
@@ -332,7 +334,7 @@ export const AudioChallenge: React.FC = () => {
           onSoundOn={onSoundOn}/>
           : 
           <section className='audio-challenge-memo-page'>
-            <AudioChallengeScore answers={chosenAnswers} handleExitClick={handleExitClick} score={score} />
+            <AudioChallengeScore answers={chosenAnswers} handleExitClick={handleExitClick} score={score} scoreLimit={scoreLimit} />
           </section>)     
         }
     </div>

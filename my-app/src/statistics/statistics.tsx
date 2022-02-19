@@ -1,8 +1,6 @@
-import { statisticsItems } from './statisticsConstants';
 import './statistics.css';
 import { WordStatistics } from './components/wordStatistic'
-import { useEffect, useState } from 'react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AudioChallengeStatistics, AudioStatisticsItem } from './components/audioChallengeStatistics';
 
 export interface statisticsItem {
@@ -15,10 +13,14 @@ export const Statistics = () => {
     {newWord: 0, lernWords: 0, percentageOfCorrectAnswers: 0}
   )
 
+  const [audioData, setAudioData] = React.useState<AudioStatisticsItem>({newWords: 0, correctAnswers: 0, longestSeries: 0});
+
   useEffect(() => {
     async function getData() {
-      let wordStatistickObj = await WordStatistics()
-      setData(wordStatistickObj as {newWord: number, lernWords: number, percentageOfCorrectAnswers: number})
+      let wordStatistickObj = await WordStatistics();
+      let audioChallengeStatisticsObj = await AudioChallengeStatistics();
+      setData(wordStatistickObj as {newWord: number, lernWords: number, percentageOfCorrectAnswers: number});
+      setAudioData(audioChallengeStatisticsObj as AudioStatisticsItem);
     }
     getData()
   }, []);
@@ -33,7 +35,12 @@ export const Statistics = () => {
             <p>Correct answers: {data.percentageOfCorrectAnswers}%</p>
             <p>Learned words: {data.lernWords}</p>
           </div>
-          <AudioChallengeStatistics />
+          <div className='statistics-page__cards-item'>
+            <h3>Audio Challenge</h3>
+            <p>New words: {audioData?.newWords}</p>
+            <p>Correct answers: {audioData?.correctAnswers}%</p>
+            <p>The longest series of correct answers: {audioData?.longestSeries}</p>
+          </div>
           <div className='statistics-page__cards-item'>
             <h3>Sprint</h3>
             <p>New words: 0</p>

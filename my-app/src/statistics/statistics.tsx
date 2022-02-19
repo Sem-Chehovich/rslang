@@ -4,6 +4,7 @@ import './statistics.css';
 import { WordStatistics } from './components/wordStatistic'
 import { useEffect, useState } from 'react';
 import React from 'react';
+import { AudioChallengeStatistics } from './components/audioChallengeStatistics';
 
 export interface statisticsItem {
   [key: string]: string

@@ -20,6 +20,7 @@ import { IUserStatistic, IUserWord } from '../../interface/interface';
 const currDateStr = getCurrentDate();
 
 const initSprintWordOpt: IUserWord = {
+  wordId: '',
   difficulty: 'weak',
   optional: {
     sprintGame: {
@@ -132,7 +133,6 @@ const Sprint: React.FC = () => {
       } else {
         wordOptional.difficulty = 'weak';
       }
-      
       await createUserWord(wordId, wordOptional);
     } else {
       console.log('Update');

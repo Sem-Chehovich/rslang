@@ -2,7 +2,7 @@ import React from "react";
 import './wordCard.scss';
 import SoundButton from './soundButton';
 import { getCorrectUrl, getCorrectMeaning } from '../utilities/utilities';
-import { card, stateObj } from '../interface/interface';
+import { card, stateObj, initWordOptional, IUserWord } from '../interface/interface';
 import FormControlLabelPosition from './component/togleButtons'
 import { isAuthorized } from '../utilities/utilities'
 import { wordPageApiService } from '../wordsPage/service/wordPageApiService'
@@ -87,7 +87,8 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
         this.setState({ isLearned: stateObj.isLearned,
             isDifficult: stateObj.isDifficult })
             let word
-        const isWordAvailable = await wordPageApiService.getUserWordById((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string))   
+        const isWordAvailable = await wordPageApiService.getUserWordById((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string)) 
+        console.log(isWordAvailable)
         if (stateObj.isDifficult) {
             word = { "difficulty": "strong"}
         } else if (stateObj.isLearned) {
@@ -101,7 +102,8 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
         if(isWordAvailable) {
             await  wordPageApiService.updateUserWord((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string), word)
         } else {
-            await wordPageApiService.createUserWord((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string), word)
+            let defaultWord = { ...initWordOptional, ...word }
+            await wordPageApiService.createUserWord((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string), defaultWord)
         }
         // let arr = await wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string))
         // wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string))

@@ -36,8 +36,7 @@ export async function AudioChallengeStatistics(): Promise<AudioStatisticsItem> {
         audioStatisticsObject.correctAnswers = todayCorrectAnsPercentage;
       }
       userSt.optional.audioGame.newWord = audioStatisticsObject.newWords;
-      userSt.optional.audioGame.newWord = audioStatisticsObject.correctAnswers;
-      console.log(audioStatisticsObject.newWords, audioStatisticsObject.correctAnswers)
+      userSt.optional.audioGame.rightAnsCount = audioStatisticsObject.correctAnswers;
     }).then(() => 
       wordPageApiService.getUserStatistics()
       .then((data) => {

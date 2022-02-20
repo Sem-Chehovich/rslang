@@ -35,3 +35,11 @@
   font-size: 30px;
   text-transform: uppercase;
 }
+
+@media (max-width: 1350px) {
+  
+  .statistics-page__cards {
+    flex-direction: column;
+  }
+
+}

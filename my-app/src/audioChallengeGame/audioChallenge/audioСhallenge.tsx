@@ -145,7 +145,7 @@ export const AudioChallenge: React.FC = () => {
             },
             sprintGame: {
               date: '',
-              newWord: true,
+              newWord: false,
               wrongAns: 0,
               rightAns: 0,
               totalRightAns: 0,
@@ -247,8 +247,7 @@ export const AudioChallenge: React.FC = () => {
 
   const updateLongestBatch = async (isCorrectAnswer: boolean) => {
     const userSt = await setUserInitialStatistics() as IUserStatistic;
-
-    if (isCorrectAnswer) {
+    if (isCorrectAnswer && currentBatch <= scoreLimit) {
       currentBatch += 1;
       if (longestBatch < currentBatch) {
         longestBatch = currentBatch;
@@ -257,22 +256,37 @@ export const AudioChallenge: React.FC = () => {
       currentBatch = 0;
     }
 
-    let userStatistics = await wordPageApiService.getUserStatistics() as IUserStatistic;
+    const userId = localStorage.getItem('userId') as string;
 
-    initStatOptional.learnedWords = userSt.learnedWords + 1;
-    initStatOptional.optional.date = currDateStr;
-    initStatOptional.optional.audioGame.newWord = userSt.optional.audioGame.newWord;
-    initStatOptional.optional.audioGame.rightAnsCount = userSt.optional.audioGame.rightAnsCount;
-    initStatOptional.optional.sprintGame.newWord = userSt.optional.sprintGame.newWord;
-    initStatOptional.optional.sprintGame.questionsCount = userSt.optional.sprintGame.questionsCount;
-    initStatOptional.optional.sprintGame.rightAnsCount = userSt.optional.sprintGame.rightAnsCount;
-    initStatOptional.optional.sprintGame.percentage = userSt.optional.sprintGame.percentage;
-    initStatOptional.optional.sprintGame.longestBatch = userSt.optional.sprintGame.longestBatch;
+    wordPageApiService.getAllUserWords(userId)
+    .then((userWords) => {
+      const todayWords = userWords.filter((word: IUserWord) => word?.optional?.audioGame?.date === currDateStr) as Array<IUserWord>;
+      initStatOptional.optional.audioGame.newWord = todayWords.length;
 
-    if (userStatistics.optional.audioGame.longestBatch < longestBatch) {
-      initStatOptional.optional.audioGame.longestBatch = longestBatch;
+      const todayRightAns = todayWords.filter((word: IUserWord) => word.optional.audioGame.rightAns >= 1).length as number;
+      const todayWrongAns = todayWords.filter((word: IUserWord) => word.optional.audioGame.wrongAns >= 1).length as number;
+      const todayCorrectAnsPercentage = Math.round(((todayRightAns) / (todayRightAns + todayWrongAns)) * 100) as number;
+      if (isNaN(todayCorrectAnsPercentage)) {
+        initStatOptional.optional.audioGame.rightAnsCount = 0;
+      } else {
+        initStatOptional.optional.audioGame.rightAnsCount = todayCorrectAnsPercentage;
+      }
+
+      initStatOptional.optional.audioGame.longestBatch = userSt.optional.audioGame.longestBatch;
+      // initStatOptional.learnedWords = userSt.learnedWords + 1;
+      initStatOptional.optional.date = currDateStr;
+      initStatOptional.optional.sprintGame.newWord = userSt.optional.sprintGame.newWord;
+      initStatOptional.optional.sprintGame.questionsCount = userSt.optional.sprintGame.questionsCount;
+      initStatOptional.optional.sprintGame.rightAnsCount = userSt.optional.sprintGame.rightAnsCount;
+      initStatOptional.optional.sprintGame.percentage = userSt.optional.sprintGame.percentage;
+      initStatOptional.optional.sprintGame.longestBatch = userSt.optional.sprintGame.longestBatch;
+
+      if (userSt.optional.audioGame.longestBatch < longestBatch) {
+        initStatOptional.optional.audioGame.longestBatch = longestBatch;
+      }
+    }).then(async() => {
       await wordPageApiService.upsertUserStatistics(initStatOptional);
-    }
+    });
   }
 
   const handleNextQuestionClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -285,7 +299,7 @@ export const AudioChallenge: React.FC = () => {
     if (event.currentTarget.innerHTML === 'I don\'t know') {
       event.currentTarget.innerHTML = 'Next';
       setIsRightAnswerShown(true);
-     updateLongestBatch(false);
+      updateLongestBatch(false);
       if (!isSoundOn) {
         soundOn(wrongAnswer);
       }
@@ -341,6 +355,12 @@ export const AudioChallenge: React.FC = () => {
     setQuestionNumber(0);
     setChosenAnswers([]);
     setScoreLimit(0);
+
+    if (isOpenFromDictionary) {
+      navigate('/textbook');
+    } else {
+      navigate('/audio');
+    }
   }
 
   const generateMixedArray = (arr: Array<Word>) => {

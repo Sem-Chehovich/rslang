@@ -119,13 +119,18 @@
 }
 
 .audio-challenge-card__words {
-  width: 1000px;
+  max-width: 1000px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }
 
 .audio-challenge-card__words-btn {
-  min-width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  width: 200px;
   max-width: 300px;
   border: 3px solid black;
   border-radius: 25px;
@@ -160,4 +165,26 @@
 
 .audio-challenge-card__next-btn:hover {
   transform: scale(1.1);
+}
+
+@media(max-width: 850px) {
+
+  /* .audio-challenge-card__words {
+    flex-direction: column;
+  } */
+
+  .audio-challenge-card__words-btn,
+  .audio-challenge-card__next-btn {
+    font-size: 18px;
+  }
+  
+}
+
+@media(max-width: 850px) {
+
+  .audio-challenge-card__words-btn,
+  .audio-challenge-card__next-btn {
+    font-size: 16px;
+  }
+
 }

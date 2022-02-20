@@ -38,10 +38,10 @@ export default function BasicMenu() {
             <MenuItem onClick={handleClose}>Dictionary</MenuItem>
         </Link>  
         <Link className='dashbord-link' to={'/game'}>
-            <MenuItem onClick={handleClose}>Audio challenge</MenuItem>
+            <MenuItem onClick={handleClose}>Sprint</MenuItem>
         </Link>
         <Link className='dashbord-link' to={'/audio'}>
-            <MenuItem onClick={handleClose}>Sprint</MenuItem>
+            <MenuItem onClick={handleClose}>Audio challenge</MenuItem>
         </Link>
         <Link className='dashbord-link' to={'/statistics'}>
             <MenuItem onClick={handleClose}>Statistics</MenuItem>
@@ -49,7 +49,7 @@ export default function BasicMenu() {
         <Link className='dashbord-link' to={'/home'}>
             <MenuItem onClick={handleClose}>Home</MenuItem>
         </Link>
-        <Link className='dashbord-link' to={'/gauthorizationame'}>
+        <Link className='dashbord-link' to={'/authorization'}>
             <MenuItem onClick={handleClose}>Authorization</MenuItem>
         </Link>
       </Menu>

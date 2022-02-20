@@ -18,7 +18,7 @@ export type AnswerObject = {
 
 export let wordsArr = [] as Array<Word>;
 
-export const AudioChallenge: React.FC = (props: any) => {
+export const AudioChallenge: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [difficulty, setDifficulty] = useState(0);
   const [words, setWords] = useState<Array<Array<Word>>>([]); 

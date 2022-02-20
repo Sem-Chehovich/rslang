@@ -10,10 +10,10 @@ import { useTypedSelector } from '../../hooks/useTypeSelector';
 import React, { useState } from 'react';
 import { useActions } from '../../hooks/useActions';
 import { IWord } from '../../types/sprint';
-import { gePercentage, getCurrentDate, getRandomNum, setUserInitialStatistics } from '../../utilities/utilities';
+import { getPercentage, getCurrentDate, getRandomNum, setUserInitialStatistics } from '../../utilities/utilities';
 import { useNavigate } from 'react-router';
 import ScrollCrid from '../sprintResults/sprintResults';
-import { createUserWord, getUserStatistics, getUserWord, updateUserWord, upsetUserStatistics } from '../service';
+import { createUserWord, getUserWord, updateUserWord, upsetUserStatistics } from '../service';
 import { IUserStatistic, IUserWord } from '../../interface/interface';
 
 
@@ -135,6 +135,9 @@ const Sprint: React.FC = () => {
         } else {
           wordOptional.optional.sprintGame.newWord = false;
         }
+
+        if (typeof userSt !== 'number') 
+          initStatOptional.optional.sprintGame.rightAnsCount = userSt.optional.sprintGame.rightAnsCount;
   
         if (wordOptional.optional.sprintGame.rightAns === 1) { 
           initStatOptional.optional.sprintGame.rightAnsCount += 1;
@@ -172,8 +175,10 @@ const Sprint: React.FC = () => {
 
       initStatOptional.learnedWords = userSt.learnedWords + 1;
       initStatOptional.optional.sprintGame.newWord = userSt.optional.sprintGame.newWord + 1;
+      initStatOptional.optional.sprintGame.questionsCount = 
+        userSt.optional.sprintGame.newWord + initStatOptional.optional.sprintGame.questionsCount;
       initStatOptional.optional.sprintGame.percentage = 
-        gePercentage(initStatOptional.optional.sprintGame.rightAnsCount, initStatOptional.optional.sprintGame.questionsCount);
+        getPercentage(initStatOptional.optional.sprintGame.rightAnsCount, initStatOptional.optional.sprintGame.questionsCount);
       
       initStatOptional.optional.audioGame.longestBatch = userSt.optional.audioGame.longestBatch;
       initStatOptional.optional.audioGame.newWord = userSt.optional.audioGame.newWord;
@@ -185,7 +190,7 @@ const Sprint: React.FC = () => {
 
   function isCorrectAnswer(question: IWord[], answerId: string, btn: string) {
     let  ans: boolean;
-    initStatOptional.optional.sprintGame.questionsCount += 1;
+    initStatOptional.optional.sprintGame.questionsCount = 1;
 
     if (question[0].id === answerId) { 
       ans = btn === '1' ? true : false;

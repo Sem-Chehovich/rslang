@@ -107,12 +107,13 @@ export async function setUserInitialStatistics() {
       userStatistic.optional.sprintGame.newWord = 0;
       userStatistic.optional.sprintGame.longestBatch = 0;
       userStatistic.optional.sprintGame.rightAnsCount = 0;
+      userStatistic.optional.sprintGame.questionsCount = 0;
     }
   }
 
   return userStatistic;
 }
 
-export function gePercentage(rightAnsCount: number, questCount: number) {
+export function getPercentage(rightAnsCount: number, questCount: number) {
   return Math.floor(rightAnsCount * 100 / questCount);
 }

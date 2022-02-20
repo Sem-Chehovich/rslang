@@ -8,6 +8,7 @@ type Props = {
 }
 
 export const AudioChallengeScore: React.FC<Props> = ({answers, score, handleExitClick}) => {
+  console.log(score)
   return (
   <>
     <table className='audio-challenge__score-table'>

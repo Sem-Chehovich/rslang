@@ -108,6 +108,9 @@ export async function setUserInitialStatistics() {
       userStatistic.optional.sprintGame.longestBatch = 0;
       userStatistic.optional.sprintGame.rightAnsCount = 0;
       userStatistic.optional.sprintGame.questionsCount = 0;
+      userStatistic.optional.audioGame.newWord = 0;
+      userStatistic.optional.audioGame.longestBatch = 0;
+      userStatistic.optional.audioGame.rightAnsCount = 0;
     }
   }
 

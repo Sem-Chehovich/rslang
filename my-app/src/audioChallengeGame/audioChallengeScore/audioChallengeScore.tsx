@@ -4,17 +4,17 @@ import './audioChallengeScore.css';
 type Props = {
   answers: Array<AnswerObject>,
   score: number,
-  handleExitClick: React.MouseEventHandler
+  handleExitClick: React.MouseEventHandler,
+  scoreLimit: number
 }
 
-export const AudioChallengeScore: React.FC<Props> = ({answers, score, handleExitClick}) => {
-  console.log(score)
+export const AudioChallengeScore: React.FC<Props> = ({answers, score, handleExitClick, scoreLimit}) => {
   return (
   <>
     <table className='audio-challenge__score-table'>
       <thead>
         <tr>
-          <th><h2>Your score - {score}/10</h2></th>
+          <th><h2>Your score - {score}/{scoreLimit}</h2></th>
         </tr>
       </thead>
       <tbody>

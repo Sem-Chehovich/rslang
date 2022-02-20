@@ -28,6 +28,11 @@
   transition: .4s ease-out;
 }
 
+.back-icon {
+  background-image: url("../../assets/svg/arrow-back.svg");
+  left: 30px;
+}
+
 .sound-icon {
   background-image: url("../../assets/svg/volume-on.svg");
   right: 100px;

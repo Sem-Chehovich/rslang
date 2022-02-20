@@ -22,7 +22,7 @@ export const Statistics: React.FC = () => {
       setData(wordStatistickObj as {newWord: number, lernWords: number, percentageOfCorrectAnswers: number})
     }
     getData()
-  })
+  }, [])
 
   return (
     <div className='statistics-page'>

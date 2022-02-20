@@ -33,7 +33,7 @@ export async function WordStatistics() {
                     wrongAnswer = wrongAnswer + word?.optional?.audioGame?.audioWrongAnswer
                 }
             })
-            statisticObject.percentageOfCorrectAnswers = Math.round(((rightAnswer) / (wrongAnswer + rightAnswer)) * 100)
+            statisticObject.percentageOfCorrectAnswers = Math.round(((rightAnswer) / (wrongAnswer + rightAnswer)) * 100) || 0
             resolve(statisticObject)
         })
     })

@@ -11,7 +11,6 @@ export interface stateObj {
 }
 
 export interface IUserWord {
-  wordId: string,
   difficulty: string, 
   optional: {
     sprintGame: {
@@ -49,7 +48,6 @@ export interface IUserStatistic {
 }
 
 export const initWordOptional: IUserWord = {
-  wordId: '',
   difficulty: 'weak',
   optional: {
     sprintGame: {

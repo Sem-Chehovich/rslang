@@ -8,10 +8,14 @@ type Props = {
   words: Array<Word>,
   handleAnswerClick: React.MouseEventHandler,
   handleNextQuestionClick: React.MouseEventHandler,
-  isRightAnswerShown: boolean
+  isRightAnswerShown: boolean,
+  backPage: React.MouseEventHandler,
+  onSoundOn: any,
+  isSoundOn: boolean
 }
 
-export const AudioChallengeCard: React.FC<Props> = ({words, handleAnswerClick, handleNextQuestionClick, isRightAnswerShown}) => {
+export const AudioChallengeCard: React.FC<Props> =
+({words, handleAnswerClick, handleNextQuestionClick, isRightAnswerShown, backPage, onSoundOn, isSoundOn}) => {
   const [isFullScreen, setFullScreen] = useState(false);
 
   let rightAnswer = words?.find((x) => x.isRight === true) as Word;
@@ -37,7 +41,9 @@ export const AudioChallengeCard: React.FC<Props> = ({words, handleAnswerClick, h
 
   return (
     <div className='audio-challenge-card'>
-      <div className={ isFullScreen === false ? 'audio-challenge-card__fullscreen-btn screen-icon' : 'audio-challenge-card__fullscreen-btn compress-screen-icon'} onClick={fullScreenMode}></div>
+      <div className='audio-challenge-card__icon-btn back-icon' onClick={backPage}></div>
+      <div className={ isSoundOn === false ? 'audio-challenge-card__icon-btn sound-icon' : 'audio-challenge-card__icon-btn sound-off-icon'} onClick={onSoundOn}></div>
+      <div className={ isFullScreen === false ? 'audio-challenge-card__icon-btn screen-icon' : 'audio-challenge-card__icon-btn compress-screen-icon'} onClick={fullScreenMode}></div>
       <div className='audio-challenge-card__audio-container'>
         <img className={ isRightAnswerShown === true ? 'audio-challenge-card__answer-img_active' : 'audio-challenge-card__answer-img' } src={getCorrectUrl(rightAnswer?.image as string)} alt='' />
         <div className='audio-challenge-card__right-answer'>
@@ -49,7 +55,7 @@ export const AudioChallengeCard: React.FC<Props> = ({words, handleAnswerClick, h
       </div>
       <div className='audio-challenge-card__words'>
         {words?.map((word: Word, index: number) => 
-          <button key={index} onClick={handleAnswerClick} className='audio-challenge-card__words-btn'>{word?.wordTranslate as string}</button>
+          <button key={index} id={index.toString()} value={word?.wordTranslate as string} onClick={handleAnswerClick} className='audio-challenge-card__words-btn'>{word?.wordTranslate as string}</button>
         )};
       </div>
       <button onClick={handleNextQuestionClick} className='audio-challenge-card__next-btn'>I don't know</button>

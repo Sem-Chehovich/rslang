@@ -1,6 +1,8 @@
 .statistics-page {
   height: calc(100vh - 70px);
   background-image: url('../mainPage/assets/bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
   display: flex;
   flex-direction: column;
   align-items: center;

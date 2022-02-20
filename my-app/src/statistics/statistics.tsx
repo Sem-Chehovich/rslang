@@ -23,9 +23,11 @@ export const Statistics = () => {
   useEffect(() => {
     async function getData() {
       let wordStatistickObj = await WordStatistics();
-      let audioChallengeStatisticsObj = await AudioChallengeStatistics();
       setData(wordStatistickObj as {newWord: number, lernWords: number, percentageOfCorrectAnswers: number});
+
+      let audioChallengeStatisticsObj = await AudioChallengeStatistics();
       setAudioData(audioChallengeStatisticsObj as AudioStatisticsItem);
+
       let sprintStatistic = await setUserInitialStatistics();
       if (typeof sprintStatistic !== 'number') {
         let obj = {

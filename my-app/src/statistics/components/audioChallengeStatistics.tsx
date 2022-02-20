@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { IUserWord } from "../../interface/interface";
+import { IUserStatistic, IUserWord } from "../../interface/interface";
+import { setUserInitialStatistics } from "../../utilities/utilities";
 import { wordPageApiService } from "../../wordsPage/service/wordPageApiService";
 
 export interface AudioStatisticsItem {
@@ -15,12 +15,15 @@ export async function AudioChallengeStatistics(): Promise<AudioStatisticsItem> {
     longestSeries: 0,
   }
 
+  const userSt = await setUserInitialStatistics() as IUserStatistic;
+
   let promise = new Promise<AudioStatisticsItem>((resolve) => {
     const currDate = new Date() as Date;
     const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}` as string;
     const userId = localStorage.getItem('userId') as string;
 
-    wordPageApiService.getAllUserWords(userId).then((userWords) => {
+    wordPageApiService.getAllUserWords(userId)
+    .then((userWords) => {
       const todayWords = userWords.filter((word: IUserWord) => word?.optional?.audioGame?.date === currDateStr) as Array<IUserWord>;
       audioStatisticsObject.newWords = todayWords.length;
 
@@ -32,8 +35,13 @@ export async function AudioChallengeStatistics(): Promise<AudioStatisticsItem> {
       } else {
         audioStatisticsObject.correctAnswers = todayCorrectAnsPercentage;
       }
-      // const longestSeries = userWords.filter((word: IUserWord) => word.optional.audioGame.rightAns).length as number;
-
+      // userSt.optional.audioGame.newWord = audioStatisticsObject.newWords;
+      // userSt.optional.audioGame.newWord = audioStatisticsObject.correctAnswers;
+      resolve(audioStatisticsObject);
+    });
+    wordPageApiService.getUserStatistics()
+    .then((data) => {
+      audioStatisticsObject.longestSeries = data.optional.audioGame.longestBatch;
       resolve(audioStatisticsObject);
     })
   })

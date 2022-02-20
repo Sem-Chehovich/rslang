@@ -250,7 +250,6 @@ export const AudioChallenge: React.FC = () => {
   const updateLongestBatch = async (isCorrectAnswer: boolean) => {
     const userSt = await setUserInitialStatistics() as IUserStatistic;
     if (isCorrectAnswer) {
-      console.log(currentBatch)
       setCurrentBatch(currentBatch + 1);
       if (longestBatch < currentBatch) {
         setLongestBatch(currentBatch);
@@ -258,13 +257,8 @@ export const AudioChallenge: React.FC = () => {
     } else {
       setCurrentBatch(0);
     }
-    console.log(currentBatch)
-    console.log(longestBatch)
 
     let userStatistics = await wordPageApiService.getUserStatistics() as IUserStatistic;
-    console.log("longest in db: ", userStatistics.optional.audioGame.longestBatch)
-    console.log("current batch: ", currentBatch)
-    console.log("longest current batch: ", longestBatch)
 
     initStatOptional.learnedWords = userSt.learnedWords + 1;
     initStatOptional.optional.date = currDateStr;

@@ -122,7 +122,7 @@
   max-width: 1000px;
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  gap: 50px;
 }
 
 .audio-challenge-card__words-btn {
@@ -169,9 +169,15 @@
 
 @media(max-width: 850px) {
 
-  /* .audio-challenge-card__words {
-    flex-direction: column;
-  } */
+  .audio-challenge-card__words {
+    /* flex-direction: column; */
+    flex-wrap: wrap;
+    max-width: 500px;
+  }
+
+  .audio-challenge-card__words-btn {
+    margin: 0;
+  }
 
   .audio-challenge-card__words-btn,
   .audio-challenge-card__next-btn {

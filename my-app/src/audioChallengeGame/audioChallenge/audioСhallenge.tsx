@@ -54,7 +54,9 @@ export const AudioChallenge: React.FC = () => {
       },
       audioGame: {
         newWord: 0,
+        questionsCount: 0,
         rightAnsCount: 0,
+        percentage: 0,
         longestBatch: 0,
       }
     }
@@ -260,19 +262,23 @@ export const AudioChallenge: React.FC = () => {
 
     wordPageApiService.getAllUserWords(userId)
     .then((userWords) => {
-      const todayWords = userWords.filter((word: IUserWord) => word?.optional?.audioGame?.date === currDateStr) as Array<IUserWord>;
-      initStatOptional.optional.audioGame.newWord = todayWords.length;
+      const allTodayWords = userWords.filter((word: IUserWord) =>
+      word?.optional?.audioGame?.date === currDateStr || word?.optional?.audioGame?.date === '') as Array<IUserWord>;
+      const todayNewWords = allTodayWords.filter((word: IUserWord) => word?.optional?.audioGame?.newWord) as Array<IUserWord>;
+      initStatOptional.optional.audioGame.newWord = todayNewWords.length;
 
-      const todayRightAns = todayWords.filter((word: IUserWord) => word.optional.audioGame.rightAns >= 1).length as number;
-      const todayWrongAns = todayWords.filter((word: IUserWord) => word.optional.audioGame.wrongAns >= 1).length as number;
+      const todayRightAns = allTodayWords.filter((word: IUserWord) => word.optional.audioGame.rightAns >= 1).length as number;
+      const todayWrongAns = allTodayWords.filter((word: IUserWord) => word.optional.audioGame.wrongAns >= 1).length as number;
       const todayCorrectAnsPercentage = Math.round(((todayRightAns) / (todayRightAns + todayWrongAns)) * 100) as number;
       if (isNaN(todayCorrectAnsPercentage)) {
-        initStatOptional.optional.audioGame.rightAnsCount = 0;
+        initStatOptional.optional.audioGame.percentage = 0;
       } else {
-        initStatOptional.optional.audioGame.rightAnsCount = todayCorrectAnsPercentage;
+        initStatOptional.optional.audioGame.percentage = todayCorrectAnsPercentage;
       }
 
       initStatOptional.optional.audioGame.longestBatch = userSt.optional.audioGame.longestBatch;
+      initStatOptional.optional.audioGame.questionsCount = allTodayWords.length;
+      initStatOptional.optional.audioGame.rightAnsCount = todayRightAns;
       // initStatOptional.learnedWords = userSt.learnedWords + 1;
       initStatOptional.optional.date = currDateStr;
       initStatOptional.optional.sprintGame.newWord = userSt.optional.sprintGame.newWord;
@@ -287,6 +293,7 @@ export const AudioChallenge: React.FC = () => {
     }).then(async() => {
       await wordPageApiService.upsertUserStatistics(initStatOptional);
     });
+    console.log(initStatOptional)
   }
 
   const handleNextQuestionClick = (event: React.MouseEvent<HTMLButtonElement>) => {

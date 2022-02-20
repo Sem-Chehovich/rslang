@@ -81,7 +81,9 @@ export async function setUserInitialStatistics() {
       date: currDateStr,
       sprintGame: {
         newWord: 0,
+        questionsCount: 0,
         rightAnsCount: 0,
+        percentage: 0,
         longestBatch: 0,
       },
       audioGame: {
@@ -91,11 +93,26 @@ export async function setUserInitialStatistics() {
       }
     }
   }
+  
   const userStatistic = await getUserStatistics();
 
-  if (userStatistic === 404) {
+  if (typeof userStatistic === 'number' && userStatistic === 404) {
     await upsetUserStatistics(initStatOptional);
     return initStatOptional;
+  } 
+
+  if (typeof userStatistic !== 'number') {
+    if (userStatistic.optional.date !== currDateStr) {
+      userStatistic.optional.date = currDateStr;
+      userStatistic.optional.sprintGame.newWord = 0;
+      userStatistic.optional.sprintGame.longestBatch = 0;
+      userStatistic.optional.sprintGame.rightAnsCount = 0;
+    }
   }
+
   return userStatistic;
+}
+
+export function gePercentage(rightAnsCount: number, questCount: number) {
+  return Math.floor(rightAnsCount * 100 / questCount);
 }

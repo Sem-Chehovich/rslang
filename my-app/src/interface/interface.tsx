@@ -10,8 +10,16 @@ export interface stateObj {
   [key: string]: boolean
 }
 
+export interface AudioUserWord {
+  difficulty: string, 
+  optional: {
+    audioGame: {
+      [key: string]: string | number | boolean
+    }
+  }
+}
+
 export interface IUserWord {
-  wordId: string,
   difficulty: string, 
   optional: {
     sprintGame: {
@@ -37,7 +45,9 @@ export interface IUserStatistic {
     date: string,
     sprintGame: {
       newWord: number,
+      questionsCount: number,
       rightAnsCount: number,
+      percentage: number,
       longestBatch: number,
     },
     audioGame: {
@@ -49,7 +59,6 @@ export interface IUserStatistic {
 }
 
 export const initWordOptional: IUserWord = {
-  wordId: '',
   difficulty: 'weak',
   optional: {
     sprintGame: {

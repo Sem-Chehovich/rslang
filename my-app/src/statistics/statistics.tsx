@@ -5,6 +5,7 @@ import { WordStatistics } from './components/wordStatistic'
 import { useEffect, useState } from 'react';
 import React from 'react';
 import { AudioChallengeStatistics } from './components/audioChallengeStatistics';
+import { setUserInitialStatistics } from '../utilities/utilities';
 
 export interface statisticsItem {
   [key: string]: string
@@ -15,14 +16,28 @@ export const Statistics: React.FC = () => {
   const [data, setData] = React.useState<{newWord: number, lernWords: number, percentageOfCorrectAnswers: number}>(
     {newWord: 0, lernWords: 0, percentageOfCorrectAnswers: 0}
   )
+  
+  const [dataSprint, setDataSprint] = React.useState<{newWord: number, longestBatch: number, percentage: number}>(
+    {newWord: 0, longestBatch: 0, percentage: 0}
+  )
 
   useEffect(() => {
     async function getData() {
-      let wordStatistickObj = await WordStatistics()
+      let wordStatistickObj = await WordStatistics();
+      let sprintStatistic = await setUserInitialStatistics();
+      if (typeof sprintStatistic !== 'number') {
+        let obj = {
+          newWord: sprintStatistic.optional.sprintGame.newWord,
+          longestBatch: sprintStatistic.optional.sprintGame.longestBatch,
+          percentage: sprintStatistic.optional.sprintGame.percentage
+        }
+        setDataSprint(obj  as {newWord: number, longestBatch: number, percentage: number} );
+      }
+        
       setData(wordStatistickObj as {newWord: number, lernWords: number, percentageOfCorrectAnswers: number})
     }
     getData()
-  })
+  }, [])
 
   return (
     <div className='statistics-page'>
@@ -42,9 +57,9 @@ export const Statistics: React.FC = () => {
           </div>
           <div className='statistics-page__cards-item'>
             <h3>Sprint</h3>
-            <p>New words: 0</p>
-            <p>Correct answers: 0%</p>
-            <p>The longest series of correct answers: 0</p>
+            <p>New words: {dataSprint.newWord}</p>
+            <p>Correct answers: {dataSprint.percentage}%</p>
+            <p>The longest series of correct answers: {dataSprint.longestBatch}</p>
           </div>
       </div>
     </div>

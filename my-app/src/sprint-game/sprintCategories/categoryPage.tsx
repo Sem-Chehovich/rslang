@@ -13,7 +13,7 @@ const levels = [1, 2, 3, 4, 5, 6];
 const GameCategories = () => {
   const navigate = useNavigate();
   const { pagePathSecond, questions } = useTypedSelector(state => state.sprint);
-  const { fetchWords, setGroup, setPage, setPagePath, setPagePathSecond, setUserInGame } = useActions();
+  const { fetchWords, setGroup, setPage, setPagePath, setPagePathSecond, setUserInGame, setResults } = useActions();
   
   const handleClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -48,13 +48,18 @@ const GameCategories = () => {
         fetchWords(group, prevPage);
       }
     }
-
     navigate('/sprint');
   }
 
   const backPage = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    }
+    
     clearWords([]);
+    setResults([]);
     setPagePath('');
+    
     if (pagePathSecond === 'isSprintFromDictionary') {
       setPagePathSecond('');
       navigate('/textbook');

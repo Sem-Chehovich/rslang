@@ -10,17 +10,42 @@ import { card } from '../interface/interface';
 import { checkIfPageLearned } from '../utilities/utilities'
 import BasicAlerts from './components/alert'
 import DisableElevation from './components/gamesButtons'
+import ScrollToBtn from './components/scrollToBtn'
+
+
 
 const WordsPageContainer = () => {
 
-      const [sections, setSections] = React.useState(localStorage.getItem('section') || '');
-      const [page, setPage] = React.useState(localStorage.getItem('page') || '1');
+      const [sections, setSections] = React.useState(localStorage.getItem('section') || localStorage.setItem('section', '0'));
+      const [page, setPage] = React.useState(localStorage.getItem('page') || localStorage.setItem('page', '1'));
       const [userId] = React.useState(localStorage.getItem('userId') || undefined);
       const [strongArr] = useState<any>([]);
       const [weakArr] = useState<any>([]);
       const [isPageLearned, setIsPageLearned] = React.useState(false)
       const [cards, setCards] = useState([])
       const [isLoading, setIsLoading] = useState(true)
+      const [isTopScrollShown, setIsTopScrollShown] = useState(false)
+      const [isBottomScrollShown, setIsBottomScrollShown] = useState(false)
+
+      const showScroll = () => {
+        if (window.pageYOffset >= 1500) {
+            setIsTopScrollShown(true)
+        } else if (window.pageYOffset < 1500) {
+            setIsTopScrollShown(false)
+        }
+        if (window.pageYOffset <= 6300) {
+            setIsBottomScrollShown(true)
+        } else if (window.pageYOffset > 6300) {
+            setIsBottomScrollShown(false)
+        }
+    }  
+
+    useEffect(() => {
+        window.addEventListener('scroll', showScroll)
+        return () => {
+            window.removeEventListener('scroll', showScroll)
+        }
+    })  
 
     useEffect(() => {
         setIsLoading(true)
@@ -75,7 +100,7 @@ const WordsPageContainer = () => {
     }
 
     const handleChange = async (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        setSections(event.target.value);
+        setSections(event.target.value as string);
         setPage('1');
         let id = `${event.target.value}`
         localStorage.setItem('section', id)
@@ -123,7 +148,7 @@ const WordsPageContainer = () => {
         setIsLoading(true)
 
         if (+sections < 6) {
-            wordPageApiService.getWords(id, sections).then(data => {
+            wordPageApiService.getWords(id, sections as string).then(data => {
                 setCards(data)
                 setIsLoading(false)
             })
@@ -135,6 +160,8 @@ const WordsPageContainer = () => {
             { isLoading ? <Spinner /> : (
                 <>
                 <div>
+                    {isTopScrollShown && <ScrollToBtn direction="top" />}
+                    {isBottomScrollShown && <ScrollToBtn direction="bottom" />}
                     <div className="category__buttons">
                         <Selector
                         handleChange={handleChange}

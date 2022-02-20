@@ -29,6 +29,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    @media screen and (max-width: 450px) {
+        flex-direction: column;
+    }
 }
 
 
@@ -60,3 +64,33 @@
 .games__buttons button {
     margin-left: 10px;
 }
+
+.scroll-btn{
+    width: 50px;
+    height: 50px;
+    border: 2px solid gray;
+    border-radius: 50%;
+    position: fixed;
+    right: 20px;
+
+    @media screen and (max-width: 750px) {
+        border: none;
+        border-radius: 0;
+        width: 20px;
+        height: 20px;
+        right: 20px;
+    }
+
+    &.top {
+        top: 42%;
+    }
+
+    &.bottom {
+        bottom: 42%;
+    }
+
+    button {
+        padding: 6px;
+    }
+}
+

@@ -250,6 +250,7 @@ export const AudioChallenge: React.FC = () => {
   const updateLongestBatch = async (isCorrectAnswer: boolean) => {
     const userSt = await setUserInitialStatistics() as IUserStatistic;
     if (isCorrectAnswer) {
+      console.log(currentBatch)
       setCurrentBatch(currentBatch + 1);
       if (longestBatch < currentBatch) {
         setLongestBatch(currentBatch);
@@ -257,15 +258,18 @@ export const AudioChallenge: React.FC = () => {
     } else {
       setCurrentBatch(0);
     }
+    console.log(currentBatch)
+    console.log(longestBatch)
 
     let userStatistics = await wordPageApiService.getUserStatistics() as IUserStatistic;
+    console.log("longest in db: ", userStatistics.optional.audioGame.longestBatch)
+    console.log("current batch: ", currentBatch)
+    console.log("longest current batch: ", longestBatch)
 
     initStatOptional.learnedWords = userSt.learnedWords + 1;
     initStatOptional.optional.date = currDateStr;
-    // initStatOptional.optional.audioGame.newWord = userSt.optional.audioGame.newWord;
-    // initStatOptional.optional.audioGame.rightAnsCount = userSt.optional.audioGame.rightAnsCount;
-    initStatOptional.optional.audioGame.newWord = 0;
-    initStatOptional.optional.audioGame.rightAnsCount = 0;
+    initStatOptional.optional.audioGame.newWord = userSt.optional.audioGame.newWord;
+    initStatOptional.optional.audioGame.rightAnsCount = userSt.optional.audioGame.rightAnsCount;
     initStatOptional.optional.sprintGame.newWord = userSt.optional.sprintGame.newWord;
     initStatOptional.optional.sprintGame.questionsCount = userSt.optional.sprintGame.questionsCount;
     initStatOptional.optional.sprintGame.rightAnsCount = userSt.optional.sprintGame.rightAnsCount;

@@ -35,15 +35,16 @@ export async function AudioChallengeStatistics(): Promise<AudioStatisticsItem> {
       } else {
         audioStatisticsObject.correctAnswers = todayCorrectAnsPercentage;
       }
-      // userSt.optional.audioGame.newWord = audioStatisticsObject.newWords;
-      // userSt.optional.audioGame.newWord = audioStatisticsObject.correctAnswers;
-      resolve(audioStatisticsObject);
-    });
-    wordPageApiService.getUserStatistics()
-    .then((data) => {
-      audioStatisticsObject.longestSeries = data.optional.audioGame.longestBatch;
-      resolve(audioStatisticsObject);
-    })
+      userSt.optional.audioGame.newWord = audioStatisticsObject.newWords;
+      userSt.optional.audioGame.newWord = audioStatisticsObject.correctAnswers;
+      console.log(audioStatisticsObject.newWords, audioStatisticsObject.correctAnswers)
+    }).then(() => 
+      wordPageApiService.getUserStatistics()
+      .then((data) => {
+        audioStatisticsObject.longestSeries = data.optional.audioGame.longestBatch;
+        resolve(audioStatisticsObject);
+      })
+    )
   })
 
   return promise;

@@ -10,14 +10,32 @@ import { useTypedSelector } from '../../hooks/useTypeSelector';
 import React, { useState } from 'react';
 import { useActions } from '../../hooks/useActions';
 import { IWord } from '../../types/sprint';
-import { getCurrentDate, getRandomNum } from '../../utilities/utilities';
+import { getPercentage, getCurrentDate, getRandomNum, setUserInitialStatistics } from '../../utilities/utilities';
 import { useNavigate } from 'react-router';
 import ScrollCrid from '../sprintResults/sprintResults';
-import { createUserWord, getUserStatistics, getUserWord, updateUserWord } from '../service';
+import { createUserWord, getUserWord, updateUserWord, upsetUserStatistics } from '../service';
 import { IUserStatistic, IUserWord } from '../../interface/interface';
 
 
 const currDateStr = getCurrentDate();
+const initStatOptional: IUserStatistic = {
+  learnedWords: 0,
+  optional: {
+    date: currDateStr,
+    sprintGame: {
+      newWord: 0,
+      questionsCount: 0,
+      rightAnsCount: 0,
+      percentage: 0,
+      longestBatch: 0,
+    },
+    audioGame: {
+      newWord: 0,
+      rightAnsCount: 0,
+      longestBatch: 0,
+    }
+  }
+}
 
 const initSprintWordOpt: IUserWord = {
   difficulty: 'weak',
@@ -37,23 +55,6 @@ const initSprintWordOpt: IUserWord = {
       totalRightAns: 0,
     }
   } 
-}
-
-const initStatOptional: IUserStatistic = {
-  learnedWords: 0,
-  optional: {
-    date: currDateStr,
-    sprintGame: {
-      newWord: 0,
-      rightAnsCount: 0,
-      longestBatch: 0,
-    },
-    audioGame: {
-      newWord: 0,
-      rightAnsCount: 0,
-      longestBatch: 0,
-    }
-  }
 }
 
 const Sprint: React.FC = () => {
@@ -112,53 +113,50 @@ const Sprint: React.FC = () => {
     sound.play();
   }
 
-  async function setUserInitialStatistics() {
-    const userStatistic = await getUserStatistics();
-
-    if (userStatistic === 404) {
-      return initStatOptional;
-    }
-    return userStatistic;
-  }
-
   async function checkWord(wordId: string, wordOptional: IUserWord) {
     const userWord = await getUserWord(wordId);
     const currDateStr = getCurrentDate();
+    const userSt = await setUserInitialStatistics();
+
+    if (typeof userSt !== 'number') 
+      initStatOptional.optional.sprintGame.rightAnsCount = userSt.optional.sprintGame.rightAnsCount;
      
     if (typeof userWord === 'number') {
       if (wordOptional.optional.sprintGame.wrongAns === 1) { 
         wordOptional.difficulty = 'strong';
         wordOptional.optional.sprintGame.totalRightAns = 0;
       } else {
+        initStatOptional.optional.sprintGame.rightAnsCount += 1;
         wordOptional.difficulty = 'weak';
       }
       await createUserWord(wordId, wordOptional);
     } else {
-      console.log('Update');
-      if (userWord.optional.sprintGame.date) {
+      if (typeof userWord !== 'number') {
         if (userWord.optional.sprintGame.date === '' || userWord.optional.sprintGame.date === currDateStr) { 
+          if (userWord.optional.sprintGame.date === '') initStatOptional.optional.sprintGame.newWord += 1;
           wordOptional.optional.sprintGame.newWord = true;
         } else {
           wordOptional.optional.sprintGame.newWord = false;
         }
-
+  
         if (wordOptional.optional.sprintGame.rightAns === 1) { 
+          initStatOptional.optional.sprintGame.rightAnsCount += 1;
           wordOptional.optional.sprintGame.rightAns += userWord.optional.sprintGame.rightAns;
         } else {
           wordOptional.optional.sprintGame.wrongAns += userWord.optional.sprintGame.wrongAns;
         }
-
+  
         if (wordOptional.optional.sprintGame.wrongAns === 1) { 
           wordOptional.difficulty = 'strong';
           wordOptional.optional.sprintGame.totalRightAns = 0;
         } else {
           wordOptional.optional.sprintGame.totalRightAns += userWord.optional.sprintGame.rightAns;
         }
-
+  
         if (wordOptional.optional.sprintGame.totalRightAns >= 3) {
           wordOptional.difficulty = 'weak';
         }
-
+  
         wordOptional.optional.audioGame.date = userWord.optional.audioGame.date;
         wordOptional.optional.audioGame.newWord = userWord.optional.audioGame.newWord;
         wordOptional.optional.audioGame.rightAns = userWord.optional.audioGame.rightAns;
@@ -166,11 +164,33 @@ const Sprint: React.FC = () => {
         wordOptional.optional.audioGame.totalRightAns = userWord.optional.audioGame.totalRightAns;
       }
       await updateUserWord(wordId, wordOptional);
+    } 
+
+    if (typeof userSt !== 'number') {
+      if (userSt.optional.sprintGame.longestBatch < isCorrect.length) {
+        initStatOptional.optional.sprintGame.longestBatch = isCorrect.length;
+      } else {
+        initStatOptional.optional.sprintGame.longestBatch = userSt.optional.sprintGame.longestBatch;
+      }
+
+      initStatOptional.learnedWords = userSt.learnedWords + 1;
+      initStatOptional.optional.sprintGame.newWord = userSt.optional.sprintGame.newWord + 1;
+      initStatOptional.optional.sprintGame.questionsCount = 
+        userSt.optional.sprintGame.newWord + initStatOptional.optional.sprintGame.questionsCount;
+      initStatOptional.optional.sprintGame.percentage = 
+        getPercentage(initStatOptional.optional.sprintGame.rightAnsCount, initStatOptional.optional.sprintGame.questionsCount);
+      
+      initStatOptional.optional.audioGame.longestBatch = userSt.optional.audioGame.longestBatch;
+      initStatOptional.optional.audioGame.newWord = userSt.optional.audioGame.newWord;
+      initStatOptional.optional.audioGame.rightAnsCount = userSt.optional.audioGame.rightAnsCount;
+
     }
+    await upsetUserStatistics(initStatOptional);
   }
 
   function isCorrectAnswer(question: IWord[], answerId: string, btn: string) {
     let  ans: boolean;
+    initStatOptional.optional.sprintGame.questionsCount = 1;
 
     if (question[0].id === answerId) { 
       ans = btn === '1' ? true : false;
@@ -264,7 +284,7 @@ const Sprint: React.FC = () => {
     const res = isCorrectAnswer([questions[questionNumber]], questions[randAns].id, btn);
     setResults(res);
     checkAnswer();
-    
+
     if (questionNumber === questions.length - 1) {
       clearTimeout(timerId);
       setGameOver(true);

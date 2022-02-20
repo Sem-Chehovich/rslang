@@ -10,6 +10,15 @@ export interface stateObj {
   [key: string]: boolean
 }
 
+export interface AudioUserWord {
+  difficulty: string, 
+  optional: {
+    audioGame: {
+      [key: string]: string | number | boolean
+    }
+  }
+}
+
 export interface IUserWord {
   difficulty: string, 
   optional: {
@@ -36,7 +45,9 @@ export interface IUserStatistic {
     date: string,
     sprintGame: {
       newWord: number,
+      questionsCount: number,
       rightAnsCount: number,
+      percentage: number,
       longestBatch: number,
     },
     audioGame: {

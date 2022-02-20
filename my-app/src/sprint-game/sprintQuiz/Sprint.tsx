@@ -7,7 +7,7 @@ import pokemon4 from '../../assets/png/pokemon4.png';
 import wrongAnswer from '../../assets/sounds/wrongAnswer.mp3';
 import rightAnswer from '../../assets/sounds/rightAnswer.mp3';
 import { useTypedSelector } from '../../hooks/useTypeSelector';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useActions } from '../../hooks/useActions';
 import { IWord } from '../../types/sprint';
 import { getPercentage, getCurrentDate, getRandomNum, setUserInitialStatistics } from '../../utilities/utilities';
@@ -65,12 +65,21 @@ const Sprint: React.FC = () => {
   const [isCorrect] = useState<Array<boolean>>([]);
   const [gameOver, setGameOver] = useState(false);
   const [points, setPoints] = useState(10);
-  const { questions, group, score, page, pagePathSecond, userInGame } = useTypedSelector(state => state.sprint);
+  const { questions, group, score, page, pagePathSecond, userInGame, pagePath } = useTypedSelector(state => state.sprint);
   const { fetchWords, setResults, setScore, setPage, setPagePath, clearWords, setPagePathSecond } = useActions();
   const navigate = useNavigate();
   const [randAns, setRandAns] = useState(0);
   
+  useEffect(() => {
+    setResults([]);
+    if (pagePath !== 'game-page') {
+      navigate('/game');
+    }
+  }, []); 
+
   let timerId = setTimeout(() => {
+    clearWords([]);
+    setResults([]);
     setGameOver(true);
   }, 60000);
 

@@ -37,3 +37,29 @@
   color: white;
   font-size: 28px;
 }
+
+.dashboard {
+  display: none;
+}
+
+@media screen and (max-width: 750px) {
+  .header__content{
+    display: none;
+  }
+  .dashboard {
+    display: block;
+    
+  }
+
+  .dashboard button {
+    color: white;
+    font-size: 25px;
+    
+  }
+
+  .dashbord-link {
+    text-decoration: none;
+    color: #537895;
+  }
+
+}

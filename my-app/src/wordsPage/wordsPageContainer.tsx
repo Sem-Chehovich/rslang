@@ -100,7 +100,7 @@ const WordsPageContainer = () => {
     }
 
     const handleChange = async (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        setSections(event.target.value);
+        setSections(event.target.value as string);
         setPage('1');
         let id = `${event.target.value}`
         localStorage.setItem('section', id)
@@ -148,7 +148,7 @@ const WordsPageContainer = () => {
         setIsLoading(true)
 
         if (+sections < 6) {
-            wordPageApiService.getWords(id, sections).then(data => {
+            wordPageApiService.getWords(id, sections as string).then(data => {
                 setCards(data)
                 setIsLoading(false)
             })

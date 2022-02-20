@@ -119,7 +119,7 @@ export async function upsetUserStatistics(statisticOptional: IUserStatistic) {
   return response.status;
 }
 
-export async function getUserStatistics() {
+export async function getUserStatistics(): Promise<IUserStatistic | number> {
   const userId = localStorage.getItem('userId')!;
   const url = getCorrectUrl(`users/${userId}/statistics`);
   const userToken = localStorage.getItem('userToken')!;
@@ -136,6 +136,6 @@ export async function getUserStatistics() {
     return response.status;
   }
 
-  const result = await response.json();
+  const result = await response.json() as IUserStatistic;
   return result;
 }

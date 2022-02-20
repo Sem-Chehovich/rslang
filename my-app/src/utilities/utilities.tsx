@@ -1,4 +1,5 @@
-import { Word } from "../interface/interface";
+import { Word, IUserStatistic } from "../interface/interface";
+import { getUserStatistics, upsetUserStatistics } from "../sprint-game/service";
 
 export function getCorrectUrl(path: string) {
   return `https://rs-lang-rs-school.herokuapp.com/${path}`
@@ -70,4 +71,49 @@ export function getCurrentDate(): string {
   const currDate = new Date();
   const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}`;
   return currDateStr;
+}
+
+export async function setUserInitialStatistics() {
+  const currDateStr = getCurrentDate();
+  const initStatOptional: IUserStatistic = {
+    learnedWords: 0,
+    optional: {
+      date: currDateStr,
+      sprintGame: {
+        newWord: 0,
+        questionsCount: 0,
+        rightAnsCount: 0,
+        percentage: 0,
+        longestBatch: 0,
+      },
+      audioGame: {
+        newWord: 0,
+        rightAnsCount: 0,
+        longestBatch: 0,
+      }
+    }
+  }
+  
+  const userStatistic = await getUserStatistics();
+
+  if (typeof userStatistic === 'number' && userStatistic === 404) {
+    await upsetUserStatistics(initStatOptional);
+    return initStatOptional;
+  } 
+
+  if (typeof userStatistic !== 'number') {
+    if (userStatistic.optional.date !== currDateStr) {
+      userStatistic.optional.date = currDateStr;
+      userStatistic.optional.sprintGame.newWord = 0;
+      userStatistic.optional.sprintGame.longestBatch = 0;
+      userStatistic.optional.sprintGame.rightAnsCount = 0;
+      userStatistic.optional.sprintGame.questionsCount = 0;
+    }
+  }
+
+  return userStatistic;
+}
+
+export function getPercentage(rightAnsCount: number, questCount: number) {
+  return Math.floor(rightAnsCount * 100 / questCount);
 }

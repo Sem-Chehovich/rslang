@@ -40,3 +40,30 @@
 .wrong-ans-icon {
   background-image: url("../../assets/svg/wrong-ans.svg");
 }
+
+@media screen and (max-width: 1200px) {
+  .sprint-results {
+    height: 90%;
+    width: 90%;
+  }
+
+  .sprint-results {
+    font-size: 23px;
+  }
+
+  .sprint-results__btn {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media screen and (max-width: 610px) {
+  .sprint-results {
+    height: 90%;
+    width: 90%;
+  }
+
+  .sprint-results {
+    font-size: 15px;
+  }
+}

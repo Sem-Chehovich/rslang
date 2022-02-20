@@ -71,14 +71,13 @@ const Sprint: React.FC = () => {
   const [randAns, setRandAns] = useState(0);
   
   useEffect(() => {
-    setResults([]);
     if (pagePath !== 'game-page') {
       navigate('/game');
     }
-  }, []); 
+  }, [pagePath]); 
 
   let timerId = setTimeout(() => {
-    clearWords([]);
+    //clearWords([]);
     setResults([]);
     setGameOver(true);
   }, 60000);

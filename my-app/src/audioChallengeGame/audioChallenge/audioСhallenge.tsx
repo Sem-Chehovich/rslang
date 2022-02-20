@@ -20,6 +20,8 @@ export type AnswerObject = {
 }
 
 export let wordsArr = [] as Array<Word>;
+let longestBatch = 0 as number;
+let currentBatch = 0 as number;
 
 export const AudioChallenge: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -38,10 +40,6 @@ export const AudioChallenge: React.FC = () => {
   const navigate = useNavigate();
   const currDate = new Date() as Date;
   const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}` as string;
-  // let longestBatch = 0 as number;
-  // let currentBatch = 0 as number;
-  const [longestBatch, setLongestBatch] = useState(0);
-  const [currentBatch, setCurrentBatch] = useState(0);
 
   const initStatOptional: IUserStatistic = {
     learnedWords: 0,
@@ -249,13 +247,14 @@ export const AudioChallenge: React.FC = () => {
 
   const updateLongestBatch = async (isCorrectAnswer: boolean) => {
     const userSt = await setUserInitialStatistics() as IUserStatistic;
+
     if (isCorrectAnswer) {
-      setCurrentBatch(currentBatch + 1);
+      currentBatch += 1;
       if (longestBatch < currentBatch) {
-        setLongestBatch(currentBatch);
+        longestBatch = currentBatch;
       }
     } else {
-      setCurrentBatch(0);
+      currentBatch = 0;
     }
 
     let userStatistics = await wordPageApiService.getUserStatistics() as IUserStatistic;

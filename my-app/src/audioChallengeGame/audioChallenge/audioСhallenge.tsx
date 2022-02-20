@@ -247,8 +247,7 @@ export const AudioChallenge: React.FC = () => {
 
   const updateLongestBatch = async (isCorrectAnswer: boolean) => {
     const userSt = await setUserInitialStatistics() as IUserStatistic;
-    console.log(userSt)
-    if (isCorrectAnswer) {
+    if (isCorrectAnswer && currentBatch <= scoreLimit) {
       currentBatch += 1;
       if (longestBatch < currentBatch) {
         longestBatch = currentBatch;

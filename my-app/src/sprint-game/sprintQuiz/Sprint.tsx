@@ -117,6 +117,9 @@ const Sprint: React.FC = () => {
     const userWord = await getUserWord(wordId);
     const currDateStr = getCurrentDate();
     const userSt = await setUserInitialStatistics();
+
+    if (typeof userSt !== 'number') 
+      initStatOptional.optional.sprintGame.rightAnsCount = userSt.optional.sprintGame.rightAnsCount;
      
     if (typeof userWord === 'number') {
       if (wordOptional.optional.sprintGame.wrongAns === 1) { 
@@ -135,9 +138,6 @@ const Sprint: React.FC = () => {
         } else {
           wordOptional.optional.sprintGame.newWord = false;
         }
-
-        if (typeof userSt !== 'number') 
-          initStatOptional.optional.sprintGame.rightAnsCount = userSt.optional.sprintGame.rightAnsCount;
   
         if (wordOptional.optional.sprintGame.rightAns === 1) { 
           initStatOptional.optional.sprintGame.rightAnsCount += 1;

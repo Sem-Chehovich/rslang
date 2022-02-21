@@ -148,6 +148,10 @@ const Sprint: React.FC = () => {
         } else {
           wordOptional.optional.sprintGame.newWord = false;
         }
+
+        if (userWord.difficulty === 'strong') {
+          wordOptional.difficulty = 'strong';
+        }
   
         if (wordOptional.optional.sprintGame.rightAns === 1) { 
           initStatOptional.optional.sprintGame.rightAnsCount += 1;
@@ -160,7 +164,7 @@ const Sprint: React.FC = () => {
           wordOptional.difficulty = 'strong';
           wordOptional.optional.sprintGame.totalRightAns = 0;
         } else {
-          wordOptional.optional.sprintGame.totalRightAns += userWord.optional.sprintGame.rightAns;
+          wordOptional.optional.sprintGame.totalRightAns += userWord.optional.sprintGame.totalRightAns;
         }
   
         if (wordOptional.optional.sprintGame.totalRightAns >= 3) {

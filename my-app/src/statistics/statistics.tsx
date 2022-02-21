@@ -1,8 +1,6 @@
-import { statisticsItems } from './statisticsConstants';
 import './statistics.css';
 import { WordStatistics } from './components/wordStatistic'
-import { useEffect, useState } from 'react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { setUserInitialStatistics } from '../utilities/utilities';
 import { AudioChallengeStatistics, AudioStatisticsItem } from './components/audioChallengeStatistics';
 import { isAuthorizedUser } from '../authorization/validateToken';
@@ -24,17 +22,9 @@ export const Statistics = () => {
   const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate();
 
+  const [audioData, setAudioData] = React.useState<AudioStatisticsItem>({newWords: 0, correctAnswers: 0, longestSeries: 0});
+
   useEffect(() => {
-    // async function checkAuth() {
-    //   const checkAuth = await isAuthorizedUser();
-    //   if (checkAuth === 'redirect') {
-    //     setShowAlert(true);
-    //     //navigate('/authorization');
-    //   }
-    // }
-
-    // checkAuth();
-
     async function getData() {
       const checkAuth = await isAuthorizedUser();
 
@@ -44,6 +34,8 @@ export const Statistics = () => {
         setShowAlert(false);
         let wordStatistickObj = await WordStatistics();
         let sprintStatistic = await setUserInitialStatistics();
+        let audioChallengeStatisticsObj = await AudioChallengeStatistics();
+        setAudioData(audioChallengeStatisticsObj as AudioStatisticsItem);
 
         if (typeof sprintStatistic !== 'number') {
           let obj = {
@@ -55,7 +47,7 @@ export const Statistics = () => {
         }
           
         setData(wordStatistickObj as {newWord: number, lernWords: number, percentageOfCorrectAnswers: number})
-        }
+      }
     }  
     getData()
   }, []);
@@ -83,7 +75,12 @@ export const Statistics = () => {
             <p>Correct answers: {data.percentageOfCorrectAnswers}%</p>
             <p>Learned words: {data.lernWords}</p>
           </div>
-          <AudioChallengeStatistics />
+          <div className='statistics-page__cards-item'>
+            <h3>Audio Challenge</h3>
+            <p>New words: {audioData?.newWords}</p>
+            <p>Correct answers: {audioData?.correctAnswers}%</p>
+            <p>The longest series of correct answers: {audioData?.longestSeries}</p>
+          </div>
           <div className='statistics-page__cards-item'>
             <h3>Sprint</h3>
             <p>New words: {dataSprint.newWord}</p>

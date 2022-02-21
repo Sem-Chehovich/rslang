@@ -3,13 +3,14 @@ import './audioСhallenge.css';
 import React, { useState } from 'react';
 import { AudioChallengeCard } from '../audioChallengeCard/audioChallengeCard';
 import { Spinner } from '../../spinner/spinner';
-import { shuffleWords, getRandomNum, getCorrectUrl, sliceArrIntoChunks } from '../../utilities/utilities';
-import { Word, IUserWord } from '../../interface/interface';
+import { shuffleWords, getRandomNum, getCorrectUrl, sliceArrIntoChunks, setUserInitialStatistics } from '../../utilities/utilities';
+import { Word, IUserWord, IUserStatistic } from '../../interface/interface';
 import { AudioChallengeScore } from '../audioChallengeScore/audioChallengeScore';
 import { wordPageApiService } from '../../wordsPage/service/wordPageApiService';
 import { isAuthorizedUser } from '../../authorization/validateToken';
 import wrongAnswer from '../../assets/sounds/wrongAnswer.mp3';
 import rightAnswer from '../../assets/sounds/rightAnswer.mp3';
+import { useNavigate } from 'react-router';
 
 export type AnswerObject = {
   answer: string,
@@ -19,6 +20,8 @@ export type AnswerObject = {
 }
 
 export let wordsArr = [] as Array<Word>;
+let longestBatch = 0 as number;
+let currentBatch = 0 as number;
 
 export const AudioChallenge: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -34,6 +37,30 @@ export const AudioChallenge: React.FC = () => {
   const [isRightAnswerShown, setIsRightAnswerShown] = useState(false);
   const [isOpenFromDictionary] = useState(localStorage.getItem('isAudioGameTurnOnByDictionary'));
   const [isSoundOn, setSoundOn] = useState(false);
+  const navigate = useNavigate();
+  const currDate = new Date() as Date;
+  const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}` as string;
+
+  const initStatOptional: IUserStatistic = {
+    learnedWords: 0,
+    optional: {
+      date: currDateStr,
+      sprintGame: {
+        newWord: 0,
+        questionsCount: 0,
+        rightAnsCount: 0,
+        percentage: 0,
+        longestBatch: 0,
+      },
+      audioGame: {
+        newWord: 0,
+        questionsCount: 0,
+        rightAnsCount: 0,
+        percentage: 0,
+        longestBatch: 0,
+      }
+    }
+  }
 
   React.useEffect(() => {
     
@@ -70,7 +97,7 @@ export const AudioChallenge: React.FC = () => {
     return function cleanUp() {
       localStorage.removeItem('isAudioGameTurnOnByDictionary');
     }
-  }, [isOpenFromDictionary]);
+  }, [isOpenFromDictionary])
 
   async function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     setLoading(true);
@@ -106,10 +133,8 @@ export const AudioChallenge: React.FC = () => {
 
     if (userId != null) {
       const dbWord = await wordPageApiService.getUserWordById(userId, wordId) as IUserWord;
-      const currDate = new Date() as Date;
-      const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}` as string;
-      if (dbWord === undefined) {
-        // console.log('новое');
+      if (dbWord === null) {
+        console.log('новое');
         const progressObj = {
           difficulty: 'strong',
           optional: {
@@ -122,7 +147,7 @@ export const AudioChallenge: React.FC = () => {
             },
             sprintGame: {
               date: '',
-              newWord: true,
+              newWord: false,
               wrongAns: 0,
               rightAns: 0,
               totalRightAns: 0,
@@ -131,7 +156,7 @@ export const AudioChallenge: React.FC = () => {
         };
         await wordPageApiService.createUserWord(userId, wordId as string, progressObj);
       } else {
-        // console.log('было уже!');
+        console.log('было уже!');
         let audioGameObj = Object.assign(dbWord?.optional?.audioGame);
         let wordDifficulty = dbWord.difficulty;
         let data = {} as IUserWord;
@@ -140,14 +165,12 @@ export const AudioChallenge: React.FC = () => {
         } else {
           audioGameObj['newWord'] = false;
         }
-
         if (isRight) {
           audioGameObj['rightAns'] = audioGameObj['rightAns'] + 1;
           audioGameObj['totalRightAns'] = audioGameObj['totalRightAns'] + 1;
         } else {
           audioGameObj['wrongAns'] = audioGameObj['wrongAns'] + 1;
           audioGameObj['totalRightAns'] = 0;
-          wordDifficulty = 'strong';
         }
 
         if (audioGameObj['totalRightAns'] === 3) {
@@ -204,6 +227,8 @@ export const AudioChallenge: React.FC = () => {
       }
     }
 
+    updateLongestBatch(isCorrect);
+
     const handleSoundClick = (event: React.MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
       const sound = new Audio();
@@ -222,6 +247,55 @@ export const AudioChallenge: React.FC = () => {
     pushNewWord(correctAnswer.id as string, isCorrect);
   }
 
+  const updateLongestBatch = async (isCorrectAnswer: boolean) => {
+    const userSt = await setUserInitialStatistics() as IUserStatistic;
+    if (isCorrectAnswer && currentBatch <= scoreLimit) {
+      currentBatch += 1;
+      if (longestBatch < currentBatch) {
+        longestBatch = currentBatch;
+      }
+    } else {
+      currentBatch = 0;
+    }
+
+    const userId = localStorage.getItem('userId') as string;
+
+    wordPageApiService.getAllUserWords(userId)
+    .then((userWords) => {
+      const allTodayWords = userWords.filter((word: IUserWord) =>
+      word?.optional?.audioGame?.date === currDateStr || word?.optional?.audioGame?.date === '') as Array<IUserWord>;
+      const todayNewWords = allTodayWords.filter((word: IUserWord) => word?.optional?.audioGame?.newWord) as Array<IUserWord>;
+      initStatOptional.optional.audioGame.newWord = todayNewWords.length;
+
+      const todayRightAns = allTodayWords.filter((word: IUserWord) => word.optional.audioGame.rightAns >= 1).length as number;
+      const todayWrongAns = allTodayWords.filter((word: IUserWord) => word.optional.audioGame.wrongAns >= 1).length as number;
+      const todayCorrectAnsPercentage = Math.round(((todayRightAns) / (todayRightAns + todayWrongAns)) * 100) as number;
+      if (isNaN(todayCorrectAnsPercentage)) {
+        initStatOptional.optional.audioGame.percentage = 0;
+      } else {
+        initStatOptional.optional.audioGame.percentage = todayCorrectAnsPercentage;
+      }
+
+      initStatOptional.optional.audioGame.longestBatch = userSt.optional.audioGame.longestBatch;
+      initStatOptional.optional.audioGame.questionsCount = allTodayWords.length;
+      initStatOptional.optional.audioGame.rightAnsCount = todayRightAns;
+      // initStatOptional.learnedWords = userSt.learnedWords + 1;
+      initStatOptional.optional.date = currDateStr;
+      initStatOptional.optional.sprintGame.newWord = userSt.optional.sprintGame.newWord;
+      initStatOptional.optional.sprintGame.questionsCount = userSt.optional.sprintGame.questionsCount;
+      initStatOptional.optional.sprintGame.rightAnsCount = userSt.optional.sprintGame.rightAnsCount;
+      initStatOptional.optional.sprintGame.percentage = userSt.optional.sprintGame.percentage;
+      initStatOptional.optional.sprintGame.longestBatch = userSt.optional.sprintGame.longestBatch;
+
+      if (userSt.optional.audioGame.longestBatch < longestBatch) {
+        initStatOptional.optional.audioGame.longestBatch = longestBatch;
+      }
+    }).then(async() => {
+      await wordPageApiService.upsertUserStatistics(initStatOptional);
+    });
+    console.log(initStatOptional)
+  }
+
   const handleNextQuestionClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const answerBtns = document.querySelectorAll('.audio-challenge-card__words-btn') as NodeListOf<HTMLElement>;
     const correctAnswer = words[questionNumber].find((x) => x.isRight === true) as Word;
@@ -232,6 +306,7 @@ export const AudioChallenge: React.FC = () => {
     if (event.currentTarget.innerHTML === 'I don\'t know') {
       event.currentTarget.innerHTML = 'Next';
       setIsRightAnswerShown(true);
+      updateLongestBatch(false);
       if (!isSoundOn) {
         soundOn(wrongAnswer);
       }
@@ -287,11 +362,36 @@ export const AudioChallenge: React.FC = () => {
     setQuestionNumber(0);
     setChosenAnswers([]);
     setScoreLimit(0);
+
+    if (isOpenFromDictionary) {
+      navigate('/textbook');
+    } else {
+      navigate('/audio');
+    }
   }
 
   const generateMixedArray = (arr: Array<Word>) => {
     arr = shuffleWords(arr);
     setWords(sliceArrIntoChunks(arr));
+  }
+
+  const backPage = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    }
+
+    setGameOver(true);
+    setShowScore(false);
+    setScore(0);
+    setQuestionNumber(0);
+    setChosenAnswers([]);
+    setScoreLimit(0);
+
+    if (isOpenFromDictionary) {
+      navigate('/textbook');
+    } else {
+      navigate('/audio');
+    }
   }
 
   const onSoundOn = () => {
@@ -330,6 +430,7 @@ export const AudioChallenge: React.FC = () => {
           isRightAnswerShown={isRightAnswerShown}
           handleAnswerClick={handleAnswerClick}
           handleNextQuestionClick={handleNextQuestionClick}
+          backPage={backPage}
           isSoundOn={isSoundOn}
           onSoundOn={onSoundOn}/>
           : 

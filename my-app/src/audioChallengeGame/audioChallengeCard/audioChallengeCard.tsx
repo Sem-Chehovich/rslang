@@ -9,11 +9,13 @@ type Props = {
   handleAnswerClick: React.MouseEventHandler,
   handleNextQuestionClick: React.MouseEventHandler,
   isRightAnswerShown: boolean,
+  backPage: React.MouseEventHandler,
   onSoundOn: any,
   isSoundOn: boolean
 }
 
-export const AudioChallengeCard: React.FC<Props> = ({words, handleAnswerClick, handleNextQuestionClick, isRightAnswerShown, onSoundOn, isSoundOn}) => {
+export const AudioChallengeCard: React.FC<Props> =
+({words, handleAnswerClick, handleNextQuestionClick, isRightAnswerShown, backPage, onSoundOn, isSoundOn}) => {
   const [isFullScreen, setFullScreen] = useState(false);
 
   let rightAnswer = words?.find((x) => x.isRight === true) as Word;
@@ -39,6 +41,7 @@ export const AudioChallengeCard: React.FC<Props> = ({words, handleAnswerClick, h
 
   return (
     <div className='audio-challenge-card'>
+      <div className='audio-challenge-card__icon-btn back-icon' onClick={backPage}></div>
       <div className={ isSoundOn === false ? 'audio-challenge-card__icon-btn sound-icon' : 'audio-challenge-card__icon-btn sound-off-icon'} onClick={onSoundOn}></div>
       <div className={ isFullScreen === false ? 'audio-challenge-card__icon-btn screen-icon' : 'audio-challenge-card__icon-btn compress-screen-icon'} onClick={fullScreenMode}></div>
       <div className='audio-challenge-card__audio-container'>

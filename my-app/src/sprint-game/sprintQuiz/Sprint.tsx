@@ -142,7 +142,7 @@ const Sprint: React.FC = () => {
       await createUserWord(wordId, wordOptional);
     } else {
       if (typeof userWord !== 'number') {
-        if (userWord.optional.sprintGame.date === '' || userWord.optional.sprintGame.date === currDateStr) { 
+        if (userWord.optional.sprintGame.date === '' || userWord.optional.sprintGame.date === currDateStr) {
           if (userWord.optional.sprintGame.date === '') initStatOptional.optional.sprintGame.newWord += 1;
           wordOptional.optional.sprintGame.newWord = true;
         } else {

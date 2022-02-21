@@ -232,7 +232,6 @@ export const AudioChallenge: React.FC = () => {
         initUserWordOptional.optional.sprintGame.wrongAns = dbWord.optional.sprintGame.wrongAns;
         initUserWordOptional.optional.sprintGame.totalRightAns = dbWord.optional.sprintGame.totalRightAns;
 
-        console.log(initUserWordOptional)
         await wordPageApiService.updateUserWord(userId, wordId as string, initUserWordOptional);
       }
     }
@@ -309,10 +308,6 @@ export const AudioChallenge: React.FC = () => {
       const allTodayWords = userWords.filter((word: IUserWord) => word?.optional?.audioGame?.date === currDateStr) as Array<IUserWord>;
       const todayNewWords = allTodayWords.filter((word: IUserWord) => word?.optional?.audioGame?.newWord === true) as Array<IUserWord>;
 
-      console.log(userWords)
-      console.log(allTodayWords)
-      console.log(todayNewWords)
-
       const todayRightAns = allTodayWords.filter((word: IUserWord) => word.optional.audioGame.rightAns >= 1).length as number;
       const todayWrongAns = allTodayWords.filter((word: IUserWord) => word.optional.audioGame.wrongAns >= 1).length as number;
       let todayCorrectAnsPercentage = Math.round(((todayRightAns) / (todayRightAns + todayWrongAns)) * 100) as number;
@@ -340,7 +335,6 @@ export const AudioChallenge: React.FC = () => {
         
     }).then(async() => {
       await wordPageApiService.upsertUserStatistics(initStatOptional);
-      console.log(initStatOptional);
     }).then(x => console.log("End!"))
   }
 
@@ -404,6 +398,7 @@ export const AudioChallenge: React.FC = () => {
   }
 
   const handleExitClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setPagePath('');
     setGameOver(true);
     setShowScore(false);
     setScore(0);

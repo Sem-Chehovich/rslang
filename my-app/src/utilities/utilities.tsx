@@ -106,6 +106,8 @@ export async function setUserInitialStatistics() {
   if (typeof userStatistic !== 'number') {
     if (userStatistic.optional.date !== currDateStr) {
       initStatOptional.optional.date = currDateStr;
+    } else {
+      return userStatistic;
     }
   }
 

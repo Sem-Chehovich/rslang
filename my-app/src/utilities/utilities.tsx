@@ -105,18 +105,13 @@ export async function setUserInitialStatistics() {
 
   if (typeof userStatistic !== 'number') {
     if (userStatistic.optional.date !== currDateStr) {
-      userStatistic.optional.date = currDateStr;
-      userStatistic.optional.sprintGame.newWord = 0;
-      userStatistic.optional.sprintGame.longestBatch = 0;
-      userStatistic.optional.sprintGame.rightAnsCount = 0;
-      userStatistic.optional.sprintGame.questionsCount = 0;
-      userStatistic.optional.audioGame.newWord = 0;
-      userStatistic.optional.audioGame.longestBatch = 0;
-      userStatistic.optional.audioGame.rightAnsCount = 0;
+      initStatOptional.optional.date = currDateStr;
+    } else {
+      return userStatistic;
     }
   }
 
-  return userStatistic;
+  return initStatOptional;
 }
 
 export function getPercentage(rightAnsCount: number, questCount: number) {

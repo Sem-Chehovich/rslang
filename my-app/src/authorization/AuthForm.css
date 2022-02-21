@@ -8,6 +8,11 @@ body {
   font-family: 'Poppins-light';
 }
 
+.form-page {
+  height: 100vh;
+  background: linear-gradient(45deg, #f8a078, #6dc6f0);
+}
+
 .form-container {
   height: calc(100vh - 70px);
 }
@@ -27,7 +32,6 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #EEE;
 }
 
 .form-container__title {
@@ -71,4 +75,10 @@ body {
   width: 100%;
   opacity: 0.9;
   box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+@media screen and (max-width: 610px) {
+  .form-container__box {
+    width: 80%;
+  }
 }

@@ -14,7 +14,7 @@ const GameCategories = () => {
   const navigate = useNavigate();
   const { pagePathSecond, questions } = useTypedSelector(state => state.sprint);
   const { fetchWords, setGroup, setPage, setPagePath, setPagePathSecond, setUserInGame, setResults } = useActions();
-  
+
   const handleClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     const group = target.dataset.group!;
@@ -23,6 +23,7 @@ const GameCategories = () => {
     const userIn = checkUser();
     userIn === 'authorized' ? setUserInGame(true) : setUserInGame(false);
     
+    clearWords([]);
     setPagePath('game-page');
     setPage(startPage);
     setGroup(Number(group));
@@ -32,22 +33,7 @@ const GameCategories = () => {
   }
 
   const clickSingleBtn = () => {
-    const group = Number(localStorage.getItem('section')) | 0;
-    const startPage = Number(localStorage.getItem('page')) | 0;
-
-    setPagePath('game-page');
-    setGroup(group);
-    setPage(startPage - 1);
-    let prevPage = startPage;
-
-    const userIn = checkUser();
-    if (userIn === 'unauthorized') { 
-      setUserInGame(false);
-
-      while (prevPage--) {
-        fetchWords(group, prevPage);
-      }
-    }
+    setResults([]);
     navigate('/sprint');
   }
 

@@ -16,8 +16,8 @@ import ScrollToBtn from './components/scrollToBtn'
 
 const WordsPageContainer = () => {
 
-      const [sections, setSections] = React.useState(localStorage.getItem('section') || localStorage.setItem('section', '0'));
-      const [page, setPage] = React.useState(localStorage.getItem('page') || localStorage.setItem('page', '1'));
+      const [sections, setSections] = React.useState(localStorage.getItem('section') || localStorage.setItem('section', '0') || '0');
+      const [page, setPage] = React.useState(localStorage.getItem('page') || localStorage.setItem('page', '1') || '1');
       const [userId] = React.useState(localStorage.getItem('userId') || undefined);
       const [strongArr] = useState<any>([]);
       const [weakArr] = useState<any>([]);
@@ -167,7 +167,7 @@ const WordsPageContainer = () => {
                         handleChange={handleChange}
                         sections={sections}
                         />
-                        {+sections < 6 && <DisableElevation sections={sections} page={page} />}
+                        {+sections < 6  && <DisableElevation sections={sections} page={page} isPageLearned={isPageLearned} />}
                     </div>
                     {isPageLearned && <div className="alert__wrapper"> <BasicAlerts /> </div>}
                     <WordsPage 

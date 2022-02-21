@@ -201,7 +201,7 @@ export const AudioChallenge: React.FC = () => {
   const handleAnswerClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const answerBtns = document.querySelectorAll('.audio-challenge-card__words-btn') as NodeListOf<HTMLButtonElement>;
     const challengeNextBtn = document.querySelector('.audio-challenge-card__next-btn') as HTMLButtonElement;
-    const chosenAnswer = event.currentTarget.value as string;
+    const chosenAnswer = event.currentTarget.innerHTML as string;
     const correctAnswer = words[questionNumber].find((x) => x.isRight === true) as Word;
     let isCorrect = false as boolean;
     isAnswered.push(true);

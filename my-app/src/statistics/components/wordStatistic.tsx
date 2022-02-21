@@ -14,7 +14,6 @@ export async function WordStatistics() {
     const userStatistic = await getUserStatistics() as {optional:{audioGame: {questionsCount: number, rightAnsCount: number}, sprintGame: {questionsCount: number, rightAnsCount: number}}};
     rightAnswer = userStatistic.optional.audioGame.rightAnsCount + userStatistic.optional.sprintGame.rightAnsCount
     totalAnswer = userStatistic.optional.audioGame.questionsCount + userStatistic.optional.sprintGame.questionsCount
-    console.log(userStatistic)
     let promise = new Promise((resolve) => {
         wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string)).then(data => {
             console.log(data)

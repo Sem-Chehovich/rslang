@@ -32,9 +32,10 @@ export const Statistics = () => {
         setShowAlert(true);
       } else {
         setShowAlert(false);
+        let audioChallengeStatisticsObj = await AudioChallengeStatistics();
         let wordStatistickObj = await WordStatistics();
         let sprintStatistic = await setUserInitialStatistics();
-        let audioChallengeStatisticsObj = await AudioChallengeStatistics();
+
         setAudioData(audioChallengeStatisticsObj as AudioStatisticsItem);
 
         if (typeof sprintStatistic !== 'number') {

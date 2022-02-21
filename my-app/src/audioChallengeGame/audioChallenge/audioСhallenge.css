@@ -1,6 +1,6 @@
 .audio-challenge-memo-page {
   width: 100%;
-  height: calc(100vh);
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;

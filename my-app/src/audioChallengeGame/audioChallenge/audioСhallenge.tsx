@@ -42,6 +42,7 @@ export const AudioChallenge: React.FC = () => {
   const navigate = useNavigate();
   const currDate = new Date() as Date;
   const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}` as string;
+  const userId = localStorage.getItem('userId') as string;
 
   const initStatOptional: IUserStatistic = {
     learnedWords: 0,
@@ -89,6 +90,19 @@ export const AudioChallenge: React.FC = () => {
       .then((data) => {
         wordsArr.push(...data as any);
       })
+
+      // await wordPageApiService.getAllUserWords(userId)
+      // .then((data) => {
+      //   const learnedWords = data.filter((word: IUserWord) => word.difficulty === 'weak');
+      //   console.log(data)
+      //   console.log(wordsArr)
+      //   console.log(learnedWords);
+      //   wordsArr.filter((word: Word) => word.id !== learnedWords.id);
+      //   console.log(wordsArr)
+      //   if (wordsArr.length < ) {
+
+      //   }
+      // })
   
       generateMixedArray(wordsArr);
       setGameOver(false);
@@ -132,7 +146,6 @@ export const AudioChallenge: React.FC = () => {
   }
 
   async function pushNewWord(wordId: string, isRight: boolean) {
-    const userId = localStorage.getItem('userId') as string;
 
     if (userId != null) {
       const dbWord = await wordPageApiService.getUserWordById(userId, wordId) as IUserWord;
@@ -201,7 +214,7 @@ export const AudioChallenge: React.FC = () => {
   const handleAnswerClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const answerBtns = document.querySelectorAll('.audio-challenge-card__words-btn') as NodeListOf<HTMLButtonElement>;
     const challengeNextBtn = document.querySelector('.audio-challenge-card__next-btn') as HTMLButtonElement;
-    const chosenAnswer = event.currentTarget.value as string;
+    const chosenAnswer = event.currentTarget.innerHTML as string;
     const correctAnswer = words[questionNumber].find((x) => x.isRight === true) as Word;
     let isCorrect = false as boolean;
     isAnswered.push(true);
@@ -300,7 +313,7 @@ export const AudioChallenge: React.FC = () => {
   }
 
   const handleNextQuestionClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const answerBtns = document.querySelectorAll('.audio-challenge-card__words-btn') as NodeListOf<HTMLElement>;
+    const answerBtns = document.querySelectorAll('.audio-challenge-card__words-btn') as NodeListOf<HTMLButtonElement>;
     const correctAnswer = words[questionNumber].find((x) => x.isRight === true) as Word;
     answerBtns.forEach((x) => {
       x.removeAttribute('disabled');
@@ -410,6 +423,33 @@ export const AudioChallenge: React.FC = () => {
     sound.play();
   }
 
+  document.onkeydown = function(event) {
+    const answerBtns = document.querySelectorAll('.audio-challenge-card__words-btn') as NodeListOf<HTMLButtonElement>;
+    const challengeNextBtn = document.querySelector('.audio-challenge-card__next-btn') as HTMLButtonElement;
+    const audioBtn = document.querySelector('.audio-challenge-card__audio-btn') as HTMLButtonElement;
+    switch (event.code) {
+      case 'Digit1':
+        answerBtns[0].click();
+        break;
+      case 'Digit2':
+        console.log('2')
+        answerBtns[1].click();
+        break;
+      case 'Digit3':
+        answerBtns[2].click();
+        break;
+      case 'Digit4':
+        answerBtns[3].click();
+        break;
+      case 'Space':
+        audioBtn.click();
+      break;
+      case 'Enter':
+        challengeNextBtn.click();
+      break;
+    }
+  }
+
   return (
     <div className='audio-challenge'>
       {loading === true ? <Spinner /> : 
@@ -419,6 +459,11 @@ export const AudioChallenge: React.FC = () => {
             <h2>Audio challenge</h2>
             <p>Improve your listening comprehension and auditory memory.</p>
             <p>You must choose the right meaning of the word you will hear.</p>
+            <ul className='audio-challenge-memo__list'>
+              <li>Use number keys from 1 to 4 to select an answer</li>
+              <li>Use Space key to repeat a word</li>
+              <li>Use Enter key for a hint or to move to the next word</li>
+            </ul>
             <p>Select word difficulty level:</p>
             <div className='audio-challenge-memo__game-levels'>
               {levels.map((level: number, index: number) =>

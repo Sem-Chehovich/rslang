@@ -11,6 +11,7 @@ import { isAuthorizedUser } from '../../authorization/validateToken';
 import wrongAnswer from '../../assets/sounds/wrongAnswer.mp3';
 import rightAnswer from '../../assets/sounds/rightAnswer.mp3';
 import { useNavigate } from 'react-router';
+import { useActions } from '../../hooks/useActions';
 
 export type AnswerObject = {
   answer: string,
@@ -37,6 +38,7 @@ export const AudioChallenge: React.FC = () => {
   const [isRightAnswerShown, setIsRightAnswerShown] = useState(false);
   const [isOpenFromDictionary] = useState(localStorage.getItem('isAudioGameTurnOnByDictionary'));
   const [isSoundOn, setSoundOn] = useState(false);
+  const { setPagePath } = useActions();
   const navigate = useNavigate();
   const currDate = new Date() as Date;
   const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}` as string;
@@ -100,6 +102,7 @@ export const AudioChallenge: React.FC = () => {
   }, [isOpenFromDictionary])
 
   async function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
+    setPagePath('game-page');
     setLoading(true);
     const id = (event.target as HTMLButtonElement).id as string;
 
@@ -379,7 +382,7 @@ export const AudioChallenge: React.FC = () => {
     if (document.fullscreenElement) {
       document.exitFullscreen();
     }
-
+    setPagePath('');
     setGameOver(true);
     setShowScore(false);
     setScore(0);

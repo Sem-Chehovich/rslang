@@ -16,7 +16,7 @@ import { checkUser } from '../../sprint-game/service';
 
   const handleClickAudio = (event: React.MouseEvent<HTMLButtonElement>) => {
     localStorage.setItem('isAudioGameTurnOnByDictionary', 'true')
-    //setPagePath('game-page');
+    setPagePath('game-page');
 }
 
 const handleClickSprint = (event: React.MouseEvent<HTMLButtonElement>) => {

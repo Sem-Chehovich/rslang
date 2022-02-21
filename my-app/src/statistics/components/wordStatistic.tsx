@@ -1,5 +1,6 @@
 import { resolve } from 'path'
 import { wordPageApiService } from '../../wordsPage/service/wordPageApiService'
+import { getUserStatistics } from '../../sprint-game/service'
 
 export async function WordStatistics() {
     let rightAnswer = 0
@@ -9,10 +10,19 @@ export async function WordStatistics() {
         lernWords: 0,
         percentageOfCorrectAnswers: 0,
     }
+    const currDate = new Date() as Date;
+    const currDateStr = `${currDate.getDate()}.${currDate.getMonth()}.${currDate.getFullYear()}` as string;
+    const userStatistic = await getUserStatistics();
+    console.log(userStatistic)
     let promise = new Promise((resolve) => {
         wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string)).then(data => {
-            data.forEach((word: { difficulty: string; wordId: string; optional: {sprintGame: {wrongAns: number, rightAns: number, newWord: boolean}, audioGame: { audioRightAnswer: number, audioWrongAnswer: number,}} }) => {
-                if(word?.optional?.sprintGame?.newWord) {
+            console.log(data)
+            data.forEach((word: { difficulty: string; wordId: string; optional: {sprintGame: {date: string, wrongAns: number, rightAns: number, newWord: boolean}, audioGame: { date: string, rightAns: number, wrongAns: number, newWord: boolean}} }) => {
+                if(word?.optional?.sprintGame?.newWord && word?.optional?.sprintGame.date === currDateStr) {
+                    statisticObject.newWord = statisticObject.newWord + 1
+                    // newWord = newWord + 1
+                }
+                if(word?.optional?.audioGame?.newWord && word?.optional?.audioGame.date === currDateStr) {
                     statisticObject.newWord = statisticObject.newWord + 1
                     // newWord = newWord + 1
                 }
@@ -23,14 +33,14 @@ export async function WordStatistics() {
                 if(word?.optional?.sprintGame?.rightAns ) {
                     rightAnswer = rightAnswer + word?.optional?.sprintGame?.rightAns
                 }
-                if(word?.optional?.audioGame?.audioRightAnswer) {
-                    rightAnswer = rightAnswer + word?.optional?.audioGame?.audioRightAnswer
+                if(word?.optional?.audioGame?.rightAns) {
+                    rightAnswer = rightAnswer + word?.optional?.audioGame?.rightAns
                 }
                 if (word?.optional?.sprintGame?.wrongAns) {
                     wrongAnswer = wrongAnswer + word?.optional?.sprintGame?.wrongAns
                 }
-                if (word?.optional?.audioGame?.audioWrongAnswer) {
-                    wrongAnswer = wrongAnswer + word?.optional?.audioGame?.audioWrongAnswer
+                if (word?.optional?.audioGame?.wrongAns) {
+                    wrongAnswer = wrongAnswer + word?.optional?.audioGame?.wrongAns
                 }
             })
             statisticObject.percentageOfCorrectAnswers = Math.round(((rightAnswer) / (wrongAnswer + rightAnswer)) * 100) || 0

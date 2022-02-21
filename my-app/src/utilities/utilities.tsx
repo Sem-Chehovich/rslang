@@ -88,7 +88,9 @@ export async function setUserInitialStatistics() {
       },
       audioGame: {
         newWord: 0,
+        questionsCount: 0,
         rightAnsCount: 0,
+        percentage: 0,
         longestBatch: 0,
       }
     }

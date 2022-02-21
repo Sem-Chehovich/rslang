@@ -52,7 +52,9 @@ export interface IUserStatistic {
     },
     audioGame: {
       newWord: number,
+      questionsCount: number,
       rightAnsCount: number,
+      percentage: number,
       longestBatch: number,
     }
   }

@@ -28,7 +28,7 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
         this.cardRef = React.createRef()
     }
 
-    componentDidMount() {
+    componentDidMount() {       
         localStorage.getItem('userId') && wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string)).then(data => {
             let strong: any = []
             let weak: any = []

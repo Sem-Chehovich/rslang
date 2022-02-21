@@ -1,6 +1,9 @@
 import './main.css';
 import { members, possibilities } from '../mainPageConstants';
 import { Outlet, Link } from "react-router-dom";
+import { useEffect } from 'react';
+import { isAuthorizedUser } from '../../authorization/validateToken';
+import { useNavigate } from 'react-router';
 
 export interface ProjectMember {
   [key: string]: string
@@ -11,6 +14,20 @@ export interface AppPossibility {
 }
 
 function Main() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function getData() {
+      const checkAuth = await isAuthorizedUser();
+
+      if (checkAuth === 'redirect' && localStorage.getItem('userId')) {
+        navigate('/authorization');
+      }
+    }
+
+    getData();
+  })
+
   return (
     <section className='main-content'>
       <div className='main-content__app-description'>

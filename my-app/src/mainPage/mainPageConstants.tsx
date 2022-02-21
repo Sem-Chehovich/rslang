@@ -12,7 +12,7 @@ export const items = [
 ] as Array<NavigationLink>;
 
 export const members = [
-  { photo: 'madina', name: 'Madina', info: '(Frontend developer) Authorization, "Sprint", statistics'}, 
+  { photo: 'madina', name: 'Madina', info: '(Frontend developer) Authorization, "Sprint", statistics, study progress'}, 
   { photo: 'ann', name: 'Anna', info: '(Frontend developer) App main page, "Audio challenge", statistics'}, 
   { photo: 'semyon', name: 'Semyon', info: '(Team leader) Electronic textbook, dictionary, statistics'}
 ] as Array<ProjectMember>;

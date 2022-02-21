@@ -33,7 +33,7 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
             let strong: any = []
             let weak: any = []
             //console.log(data)
-            data.forEach((word: { difficulty: string; wordId: string; optional: {sprintGame: {wrongAns: number, rightAns: number}, audioGame: { audioRightAnswer: number, audioWrongAnswer: number,}} }) => {
+            data.forEach((word: { difficulty: string; wordId: string; optional: {sprintGame: {wrongAns: number, rightAns: number}, audioGame: { rightAns: number, wrongAns: number,}} }) => {
                 if (word.difficulty === 'strong') {
                     strong.push(word.wordId)
                 }
@@ -46,11 +46,11 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
                 if (word.optional?.sprintGame?.rightAns && this.props.card.id === word.wordId) {
                     this.setState({sprintRightCount: word.optional.sprintGame.rightAns})
                 }
-                if (word.optional?.audioGame?.audioRightAnswer && this.props.card.id === word.wordId) {
-                    this.setState({audioRightCount: word.optional.audioGame.audioRightAnswer})
+                if (word.optional?.audioGame?.rightAns && this.props.card.id === word.wordId) {
+                    this.setState({audioRightCount: word.optional.audioGame.rightAns})
                 }
-                if (word.optional?.audioGame?.audioWrongAnswer && this.props.card.id === word.wordId) {
-                    this.setState({audioWrongCount: word.optional.audioGame.audioWrongAnswer})
+                if (word.optional?.audioGame?.wrongAns && this.props.card.id === word.wordId) {
+                    this.setState({audioWrongCount: word.optional.audioGame.wrongAns})
                 }
             })
 
@@ -90,7 +90,12 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
         const isWordAvailable = await wordPageApiService.getUserWordById((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string)) 
         console.log(isWordAvailable)
         if (stateObj.isDifficult) {
-            word = { "difficulty": "strong"}
+            let sprintGame = await { ...(await isWordAvailable?.optional.sprintGame), totalRightAns: 0 }
+            let audioGame = await { ...(await isWordAvailable?.optional.audioGame), totalRightAns: 0 }
+            let optional =  { audioGame: { ...audioGame }, sprintGame: { ...sprintGame } }
+            word = {difficulty: 'strong', optional: { ...optional }}
+            console.log(word)
+            // word = { "difficulty": "strong"}
         } else if (stateObj.isLearned) {
             word = { "difficulty": "weak"}
         }  
@@ -105,6 +110,7 @@ class WordCardContainer extends React.Component<MyProps, MyState> {
             let defaultWord = { ...initWordOptional, ...word }
             await wordPageApiService.createUserWord((localStorage.getItem('userId') as string), (this.cardRef.current?.id as string), defaultWord)
         }
+        console.log(isWordAvailable)
         // let arr = await wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string))
         // wordPageApiService.getAllUserWords((localStorage.getItem('userId') as string))
         //     .then(data => {

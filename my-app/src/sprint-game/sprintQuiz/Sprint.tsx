@@ -185,6 +185,8 @@ const Sprint: React.FC = () => {
       initStatOptional.optional.audioGame.longestBatch = userSt.optional.audioGame.longestBatch;
       initStatOptional.optional.audioGame.newWord = userSt.optional.audioGame.newWord;
       initStatOptional.optional.audioGame.rightAnsCount = userSt.optional.audioGame.rightAnsCount;
+      initStatOptional.optional.audioGame.questionsCount = userSt.optional.audioGame.questionsCount;
+      initStatOptional.optional.audioGame.percentage = userSt.optional.audioGame.percentage;
 
     }
     await upsetUserStatistics(initStatOptional);

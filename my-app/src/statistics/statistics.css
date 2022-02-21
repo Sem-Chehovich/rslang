@@ -1,5 +1,5 @@
 .statistics-page {
-  height: calc(100vh - 70px);
+  height: 100vh;
   background-image: url('../mainPage/assets/bg.jpg');
   background-repeat: no-repeat;
   background-size: cover;
@@ -59,9 +59,21 @@
 }
 
 @media (max-width: 1350px) {
+
+  .statistics-page {
+    height: 100%;
+    padding: 100px 0 70px;
+    gap: 20px;
+  }
   
   .statistics-page__cards {
     flex-direction: column;
   }
 
 }
+
+@media (max-width: 700px) {
+  .statistics-page h2 {
+    font-size: 38px;
+  }
+} 

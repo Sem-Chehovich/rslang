@@ -9,11 +9,13 @@
 .sprint-results table {
 	display: flex;
   justify-content: center;
+  color: #ffffff;
 }
 
 .result-title {
   text-align: center;
   font-size: 38px;
+  color: #ffffff;
 }
 
 .sprint-results tbody td {

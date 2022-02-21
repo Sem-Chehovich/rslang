@@ -1,10 +1,12 @@
 import { statisticsItems } from './statisticsConstants';
 import './statistics.css';
 import { WordStatistics } from './components/wordStatistic'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 import { setUserInitialStatistics } from '../utilities/utilities';
 import { AudioChallengeStatistics, AudioStatisticsItem } from './components/audioChallengeStatistics';
+import { isAuthorizedUser } from '../authorization/validateToken';
+import { useNavigate } from 'react-router';
 
 export interface statisticsItem {
   [key: string]: string
@@ -19,26 +21,59 @@ export const Statistics = () => {
   const [dataSprint, setDataSprint] = React.useState<{newWord: number, longestBatch: number, percentage: number}>(
     {newWord: 0, longestBatch: 0, percentage: 0}
   )
+  const [showAlert, setShowAlert] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // async function checkAuth() {
+    //   const checkAuth = await isAuthorizedUser();
+    //   if (checkAuth === 'redirect') {
+    //     setShowAlert(true);
+    //     //navigate('/authorization');
+    //   }
+    // }
+
+    // checkAuth();
+
     async function getData() {
-      let wordStatistickObj = await WordStatistics();
-      let sprintStatistic = await setUserInitialStatistics();
-      if (typeof sprintStatistic !== 'number') {
-        let obj = {
-          newWord: sprintStatistic.optional.sprintGame.newWord,
-          longestBatch: sprintStatistic.optional.sprintGame.longestBatch,
-          percentage: sprintStatistic.optional.sprintGame.percentage
+      const checkAuth = await isAuthorizedUser();
+
+      if (checkAuth === 'redirect') {
+        setShowAlert(true);
+      } else {
+        setShowAlert(false);
+        let wordStatistickObj = await WordStatistics();
+        let sprintStatistic = await setUserInitialStatistics();
+
+        if (typeof sprintStatistic !== 'number') {
+          let obj = {
+            newWord: sprintStatistic.optional.sprintGame.newWord,
+            longestBatch: sprintStatistic.optional.sprintGame.longestBatch,
+            percentage: sprintStatistic.optional.sprintGame.percentage
+          }
+          setDataSprint(obj  as {newWord: number, longestBatch: number, percentage: number} );
         }
-        setDataSprint(obj  as {newWord: number, longestBatch: number, percentage: number} );
-      }
-        
-      setData(wordStatistickObj as {newWord: number, lernWords: number, percentageOfCorrectAnswers: number})
-    }
+          
+        setData(wordStatistickObj as {newWord: number, lernWords: number, percentageOfCorrectAnswers: number})
+        }
+    }  
     getData()
   }, []);
 
+  const handleClick = () => {
+    navigate('/authorization');
+  }
+
   return (
+    showAlert === true ?
+    <div className='statistics-page'>
+      <div className='statistics-page__cards-item big'>
+        <h3>We apologize!</h3>
+        <p>The statistics page is available only to authorized users. Please go to login page!</p>
+        <button className='go-btn' onClick={handleClick}>Go</button>
+      </div>
+    </div>
+    :
     <div className='statistics-page'>
       <h2>Statistics for today</h2>
       <div className='statistics-page__cards'>

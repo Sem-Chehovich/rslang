@@ -12,7 +12,7 @@ const levels = [1, 2, 3, 4, 5, 6];
 
 const GameCategories = () => {
   const navigate = useNavigate();
-  const { pagePathSecond, questions } = useTypedSelector(state => state.sprint);
+  const { pagePathSecond } = useTypedSelector(state => state.sprint);
   const { fetchWords, setGroup, setPage, setPagePath, setPagePathSecond, setUserInGame, setResults } = useActions();
 
   const handleClick = (e: React.MouseEvent) => {
@@ -61,21 +61,14 @@ const GameCategories = () => {
       </div> 
       <section>
           { pagePathSecond === 'isSprintFromDictionary' ?
-              questions.length !== 0 ? 
-              <div className='game-categories__box'>
-                <h2 className='sprint-categories__title'>Sprint</h2>
-                <p>Test yourself, indicate if the translation of the word we showed you is correct.</p>
-                <p>You will have only one minute!</p>
-                <div className='sprint-categories'> 
-                  <button className='sprint-play__btn' onClick={clickSingleBtn}>Play</button>
-                </div>
+            <div className='game-categories__box'>
+              <h2 className='sprint-categories__title'>Sprint</h2>
+              <p>Test yourself, indicate if the translation of the word we showed you is correct.</p>
+              <p>You will have only one minute!</p>
+              <div className='sprint-categories'> 
+                <button className='sprint-play__btn' onClick={clickSingleBtn}>Play</button>
               </div>
-              :
-              <div className='game-categories__box'>
-                  <div className='victorious-icon'></div>
-                  <h2 className='sprint-categories__title green'>Good job!</h2>
-                  <p>You have learned all words from this and the previous pages of this section</p>
-              </div>
+            </div>
             :
             <div className='game-categories__box'>
               <h2 className='sprint-categories__title'>Sprint</h2>

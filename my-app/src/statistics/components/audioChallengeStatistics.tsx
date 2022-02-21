@@ -16,7 +16,6 @@ export async function AudioChallengeStatistics(): Promise<AudioStatisticsItem> {
   let promise = new Promise<AudioStatisticsItem>((resolve) => {
     wordPageApiService.getUserStatistics()
     .then((data) => {
-      console.log(data)
       audioStatisticsObject.newWords = data.optional.audioGame.newWord;
       audioStatisticsObject.correctAnswers = data.optional.audioGame.percentage;
       audioStatisticsObject.longestSeries = data.optional.audioGame.longestBatch;

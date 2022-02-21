@@ -51,7 +51,7 @@ const initSprintWordOpt: IUserWord = {
     },
     audioGame: {
       date: '',
-      newWord: true,
+      newWord: false,
       wrongAns: 0,
       rightAns: 0,
       totalRightAns: 0,
@@ -127,6 +127,7 @@ const Sprint: React.FC = () => {
     const userWord = await getUserWord(wordId);
     const currDateStr = getCurrentDate();
     const userSt = await setUserInitialStatistics();
+    console.log("то что мы получили", userSt)
 
     if (typeof userSt !== 'number') 
       initStatOptional.optional.sprintGame.rightAnsCount = userSt.optional.sprintGame.rightAnsCount;
@@ -139,6 +140,7 @@ const Sprint: React.FC = () => {
         initStatOptional.optional.sprintGame.rightAnsCount += 1;
         wordOptional.difficulty = 'weak';
       }
+      console.log("новое")
       await createUserWord(wordId, wordOptional);
     } else {
       if (typeof userWord !== 'number') {
@@ -195,8 +197,8 @@ const Sprint: React.FC = () => {
       initStatOptional.optional.audioGame.rightAnsCount = userSt.optional.audioGame.rightAnsCount;
       initStatOptional.optional.audioGame.questionsCount = userSt.optional.audioGame.questionsCount;
       initStatOptional.optional.audioGame.percentage = userSt.optional.audioGame.percentage;
-
     }
+    console.log("то что мы сохраним в базу", initStatOptional)
     await upsetUserStatistics(initStatOptional);
   }
 

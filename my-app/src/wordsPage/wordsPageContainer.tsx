@@ -11,6 +11,8 @@ import { checkIfPageLearned } from '../utilities/utilities'
 import BasicAlerts from './components/alert'
 import DisableElevation from './components/gamesButtons'
 import ScrollToBtn from './components/scrollToBtn'
+import { isAuthorizedUser } from "../authorization/validateToken";
+import { useNavigate } from "react-router";
 
 
 
@@ -26,6 +28,7 @@ const WordsPageContainer = () => {
       const [isLoading, setIsLoading] = useState(true)
       const [isTopScrollShown, setIsTopScrollShown] = useState(false)
       const [isBottomScrollShown, setIsBottomScrollShown] = useState(false)
+      const navigate = useNavigate();
 
       const showScroll = () => {
         if (window.pageYOffset >= 1500) {
@@ -48,6 +51,14 @@ const WordsPageContainer = () => {
     })  
 
     useEffect(() => {
+        async function getData() {
+            const checkAuth = await isAuthorizedUser();
+            
+            if (checkAuth === 'redirect' && localStorage.getItem('userId')) {
+              navigate('/authorization');
+            }
+        }
+        getData();
         setIsLoading(true)
         if (+sections < 6) {
 

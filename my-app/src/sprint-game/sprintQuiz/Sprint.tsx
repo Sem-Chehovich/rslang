@@ -127,7 +127,6 @@ const Sprint: React.FC = () => {
     const userWord = await getUserWord(wordId);
     const currDateStr = getCurrentDate();
     const userSt = await setUserInitialStatistics();
-    console.log("то что мы получили", userSt)
 
     if (typeof userSt !== 'number') 
       initStatOptional.optional.sprintGame.rightAnsCount = userSt.optional.sprintGame.rightAnsCount;
@@ -140,7 +139,6 @@ const Sprint: React.FC = () => {
         initStatOptional.optional.sprintGame.rightAnsCount += 1;
         wordOptional.difficulty = 'weak';
       }
-      console.log("новое")
       await createUserWord(wordId, wordOptional);
     } else {
       if (typeof userWord !== 'number') {
@@ -149,6 +147,10 @@ const Sprint: React.FC = () => {
           wordOptional.optional.sprintGame.newWord = true;
         } else {
           wordOptional.optional.sprintGame.newWord = false;
+        }
+
+        if (userWord.difficulty === 'strong') {
+          wordOptional.difficulty = 'strong';
         }
   
         if (wordOptional.optional.sprintGame.rightAns === 1) { 
@@ -162,7 +164,7 @@ const Sprint: React.FC = () => {
           wordOptional.difficulty = 'strong';
           wordOptional.optional.sprintGame.totalRightAns = 0;
         } else {
-          wordOptional.optional.sprintGame.totalRightAns += userWord.optional.sprintGame.rightAns;
+          wordOptional.optional.sprintGame.totalRightAns += userWord.optional.sprintGame.totalRightAns;
         }
   
         if (wordOptional.optional.sprintGame.totalRightAns >= 3) {
@@ -198,7 +200,6 @@ const Sprint: React.FC = () => {
       initStatOptional.optional.audioGame.questionsCount = userSt.optional.audioGame.questionsCount;
       initStatOptional.optional.audioGame.percentage = userSt.optional.audioGame.percentage;
     }
-    console.log("то что мы сохраним в базу", initStatOptional)
     await upsetUserStatistics(initStatOptional);
   }
 

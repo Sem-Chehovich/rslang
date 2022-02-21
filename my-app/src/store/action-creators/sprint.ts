@@ -32,9 +32,12 @@ export const fetchWords = (group = 0, page = 0, userIn?: string) => {
     try {
       dispatch({ type: SprintActionTypes.FETCH_WORDS });
       wordList = await getWords(group, page);
+
       if (userIn) {
         const userWords = await getAllUserWords();
-        wordList = await filterWeakWords(userWords, wordList);
+        if (userWords.length > 0) {
+          wordList = await filterWeakWords(userWords, wordList);
+        }
       }
       
       dispatch({ type: SprintActionTypes.FETCH_WORDS_SUCCESS, payload: shuffle(wordList) });

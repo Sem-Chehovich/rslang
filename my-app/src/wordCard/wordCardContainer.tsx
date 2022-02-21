@@ -2,7 +2,7 @@ import React from "react";
 import './wordCard.scss';
 import SoundButton from './soundButton';
 import { getCorrectUrl, getCorrectMeaning } from '../utilities/utilities';
-import { card, stateObj, initWordOptional, IUserWord } from '../interface/interface';
+import { card, stateObj, initWordOptional } from '../interface/interface';
 import FormControlLabelPosition from './component/togleButtons'
 import { isAuthorized } from '../utilities/utilities'
 import { wordPageApiService } from '../wordsPage/service/wordPageApiService'

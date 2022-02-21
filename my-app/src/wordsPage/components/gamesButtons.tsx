@@ -9,10 +9,10 @@ import { checkUser } from '../../sprint-game/service';
 
 
 // export default function DisableElevation({ sections, page }: { sections: string; page: string }) {
-  export default function DisableElevation(props: any) {
+  export default function DisableElevation({ isPageLearned, sections, page}: {isPageLearned: boolean, sections: string, page: string}) {
     const { setPagePathSecond, setPagePath, setGroup, setPage, setUserInGame, fetchWords, clearWords } = useActions();
     const navigate = useNavigate();
-
+    // let pageLearn = isPageLearned
 
   const handleClickAudio = (event: React.MouseEvent<HTMLButtonElement>) => {
     localStorage.setItem('isAudioGameTurnOnByDictionary', 'true')
@@ -53,15 +53,19 @@ const handleClickSprint = (event: React.MouseEvent<HTMLButtonElement>) => {
 
   return (
     <div className='games__buttons'>
-      <Link 
-      to='/audio'
-      >
-      <Button onClick={handleClickAudio} variant="contained" disableElevation>
+    { isPageLearned ? (
+            <Button onClick={handleClickAudio} disabled={isPageLearned}  variant="contained" disableElevation>
             AUDIO CHALLENGE
         </Button>
-      </Link>
+    ) : ( <Link
+      to='/audio'
+      >
+      <Button onClick={handleClickAudio} disabled={isPageLearned}  variant="contained" disableElevation>
+            AUDIO CHALLENGE
+        </Button>
+      </Link>)}
 
-        <Button onClick={handleClickSprint} variant="contained" disableElevation>
+        <Button onClick={handleClickSprint} disabled={isPageLearned} variant="contained" disableElevation>
             SPRINT
         </Button>
     </div>

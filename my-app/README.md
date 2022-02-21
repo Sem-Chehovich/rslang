@@ -7,3 +7,5 @@
 `Redux`
 
 `MUI`
+
+`TypeScript`

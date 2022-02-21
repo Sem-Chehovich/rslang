@@ -160,11 +160,14 @@ export const AudioChallenge: React.FC = () => {
         let audioGameObj = Object.assign(dbWord?.optional?.audioGame);
         let wordDifficulty = dbWord.difficulty;
         let data = {} as IUserWord;
-        if (audioGameObj['date'] === currDateStr) {
+        if (audioGameObj['date'] === currDateStr && audioGameObj['newWord'] !== false) {
           audioGameObj['newWord'] = true;
         } else {
           audioGameObj['newWord'] = false;
         }
+
+        audioGameObj['date'] = currDateStr;
+
         if (isRight) {
           audioGameObj['rightAns'] = audioGameObj['rightAns'] + 1;
           audioGameObj['totalRightAns'] = audioGameObj['totalRightAns'] + 1;
@@ -259,12 +262,10 @@ export const AudioChallenge: React.FC = () => {
     }
 
     const userId = localStorage.getItem('userId') as string;
-
-    wordPageApiService.getAllUserWords(userId)
-    .then((userWords) => {
-      const allTodayWords = userWords.filter((word: IUserWord) =>
-      word?.optional?.audioGame?.date === currDateStr || word?.optional?.audioGame?.date === '') as Array<IUserWord>;
-      const todayNewWords = allTodayWords.filter((word: IUserWord) => word?.optional?.audioGame?.newWord) as Array<IUserWord>;
+    await wordPageApiService.getAllUserWords(userId)
+    .then(async (userWords) => {
+      const allTodayWords = userWords.filter((word: IUserWord) => word?.optional?.audioGame?.date === currDateStr) as Array<IUserWord>;
+      const todayNewWords = allTodayWords.filter((word: IUserWord) => word?.optional?.audioGame?.newWord === true) as Array<IUserWord>;
       initStatOptional.optional.audioGame.newWord = todayNewWords.length;
 
       const todayRightAns = allTodayWords.filter((word: IUserWord) => word.optional.audioGame.rightAns >= 1).length as number;
@@ -279,7 +280,6 @@ export const AudioChallenge: React.FC = () => {
       initStatOptional.optional.audioGame.longestBatch = userSt.optional.audioGame.longestBatch;
       initStatOptional.optional.audioGame.questionsCount = allTodayWords.length;
       initStatOptional.optional.audioGame.rightAnsCount = todayRightAns;
-      // initStatOptional.learnedWords = userSt.learnedWords + 1;
       initStatOptional.optional.date = currDateStr;
       initStatOptional.optional.sprintGame.newWord = userSt.optional.sprintGame.newWord;
       initStatOptional.optional.sprintGame.questionsCount = userSt.optional.sprintGame.questionsCount;
@@ -290,10 +290,10 @@ export const AudioChallenge: React.FC = () => {
       if (userSt.optional.audioGame.longestBatch < longestBatch) {
         initStatOptional.optional.audioGame.longestBatch = longestBatch;
       }
-    }).then(async() => {
+
+      console.log(initStatOptional);
       await wordPageApiService.upsertUserStatistics(initStatOptional);
-    });
-    console.log(initStatOptional)
+    })
   }
 
   const handleNextQuestionClick = (event: React.MouseEvent<HTMLButtonElement>) => {

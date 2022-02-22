@@ -12,6 +12,7 @@ import wrongAnswer from '../../assets/sounds/wrongAnswer.mp3';
 import rightAnswer from '../../assets/sounds/rightAnswer.mp3';
 import { useNavigate } from 'react-router';
 import { useActions } from '../../hooks/useActions';
+import { NextWeekSharp } from '@mui/icons-material';
 
 export type AnswerObject = {
   answer: string,
@@ -89,7 +90,6 @@ export const AudioChallenge: React.FC = () => {
   React.useEffect(() => {
     const section = localStorage.getItem('section') as string;
     console.log(isOpenFromDictionary);
-    
     async function renderPage() {
       setLoading(true);
       let pageNumber1 = (+(localStorage.getItem('page') as string) - 1) + '';
@@ -113,9 +113,14 @@ export const AudioChallenge: React.FC = () => {
 
       // checkIsWordLearned(wordsArr);
   
-      generateMixedArray(wordsArr);
+      const usedWords = generateMixedArray(wordsArr);
       setGameOver(false);
       setLoading(false);
+
+      let audioSrc = usedWords[0].find((x) => x.isRight === true)?.audio;
+      const sound = new Audio();
+      sound.src = getCorrectUrl(audioSrc as string);
+      sound.play();
     }
 
     // async function checkIsWordLearned(wordsArr: Array<Word>) {
@@ -163,12 +168,18 @@ export const AudioChallenge: React.FC = () => {
     await wordPageApiService.getWords(pageNumber2.toString(), difficulty.toString())
     .then((data) => {
       wordsArr.push(...data as any);
-    })
+    });
 
-    generateMixedArray(wordsArr);
+    const usedWords = generateMixedArray(wordsArr);
+
     setGameOver(false);
     setLoading(false);
     isAuthorizedUser();
+
+    let audioSrc = usedWords[0].find((x) => x.isRight === true)?.audio;
+    const sound = new Audio();
+    sound.src = getCorrectUrl(audioSrc as string);
+    sound.play();
   }
 
   async function pushNewWord(wordId: string, isRight: boolean) {
@@ -375,6 +386,11 @@ export const AudioChallenge: React.FC = () => {
       }
 
       if (questionNumber < 9) {
+        let nextWords = words[questionNumber + 1];
+        let audioSrc = nextWords.find((x) => x.isRight === true)?.audio;
+        const sound = new Audio();
+        sound.src = getCorrectUrl(audioSrc as string);
+        sound.play();
         setQuestionNumber(questionNumber + 1);
       } else {
         setGameOver(true);
@@ -415,7 +431,9 @@ export const AudioChallenge: React.FC = () => {
 
   const generateMixedArray = (arr: Array<Word>) => {
     arr = shuffleWords(arr);
-    setWords(sliceArrIntoChunks(arr));
+    const words = sliceArrIntoChunks(arr)
+    setWords(words);
+    return words;
   }
 
   const backPage = () => {

@@ -1,0 +1,89 @@
+.game-categories-page {
+  height: 100vh;
+  background: linear-gradient(45deg, #30cfd0, #330867);
+}
+
+.game-categories__box {
+  max-width: 550px;
+  height: 350px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  margin: 0px auto;
+  background-color: rgb(243 233 233 / 70%);
+  border: 5px solid black;
+  border-radius: 25px;
+  box-shadow: 12px 12px 2px 1px rgba(159, 176, 189, 0.3);
+}
+
+.sprint-categories__title {
+  text-transform: uppercase;
+}
+
+.sprint-categories__title.green {
+  color: #25a70b;
+}
+
+.sprint-categories {
+  display: flex;
+  justify-content: space-evenly;
+  padding-top: 20px;
+}
+
+.sprint-categories__btn {
+  width: 50px;
+  height: 50px;
+  background-color: white;
+  border-radius: 35%;
+  border: none;
+  cursor: pointer;
+  transition: 0.4s;
+  box-shadow: 5px 5px 2px 1px rgba(0, 0, 0, 0.3);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.sprint-play__btn {
+  width: 80px;
+  height: 50px;
+  background-color: white;
+  border-radius: 17px;
+  border: none;
+  cursor: pointer;
+  transition: .4s;
+  box-shadow: 5px 5px 2px 1px rgba(0, 0, 0, .3);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.sprint-categories__btn:hover,
+.sprint-play__btn:hover {
+  transform: scale(1.05);
+}
+
+.game-categories__controls {
+  padding: 30px;
+}
+
+.victorious-icon {
+  width: 60px;
+  height: 60px;
+  background-image: url("../../assets/svg/championCup.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  transition: 0.3s;
+  margin: 0px auto;
+}
+
+@media screen and (max-width: 650px) {
+  .game-categories__box {
+    width: 70%;
+    height: 350px;
+  }
+
+  .sprint-categories__btn {
+    width: 37px;
+    height: 37px;
+  }
+}

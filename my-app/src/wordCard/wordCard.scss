@@ -1,0 +1,119 @@
+.card {
+    display: flex;
+    background-color: #537895;
+    margin: 10px;
+    border-radius: 10px;
+    width: 80%;
+}
+
+.card__img-wrapper {
+    margin: 20px;
+}
+
+.card__img{
+    width: 300px;
+    height: 250px;
+}
+
+.card__content {
+    margin: 20px;
+    margin-left: 10px;
+    font-size: 20px;
+}
+
+.card__titel{
+    font-size: 25px;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.card__example {
+    margin-bottom: 10px;
+}
+
+.sound__button {
+    margin-left: 10px;
+}
+
+.card__titel-wrapper{
+    display: flex;
+}
+
+.toggle-buttons {
+    border: 2px solid rgba(210, 108, 106, .4);
+    background-color: #5f8aaa;
+    margin-left: 10px;
+}
+
+.learned {
+    border: 5px solid green;
+}
+
+.difficult {
+    border: 5px solid red;
+}
+
+.study-progress__container {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #d26c6a;
+    background-color: #5f8aaa;
+    margin-top: 10px;
+}
+
+.game__container {
+    display: flex;
+    margin-left: 10px;
+}
+
+.audio-answer {
+    margin-left: 10px;
+}
+
+.audio-title {
+    font-weight: bold;
+}
+
+@media screen and (max-width: 1100px) { 
+    .card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+ }
+
+ @media screen and (max-width: 600px) { 
+
+    .card__titel{
+        font-size: 20px;
+    }
+
+    .card__content {
+        font-size: 15px;
+    }
+
+    .card__titel-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .card__titel-wrapper div {
+        margin-bottom: 5px;
+    }
+
+ }
+
+ @media screen and (max-width: 450px) { 
+    .card__img{
+        width: 200px;
+        height: 150px;
+    }
+
+    .card__titel{
+        font-size: 15px;
+    }
+
+    .card__content {
+        font-size: 12px;
+    }
+ }

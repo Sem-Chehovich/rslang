@@ -1,0 +1,62 @@
+.audio-challenge-memo-page {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../../mainPage/assets/bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.audio-challenge-memo {
+  width: 550px;
+  height: 500px;
+  background-color: #537895;
+  border: 5px solid black;
+  border-radius: 25px;
+  box-shadow: 12px 12px 2px 1px rgba(83, 120, 149, .3);
+  padding: 25px 30px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: space-between;
+}
+
+.audio-challenge-memo__list {
+  margin: 0 auto;
+  padding: 0 25px;
+  border-radius: 10px;
+  border: 1px solid black;
+}
+
+.audio-challenge-memo li {
+  text-align: start;
+}
+
+.audio-challenge-memo h2 {
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.audio-challenge-memo__game-levels {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.audio-challenge-memo__game-levels-btn {
+  width: 60px;
+  height: 60px;
+  background-color: white;
+  border-radius: 17px;
+  border: none;
+  cursor: pointer;
+  transition: .4s;
+  box-shadow: 5px 5px 2px 1px rgba(0, 0, 0, .3);
+  font-size: 24px;
+}
+
+.audio-challenge-memo__game-levels-btn:hover {
+  transform: scale(1.05);
+}

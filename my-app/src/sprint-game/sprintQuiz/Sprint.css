@@ -1,0 +1,187 @@
+.sprint-page {
+  height: 100vh;
+  font-size: 32px;
+  background: linear-gradient(45deg, #30cfd0, #330867);
+}
+
+.sprint-page__controls {
+  display: flex;
+  color: #ffffff;
+  justify-content: space-between;
+  padding: 30px;
+}
+
+.sprint-btn {
+  width: 40px;
+  height: 40px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sprint-btn:hover {
+  transform: scale(1.1);
+  transition: 0.5s ease-out;
+}
+
+.back-icon {
+  background-image: url("../../assets/svg/arrow-back.svg");
+}
+
+.game-control {
+  display: flex;
+  width: 150px;
+  justify-content: space-between;
+}
+
+.centered {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
+.sound-icon {
+  background-image: url("../../assets/svg/volume-on.svg");
+}
+
+.sound-of-icon {
+  background-image: url("../../assets/svg/volume-off.svg");
+}
+
+.screen-icon {
+  background-image: url("../../assets/svg/expand.svg");
+}
+
+.compress-screen-icon {
+  background-image: url("../../assets/svg/compress.svg");
+}
+
+.game-box {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  color: black;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.sprint-page__game-data {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  color: #ffffff;
+  padding: 10px 20px;
+}
+
+.sprint-page__game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background-color: rgb(243 233 233 / 70%);
+  border: 3px solid rgb(243 233 233 / 70%);
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+}
+
+.game-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lightbulbs {
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
+  padding: 10px;
+}
+
+.game-points {
+  align-self: flex-end;
+}
+
+.sprint-page__score {
+  align-self: flex-end;
+}
+
+.bulbs {
+  width: 30px;
+  height: 30px;
+  background-image: url("../../assets/svg/lightbulb.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  transition: 0.3s;
+}
+
+.question-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 150px;
+  padding: 10px;
+}
+
+.game-keys {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+}
+
+.answer-btn {
+  max-width: 150px;
+  padding: 16px 20px;
+  font-size: 23px;
+  border: none;
+  border-radius: 10px;
+  color: #ffffff;
+  transition: 0.5s ease-out;
+}
+
+.answer-btn:hover {
+  transform: scale(1.1);
+  transition: 0.5s ease-out;
+}
+
+.key-wrong {
+  background-color: #a70b0b;
+}
+
+.key-right {
+  background-color: #25a70b;
+}
+
+.score-imgs {
+  padding: 10px;
+}
+
+.pokemon {
+  display: inline;
+  width: 80px;
+  height: 80px;
+}
+
+.cycleTimerBox {
+  display: inline-block;
+  width:200px;
+  height: 200px;
+  border-radius: 50%;
+  background-color: #fff;
+}
+
+@media screen and (max-width: 700px) {
+  .game-box {
+    width: 90%;
+    margin: 0 20px;
+  }
+
+  .pokemon {
+    width: 70px;
+    height: 70px;
+  }
+}

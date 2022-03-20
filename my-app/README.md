@@ -4,6 +4,8 @@
 
 `TypeScript`
 
+`CRA`
+
 `react-router-dom`
 
 `Redux`

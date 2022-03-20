@@ -1,4 +1,4 @@
-# Features of the technical implementation of the project
+# Features of the technical implementation
 
 `React`
 

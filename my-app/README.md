@@ -6,7 +6,7 @@
 
 `CRA`
 
-`react-router-dom`
+`React router`
 
 `Redux`
 

@@ -2,10 +2,14 @@
 
 `React`
 
+`TypeScript`
+
 `react-router-dom`
 
 `Redux`
 
+`REST API`
+
 `MUI`
 
-`TypeScript`
+`Sass`
